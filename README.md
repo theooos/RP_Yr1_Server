@@ -8,7 +8,7 @@ Inside each branch there is a `src` folder containing a package in which you **m
 
 If you do, then Theo will be forced to get the whip out, and it won't be nice... (unless you're into this sort of stuff)
 
-##How to import this repo into Eclipse
+<h2>How to import this repo into Eclipse</h2>
 
 1. Open Eclipse *(duh)*
 2. Copy and paste the HTTPS URI of the repo (should be above)
