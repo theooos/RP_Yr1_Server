@@ -1,7 +1,5 @@
-This is the main repository used for Robot Programming Group 1.1
+This is a branch for the Warehouse Management Graphical Display part of the project.
 
-Each member (or members) will have their own package to which they can push/pull files.
+You should work on your code here until you are sure that you have finished it.
 
-DO NOT tinker with other people's package if they do not give permission to do so!
-
-If you do, then Theo will be forced to get the whip out, and it won't be nice... (unless you're into this sort of stuff)
+Upon finishing, submit a merge request with the <code>master</code> branch.
