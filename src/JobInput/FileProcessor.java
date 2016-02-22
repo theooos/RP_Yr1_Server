@@ -1,3 +1,5 @@
+package JobInput;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,6 +32,9 @@ public class FileProcessor {
                 fileContents.add(line); 
             }
 
+            fr.close();
+            reader.close();
+
             return Optional.of(fileContents);
 
         } catch (FileNotFoundException e) {
@@ -37,7 +42,6 @@ public class FileProcessor {
         } catch (IOException e) {
             return Optional.empty();
         }
-
 
     }
 
