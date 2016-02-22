@@ -1,8 +1,8 @@
 package Networking;
 
-public class ServerSender {
+public class Puppet extends Thread {
 
-	public ServerSender() {
+	public Puppet() {
 		// TODO Auto-generated constructor stub
 	}
 
