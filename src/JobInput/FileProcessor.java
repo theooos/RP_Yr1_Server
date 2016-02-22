@@ -45,4 +45,24 @@ public class FileProcessor {
 
     }
 
+    public static void processJobFile(String fileName) {
+
+        Optional<List<String>> jobs = readFile(fileName);
+
+        if(jobs.isPresent()) {
+            System.err.println("Error processing job file.");
+            return;
+        }
+
+        for(String jobStr : jobs.get()) {
+            String[] jobArr = jobStr.split(","); 
+            Job newJob = new Job(Integer.parseInt(jobArr[0]));
+            for(int i = 1; i < jobArr.length; i+=2) {
+                newJob.addItem(Item.get(jobArr[i]), Integer.parseInt(jobArr[i+1]));
+            }
+            Job.jobs.add(newJob);
+        }
+
+    }
+
 }
