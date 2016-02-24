@@ -45,7 +45,7 @@ public class FileProcessor {
 
     }
 
-    //process job file
+    //process the job file
     public static void processJobFile(String fileName) {
 
         Optional<List<String>> jobs = readFile(fileName);
