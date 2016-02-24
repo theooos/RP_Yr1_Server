@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Job {
 
-    public static List<Job> jobs = new ArrayList<Job>();
+    public static List<Job> currentJobs = new ArrayList<Job>();
 
     private int jobID;
     private List<JobItem> items;

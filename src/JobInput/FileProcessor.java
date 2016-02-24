@@ -45,6 +45,10 @@ public class FileProcessor {
 
     }
 
+    /**
+     * Process the job file.
+     * @param fileName The name of the job file.
+     */
     public static void processJobFile(String fileName) {
 
         Optional<List<String>> jobs = readFile(fileName);
@@ -55,12 +59,19 @@ public class FileProcessor {
         }
 
         for(String jobStr : jobs.get()) {
+            // Each data element is seperated by a comma.
             String[] jobArr = jobStr.split(","); 
+
+            // Create a new job with the job ID.
             Job newJob = new Job(Integer.parseInt(jobArr[0]));
+
+            // Add each the item and the quantity of the item to the job.
             for(int i = 1; i < jobArr.length; i+=2) {
                 newJob.addItem(Item.get(jobArr[i]), Integer.parseInt(jobArr[i+1]));
             }
-            Job.jobs.add(newJob);
+
+            // Add a job to the list.
+            Job.currentJobs.add(newJob);
         }
 
     }
