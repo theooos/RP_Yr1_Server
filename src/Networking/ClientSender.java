@@ -3,6 +3,7 @@ package Networking;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import com.google.gson.Gson;
 
 public class ClientSender extends Thread {
@@ -14,6 +15,10 @@ public class ClientSender extends Thread {
 		this.toServer = toServer;
 	}
 	
+	/**
+	 * Always sending commands that it has been given to the Server for the
+	 * Puppet to use.
+	 */
 	/* Senders and receivers must always send two objects at a time.
 	 * Class name first, and then the JSON object.
 	 */
@@ -21,6 +26,7 @@ public class ClientSender extends Thread {
 	public void run(){
 		while(true){
 			try {
+				Thread.sleep(100);
 				/* 
 				 * Uses Google's GSON to convert to JSON, instead of spending time
 				 * on making all commands serializable ourself.
@@ -36,7 +42,8 @@ public class ClientSender extends Thread {
 				}
 			} catch (IOException e) {
 				out("MyListener: Disconnected from server. Shutting down.");
-				e.printStackTrace();
+			} catch (InterruptedException e) {
+				out("Client sender sleep broken.");
 			}
 		}
 	}
@@ -60,7 +67,7 @@ public class ClientSender extends Thread {
 	 * Only done so that access to the commands ArrayList is always synchronised.
 	 * @param comm The command to add.
 	 */
-	synchronized public void addComm(Object comm){
+	synchronized public void send(Object comm){
 		objectsToPuppet.add(comm);
 	}
 

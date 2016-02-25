@@ -31,14 +31,15 @@ public class ClientConnection extends Thread {
 		closeConnection();
 	}
 
-//	TODO
-//	public DataOutputStream getToServer(){
-//		return this.toServer;
-//	}
-//	
-//	public DataInputStream getFromServer(){
-//		return this.fromServer;
-//	}
+	// TODO This
+	public DataOutputStream getToServer(){
+		return null;
+	}
+	
+	// TODO This
+	public DataInputStream getFromServer(){
+		return null;
+	}
 
 	public void shutdown(){
 		alive = false;

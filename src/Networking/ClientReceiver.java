@@ -9,13 +9,16 @@ public class ClientReceiver extends Thread {
 
 	private boolean alive = true;
 	private DataInputStream fromServer;
-	private ArrayList<Object> commandsForInterface = new ArrayList<Object>();
-	private ArrayList<Object> commandsForMovement = new ArrayList<Object>();
+	private ArrayList<Object> commands = new ArrayList<Object>();
 
 	public ClientReceiver(DataInputStream fromServer) {
 		this.fromServer = fromServer;
 	}
 
+	/**
+	 * Forever trying to read two messages at a time from the server, to deduce
+	 * new commands.
+	 */
 	@Override
 	public void run() {
 		while (alive) {
@@ -28,7 +31,7 @@ public class ClientReceiver extends Thread {
 			try {
 				String classTitle = fromServer.readUTF();
 				String command = fromServer.readUTF();
-				figureRecipient(classTitle, command);				
+				figureType(classTitle, command);				
 				
 			} catch (IOException e) {
 				out("MyListener noticed the server died. Shutting everything down.");
@@ -40,19 +43,22 @@ public class ClientReceiver extends Thread {
 	}
 
 	// TODO This bad boy. Re-instantiates correct object types and adds to appropriate list.
-	private synchronized void figureRecipient(String cT, String command) {
+	private synchronized void figureType(String cT, String command) {
 		Gson gson = new Gson();
 		
 		switch(cT){
 			case "Move":
 				// Move moveObj = gson.fromJson(command, Move.class);
-				// addInterfaceComm(moveObj);
+				// addComm(moveObj);
 				// Creates a move object, adds to to the right list, etc...
 		}
 		
 	}
 	
-	private void shutdown(){
+	/**
+	 * Ends the thread.
+	 */
+	public void shutdown(){
 		alive = false;
 	}
 
@@ -64,46 +70,23 @@ public class ClientReceiver extends Thread {
 	 * 
 	 * @param comm The command to add.
 	 */
-	synchronized private void addInterfaceComm(Object comm) {
-		commandsForInterface.add(comm);
-	}
-	
-	/**
-	 * Only done so that access to the commandsForMovement ArrayList is always
-	 * synchronised.
-	 * @param comm The command to add.
-	 */
-	synchronized private void addMovementComm(Object comm) {
-		commandsForMovement.add(comm);
+	synchronized private void addComm(Object comm) {
+		commands.add(comm);
 	}
 	
 	/**
 	 * Takes the next message from the message list.
 	 * @return
 	 */
-	synchronized public Object popInterfaceCommand() {
-		if (commandsForInterface.isEmpty()) {
+	synchronized public Object popCommand() {
+		if (commands.isEmpty()) {
 			return null;
 		} else {
-			Object comm = commandsForInterface.get(0);
-			commandsForInterface.remove(0);
+			Object comm = commands.get(0);
+			commands.remove(0);
 			return comm;
 		}
 	}
-	
-	/**
-	 * Takes the next message from the message list.
-	 * @return
-	 */
-	synchronized public Object popMovementCommand() {
-		if (commandsForMovement.isEmpty()) {
-			return null;
-		} else {
-			Object comm = commandsForMovement.get(0);
-			commandsForMovement.remove(0);
-			return comm;
-		}
-	}	
 
 	// ******************** HELPER COMMANDS **********************
 	
