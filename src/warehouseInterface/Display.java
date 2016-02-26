@@ -12,6 +12,14 @@ public class Display extends JFrame
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setResizable(false);
 		setSize(800, 600);
+
+		JobTable jobTable = new JobTable();
+		RobotTable robotTable = new RobotTable();
+		GridMap gridMap = new GridMap();
+
+		add(jobTable);
+		add(gridMap);
+		add(robotTable);
 		setVisible(true);
 	}
 
