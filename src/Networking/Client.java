@@ -3,6 +3,8 @@ package Networking;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.UUID;
+import lejos.nxt.comm.BTConnection;
+import lejos.nxt.comm.Bluetooth;
 
 public class Client {
 
@@ -14,17 +16,16 @@ public class Client {
 	public Client(String[] args) {
 		name = UUID.randomUUID();
 		
-		// TODO Set up connection properly.
-		ClientConnection con = new ClientConnection();
-		con.start();
+		System.out.println("Waiting for Bluetooth connection...");
+		BTConnection connection = Bluetooth.waitForConnection();
+		System.out.println("OK!");
+
+		DataInputStream in = connection.openDataInputStream();
+		DataOutputStream out = connection.openDataOutputStream();
 		
-		DataOutputStream out = con.getToServer();
-		while (out == null) out = con.getToServer();
 	    this.sender = new ClientSender(out);
 	    sender.start();
 	    
-	    DataInputStream in = con.getFromServer();
-	    while (in == null) in = con.getFromServer();
     	this.receiver = new ClientReceiver(in);
 	    receiver.start();
 	    

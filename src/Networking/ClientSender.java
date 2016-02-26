@@ -1,10 +1,7 @@
 package Networking;
 
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
 
 public class ClientSender extends Thread {
 	
@@ -25,26 +22,26 @@ public class ClientSender extends Thread {
 	@Override
 	public void run(){
 		while(true){
-			try {
-				Thread.sleep(100);
+//			try {
+//				Thread.sleep(100);
 				/* 
 				 * Uses Google's GSON to convert to JSON, instead of spending time
 				 * on making all commands serializable ourself.
 				 */
-				Gson gson = new Gson();
-				Object comm = popCommand();
-				String className = comm.getClass().getName();
-				String commString = gson.toJson(comm);
-				
-				if (commString != null){
-					toServer.writeUTF(className);
-					toServer.writeUTF(commString);
-				}
-			} catch (IOException e) {
-				out("MyListener: Disconnected from server. Shutting down.");
-			} catch (InterruptedException e) {
-				out("Client sender sleep broken.");
-			}
+//				Gson gson = new Gson();
+//				Object comm = popCommand();
+//				String className = comm.getClass().getName();
+//				String commString = gson.toJson(comm);
+//				
+//				if (commString != null){
+//					toServer.writeUTF(className);
+//					toServer.writeUTF(commString);
+//				}
+//			} catch (IOException e) {
+//				out("MyListener: Disconnected from server. Shutting down.");
+//			} catch (InterruptedException e) {
+//				out("Client sender sleep broken.");
+//			}
 		}
 	}
 	

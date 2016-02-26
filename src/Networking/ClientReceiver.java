@@ -3,7 +3,6 @@ package Networking;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import com.google.gson.Gson;
 
 public class ClientReceiver extends Thread {
 
@@ -44,7 +43,6 @@ public class ClientReceiver extends Thread {
 
 	// TODO This bad boy. Re-instantiates correct object types and adds to appropriate list.
 	private synchronized void figureType(String cT, String command) {
-		Gson gson = new Gson();
 		
 		switch(cT){
 			case "Move":
