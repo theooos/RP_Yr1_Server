@@ -53,13 +53,13 @@ public class FileProcessor {
 
         Optional<List<String>> jobs = readFile(fileName);
 
-        if(jobs.isPresent()) {
+        if(!jobs.isPresent()) {
             System.err.println("Error processing job file.");
             return;
         }
 
         for(String jobStr : jobs.get()) {
-            // Each data element is seperated by a comma.
+            // Each data element is separated by a comma.
             String[] jobArr = jobStr.split(","); 
 
             // Create a new job with the job ID.
@@ -75,5 +75,6 @@ public class FileProcessor {
         }
 
     }
-
+    
+   
 }
