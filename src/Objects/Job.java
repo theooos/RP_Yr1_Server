@@ -1,17 +1,18 @@
 package Objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a job to be carried out.
  */
-public class Job {
+public class Job implements Serializable {
 
     public static List<Job> currentJobs = new ArrayList<Job>();
 
     private int jobID;
-    private List<JobItem> items;
+    private List<SingleTask> tasks;
     
     /**
      * Create an empty job with an ID.
@@ -19,7 +20,7 @@ public class Job {
      */
     public Job(int jobID) {
         this.jobID = jobID;
-        this.items = new ArrayList<JobItem>();
+        this.tasks = new ArrayList<SingleTask>();
     }
 
     /**
@@ -27,17 +28,17 @@ public class Job {
      * @param jobID The job ID.
      * @param items The items in the job.
      */
-    public Job(int jobID, List<JobItem> items) {
+    public Job(int jobID, List<SingleTask> tasks) {
         this.jobID = jobID;
-        this.items = items;
+        this.tasks = tasks;
     }
 
     /**
      * Add an item to the list of job items.
      * @param item The job item to be added.
      */
-    public void addItem(JobItem item) {
-        items.add(item);
+    public void addItem(SingleTask task) {
+        tasks.add(task);
     }
 
     /**
@@ -46,7 +47,14 @@ public class Job {
      * @param qty The amount of the item needed.
      */
     public void addItem(Item item, int qty) {
-        items.add(new JobItem(item, qty));
+        tasks.add(new SingleTask(item, qty));
     }
 
+    // toString method for debugging purposes
+	@Override
+	public String toString() {
+		return "Job [jobID=" + jobID + ", tasks=" + tasks + "]";
+	}
+
+    
 }

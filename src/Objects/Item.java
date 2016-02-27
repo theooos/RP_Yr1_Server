@@ -2,27 +2,33 @@ package Objects;
 
 import java.awt.Point;
 
+/**
+ * SHARED OBJECTS
+ * Used to represent a single item: it's ID, location, weight and reward.
+ */
 public class Item {
 	
-	private String name;
+	private String ID;
 	private Point location;
-	private int weight;
+	private double weight;
+	private double reward;
 
-	public Item(String name, Point location, int weight) {
+	public Item(String ID, int x, int y, Double weight, Double reward) {
 	
-		this.name = name;
-		this.location = location;
-		this.weight = weight;
+		this.ID = ID;
+		this.location = new Point(x, y);
 		
+		this.weight = weight;
+		this.reward = reward;
 	}
 	
 	
 	/**
-	 * Get the name of the item.
-	 * @return The name.
+	 * Get the ID of the item.
+	 * @return The ID.
 	 */
-	public String getName() {
-		return name;
+	public String getID() {
+		return ID;
 	}
 	
 	/**
@@ -37,9 +43,23 @@ public class Item {
 	 * Get weight of the item.
 	 * @return The weight.
 	 */
-	public int getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 	
+	/**
+	 * Get reward of the item.
+	 * @return The reward.
+	 */
+	public double getReward() {
+		return reward;
+	}
+
+	// toString method for debugging purposes
+	@Override
+	public String toString() {
+		return "Item [ID=" + ID + ", location=" + location + ", weight=" + weight + ", reward=" + reward + "]";
+	}
+
 
 }
