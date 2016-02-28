@@ -9,7 +9,7 @@ public class SplitTest {
 		for(int i = 0; i < test.length(); i++){
 			String nextChar = String.valueOf(test.charAt(i));
 			if(test.charAt(i) != ','){
-				current += 
+//				current += 
 			}
 		}
 		char poo = test.charAt(6);
