@@ -22,6 +22,11 @@ public class ClientSender extends Thread {
 	@Override
 	public void run(){
 		while(true){
+			Object comm = popCommand();
+			if(comm != null){
+				
+			}
+			
 //			try {
 //				Thread.sleep(100);
 				/* 
