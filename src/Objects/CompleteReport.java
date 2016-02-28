@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class CompleteReport implements Serializable {
 	
-	private Boolean isPickup;
-	private Boolean wasCompleted;	
+	private static Boolean isPickup;
+	private static Boolean wasCompleted;	
 
 	public CompleteReport(Boolean isPickup, Boolean wasCompleted) {
 		this.isPickup = isPickup;
@@ -33,6 +33,13 @@ public class CompleteReport implements Serializable {
 	public String toString() {
 		return "CompleteReport [isPickup=" + isPickup + ", wasCompleted=" + wasCompleted + "]";
 	}
-
-
+	
+	/**
+	 * Gets the parameters in csv format
+	 * @return all parameters, seperated by commas
+	 */
+	public static String parameters() {
+		return (isPickup+","+wasCompleted);
+	}
+	
 }
