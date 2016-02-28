@@ -76,5 +76,53 @@ public class FileProcessor {
 
     }
     
+    /**
+     * Process the item file.
+     * @param fileName The name of the job file.
+     */
+    public static void processBothFiles(String fileName, String fileName2) {
+
+        Optional<List<String>> items = readFile(fileName);
+        Optional<List<String>> locations = readFile(fileName2);
+
+        if(!items.isPresent()) {
+            System.err.println("Error processing items file.");
+            return;
+        }
+       
+        if(!locations.isPresent()) {
+        	System.err.println("Error processing locations file");
+        	return;
+        }
+        
+
+        for(String itemStr : items.get()) {
+           
+        	// Each data element is separated by a comma.
+            String[] itemArr = itemStr.split(","); 
+            
+            for(String locationStr : locations.get()){
+            	
+            	String[] locationArr = locationStr.split(",");
+            
+            	if(Integer.parseInt(itemArr[0]) == Integer.parseInt(locationArr[0]){
+		           
+            		// Create a new item with the itemID.
+		            Item newItem = new Item(Integer.parseInt(itemArr[0]), 
+		            		Integer.parseInt(locationArr[1]), 
+		            		Integer.parseInt(locationArr[2]), 
+		            		Double.parseDouble(itemArr[1]), 
+		            		Double.parseDouble(itemArr[2]));
+
+            
+
+		            // Add an item object to the list.
+		            ManyItems.addItem(newItem);
+            
+            	}
+        }
+
+    }
+    
    
 }
