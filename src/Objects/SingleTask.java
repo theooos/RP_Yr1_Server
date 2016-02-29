@@ -8,8 +8,8 @@ import java.io.Serializable;
  */
 public class SingleTask implements Serializable {
 	
-	private static Item item;
-	private static int quantity;
+	private Item item;
+	private int quantity;
 
 	public SingleTask(Item item, int quantity) {
 		
@@ -44,7 +44,7 @@ public class SingleTask implements Serializable {
 	 * Gets the parameters in csv format
 	 * @return all parameters, seperated by commas
 	 */
-	public static String parameters() {
+	public String parameters() {
 		return (item+","+quantity);
 	}
 
