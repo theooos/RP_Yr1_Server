@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Job implements Serializable {
 
-    public static List<Job> currentJobs = new ArrayList<Job>();
+    public List<Job> currentJobs = new ArrayList<Job>();
 
     private int jobID;
     private List<SingleTask> tasks;

@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class MoveReport implements Serializable {
 
-	private static Boolean moved;
+	private Boolean moved;
 	
 	public MoveReport(Boolean moved) {
 		this.moved = moved;
@@ -32,7 +32,7 @@ public class MoveReport implements Serializable {
 	 * Gets the parameters in csv format
 	 * @return all parameters, seperated by commas
 	 */
-	public static String parameters() {
+	public String parameters() {
 		return ("" + moved);
 	}
 	
