@@ -2,34 +2,31 @@ package JobInput;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HasMap;
+import java.util.Map;
 
 /**
  * Represents a job to be carried out.
  */
 public class Job {
 
-    public static List<Job> currentJobs = new ArrayList<Job>();
+    public static Map<Integer, Job> currentJobs = new HashMap<Integer, Job>();
 
-    private int jobID;
     private List<Task> tasks;
     
     /**
-     * Create an empty job with an ID.
-     * @param jobID The job ID.
+     * Create an empty job.
      */
-    public Job(int jobID) {
-        this.jobID = jobID;
+    public Job() {
         this.items = new ArrayList<JobItem>();
     }
 
     /**
-     * Create a job from a job ID and job items.
-     * @param jobID The job ID.
-     * @param items The items in the job.
+     * Create a job from a list of tasks.
+     * @param tasks The tasks in the job.
      */
-    public Job(int jobID, List<JobItem> items) {
-        this.jobID = jobID;
-        this.items = items;
+    public Job(List<Task> tasks) {
+        this.tasks = tasks;
 
         calculateRewardPerItem();
         calculateRewardPerWeight();
@@ -64,14 +61,16 @@ public class Job {
      */
     public double rewardPerItem() {
         
+        int numOfItems = 0;
         double reward = 0f;
 
         for(int i = 0; i < tasks.size(); i++) {
             Item item = tasks.get(i).getItem();
+            numOfItems += items.getQuantity();
             reward += item.getReward() * item.getQuantity(); 
         }
 
-        return (reward / (double) items.size());
+        return (reward / (double) numOfItems);
 
     }
 

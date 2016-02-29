@@ -62,8 +62,8 @@ public class FileProcessor {
             // Each data element is separated by a comma.
             String[] jobArr = jobStr.split(","); 
 
-            // Create a new job with the job ID.
-            Job newJob = new Job(Integer.parseInt(jobArr[0]));
+            // Create a new job.
+            Job newJob = new Job();;
 
             // Add each the item and the quantity of the item to the job.
             for(int i = 1; i < jobArr.length; i+=2) {
@@ -71,7 +71,7 @@ public class FileProcessor {
             }
 
             // Add a job to the list.
-            Job.currentJobs.add(newJob);
+            Job.currentJobs.put(jobArr[1], newJob);
         }
 
     }
@@ -105,7 +105,7 @@ public class FileProcessor {
             	
             	String[] locationArr = locationStr.split(",");
             
-            	if(Integer.parseInt(itemArr[0]) == Integer.parseInt(locationArr[0]){
+            	if(Integer.parseInt(itemArr[0]).equals(Integer.parseInt(locationArr[0]))){
 		           
             		// Create a new item with the itemID.
 		            Item newItem = new Item(Integer.parseInt(itemArr[0]), 
@@ -118,6 +118,7 @@ public class FileProcessor {
 
 		            // Add an item object to the list.
 		            ManyItems.addItem(newItem);
+                    break;
             
             	}
         }
