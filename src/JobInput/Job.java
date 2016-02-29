@@ -1,8 +1,8 @@
 package JobInput;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.HasMap;
 import java.util.Map;
 
 /**
@@ -18,7 +18,7 @@ public class Job {
      * Create an empty job.
      */
     public Job() {
-        this.items = new ArrayList<JobItem>();
+        this.tasks = new ArrayList<Task>();
     }
 
     /**
@@ -28,8 +28,8 @@ public class Job {
     public Job(List<Task> tasks) {
         this.tasks = tasks;
 
-        calculateRewardPerItem();
-        calculateRewardPerWeight();
+        rewardPerItem();
+        rewardPerWeight();
     }
 
     /**
@@ -39,8 +39,8 @@ public class Job {
     public void addTask(Task t) {
         tasks.add(t);
 
-        calculateRewardPerItem();
-        calculateRewardPerWeight();
+        rewardPerItem();
+        rewardPerWeight();
     }
 
     /**
@@ -51,8 +51,8 @@ public class Job {
     public void addTask(Item item, int qty) {
         tasks.add(new Task(item, qty));
 
-        calculateRewardPerItem();
-        calculateRewardPerWeight();
+        rewardPerItem();
+        rewardPerWeight();
     }
 
     /**
@@ -66,8 +66,8 @@ public class Job {
 
         for(int i = 0; i < tasks.size(); i++) {
             Item item = tasks.get(i).getItem();
-            numOfItems += items.getQuantity();
-            reward += item.getReward() * item.getQuantity(); 
+            numOfItems += tasks.get(i).getQuantity();
+            reward += item.getReward() * tasks.get(i).getQuantity(); 
         }
 
         return (reward / (double) numOfItems);
@@ -83,10 +83,10 @@ public class Job {
         double reward = 0f;
         double weight = 0f;
 
-        for(int i = 0; i < items.size(); i++) {
+        for(int i = 0; i < tasks.size(); i++) {
             Item item = tasks.get(i).getItem();
-            reward += item.getReward() * item.getQuantity();
-            weight += item.getWeight() * item.getQuantity();
+            reward += item.getReward() * tasks.get(i).getQuantity();
+            weight += item.getWeight() * tasks.get(i).getQuantity();
         }
 
         return (reward / weight);
