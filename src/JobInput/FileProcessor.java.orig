@@ -105,7 +105,11 @@ public class FileProcessor {
             	
             	String[] locationArr = locationStr.split(",");
             
+<<<<<<< HEAD
             	if(Integer.parseInt(itemArr[0]).equals(Integer.parseInt(locationArr[0]))){
+=======
+            	if((itemArr[0]).equals(locationArr[0])){
+>>>>>>> 8961c2473a697a914c1859148a65c911428536c7
 		           
             		// Create a new item 
 		            Item newItem = new Item( 
@@ -117,8 +121,12 @@ public class FileProcessor {
             
 
 		            // Add an item object to the list.
-		            Item.items.put(itemArr[0], newItem);
+<<<<<<< HEAD
+		            ManyItems.addItem(newItem);
                     break;
+=======
+		            Item.items.put(itemArr[0], newItem);
+>>>>>>> 8961c2473a697a914c1859148a65c911428536c7
             
             	}
         }
