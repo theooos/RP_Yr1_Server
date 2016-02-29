@@ -105,10 +105,10 @@ public class FileProcessor {
             	
             	String[] locationArr = locationStr.split(",");
             
-            	if(Integer.parseInt(itemArr[0]) == Integer.parseInt(locationArr[0]){
+            	if((itemArr[0]).equals(locationArr[0])){
 		           
             		// Create a new item with the itemID.
-		            Item newItem = new Item(Integer.parseInt(itemArr[0]), 
+		            Item newItem = new Item( 
 		            		Integer.parseInt(locationArr[1]), 
 		            		Integer.parseInt(locationArr[2]), 
 		            		Double.parseDouble(itemArr[1]), 
@@ -117,7 +117,7 @@ public class FileProcessor {
             
 
 		            // Add an item object to the list.
-		            ManyItems.addItem(newItem);
+		            Item.items.put(itemArr[0], newItem);
             
             	}
         }

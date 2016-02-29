@@ -1,20 +1,26 @@
 package JobInput;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Represents an item and  needed.
  */
 public class Item {
 
-    private final int ID;
+   // private final String ID;
     private final int x;
     private final int y;
     private final double reward;
     private final double weight;
+    
+    public static Map<String, Item> items = new HashMap<String, Item>();
+    
 
     
-    public Item(int ID, int x, int y, double reward, double weight) {
+    public Item(int x, int y, double reward, double weight) {
         
-        this.ID = ID;
+       // this.ID = ID;
         this.x = x;
         this.y = y;
         this.reward = reward;
@@ -22,11 +28,7 @@ public class Item {
 
     }
 
-    public int getID() {
-        return ID;
-    }
-
-    
+   
     public int getX() {
         return x;
     }
