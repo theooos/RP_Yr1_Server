@@ -15,7 +15,7 @@ public class Display extends JFrame
 
 		JobTable jobTable = new JobTable();
 		RobotTable robotTable = new RobotTable();
-		GridMap gridMap = new GridMap();
+		GridMap gridMap = new GridMap(robotTable);
 
 		add(jobTable);
 		add(gridMap);
