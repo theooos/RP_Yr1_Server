@@ -7,6 +7,7 @@ public class Task {
 
 	private final Item item;
 	private final int qty;
+    private final boolean completed;
 
 	/**
 	 * Create a job item from an item and a quantity.
@@ -17,6 +18,7 @@ public class Task {
 
 		this.item = item;
 		this.qty = qty;
+        this.completed = false;
 
 	}
 
@@ -35,6 +37,13 @@ public class Task {
 	public int getQuantity() {
 		return qty;
 	}
+
+    /**
+     * Set the task to completed.
+     */
+    public void completed() {
+        completed = true;
+    }
 
 	// toString method for debugging purposes
 	@Override

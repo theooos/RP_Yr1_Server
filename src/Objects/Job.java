@@ -13,6 +13,7 @@ public class Job {
 	public static Map<Integer, Job> currentJobs = new HashMap<Integer, Job>();
 
 	private List<Task> tasks;
+    private float cancellationProb;
 
 	/**
 	 * Create an empty job.
@@ -54,6 +55,22 @@ public class Job {
 		rewardPerItem();
 		rewardPerWeight();
 	}
+
+    /**
+     * Set the cancellation probability.
+     * @param p The cancellation probability.
+     */
+    public void setCancellationProb(float p) {
+        this.cancellationProb = p;
+    }
+
+    /**
+     * Get the cancellation probability.
+     * @return The cancellation probability.
+     */
+    public float getCancellationProb() {
+        return cancellationProb;
+    }
 
 	/**
 	 * Calculate the reward for this job per item.
