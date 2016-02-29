@@ -2,21 +2,21 @@ package RoutePlanning;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import SingleTask;
+
 
 public class OrderPicks {
 
 	
 	
-	public ArrayList<SingleTask> items; //the list of items in the job
-	public ArrayList<SingleTask> orderedItems; //the ordered list of items
+	public ArrayList<Objects.SingleTask> items; //the list of items in the job
+	public ArrayList<Objects.SingleTask> orderedItems; //the ordered list of items
 	public ArrayList<Point2D> dropOffs;
 	public Point2D dropOff;
 	private boolean running=true;
 	private boolean canceled=false;
 	
 	
-	public OrderPicks(ArrayList<SingleTask> items,ArrayList<Point2D> dropOffs)
+	public OrderPicks(ArrayList<Objects.SingleTask> items,ArrayList<Point2D> dropOffs)
 	{
 		this.dropOffs=dropOffs;
 		this.items=items;
@@ -38,7 +38,7 @@ public class OrderPicks {
 	private void planOrder()
 	{
 		int miny=-1;
-		ArrayList<SingleTask> orderedItemsForMiny=orderedItems;
+		ArrayList<Objects.SingleTask> orderedItemsForMiny=orderedItems;
 		int minTotalDistance=-1;
 		for(int y=0;y<=dropOffs.size();y++)
 		{
