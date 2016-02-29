@@ -107,7 +107,7 @@ public class FileProcessor {
             
             	if((itemArr[0]).equals(locationArr[0])){
 		           
-            		// Create a new item with the itemID.
+            		// Create a new item 
 		            Item newItem = new Item( 
 		            		Integer.parseInt(locationArr[1]), 
 		            		Integer.parseInt(locationArr[2]), 
