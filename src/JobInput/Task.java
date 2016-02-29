@@ -3,7 +3,7 @@ package JobInput;
 /**
  * Represents an item and the quantity needed.
  */
-public class JobItem {
+public class Task {
 
     private final Item item;
     private final int qty;
@@ -13,7 +13,7 @@ public class JobItem {
      * @param item The item.
      * @param qty The quantity needed.
      */
-    public JobItem(Item item, int qty) {
+    public Task(Item item, int qty) {
         
         this.item = item;
         this.qty = qty;
