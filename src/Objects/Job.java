@@ -12,20 +12,21 @@ public class Job {
 
 	public static Map<Integer, Job> currentJobs = new HashMap<Integer, Job>();
 
-	private List<Task> tasks;
+	private List<SingleTask> tasks;
+    private float cancellationProb;
 
 	/**
 	 * Create an empty job.
 	 */
 	public Job() {
-		this.tasks = new ArrayList<Task>();
+		this.tasks = new ArrayList<SingleTask>();
 	}
 
 	/**
 	 * Create a job from a list of tasks.
 	 * @param tasks The tasks in the job.
 	 */
-	public Job(List<Task> tasks) {
+	public Job(List<SingleTask> tasks) {
 		this.tasks = tasks;
 
 		rewardPerItem();
@@ -36,7 +37,7 @@ public class Job {
 	 * Add an item to the list of job items.
 	 * @param item The job item to be added.
 	 */
-	public void addTask(Task t) {
+	public void addTask(SingleTask t) {
 		tasks.add(t);
 
 		rewardPerItem();
@@ -49,11 +50,27 @@ public class Job {
 	 * @param qty The amount of the item needed.
 	 */
 	public void addTask(Item item, int qty) {
-		tasks.add(new Task(item, qty));
+		tasks.add(new SingleTask(item, qty));
 
 		rewardPerItem();
 		rewardPerWeight();
 	}
+
+    /**
+     * Set the cancellation probability.
+     * @param p The cancellation probability.
+     */
+    public void setCancellationProb(float p) {
+        this.cancellationProb = p;
+    }
+
+    /**
+     * Get the cancellation probability.
+     * @return The cancellation probability.
+     */
+    public float getCancellationProb() {
+        return cancellationProb;
+    }
 
 	/**
 	 * Calculate the reward for this job per item.

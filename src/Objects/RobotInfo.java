@@ -32,7 +32,7 @@ public class RobotInfo {
 	 * @return all parameters, seperated by commas
 	 */
 	public String parameters() {
-		return (name + "," + position.getX() + "," + position.getY());
+		return (name + "," + (int)position.getX() + "," + (int)position.getY());
 	}
 
 }
