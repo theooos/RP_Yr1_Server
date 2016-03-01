@@ -1,8 +1,14 @@
 package Networking;
 
+/**
+ * The class to instantiate.
+ * @author theo
+ *
+ */
 public class Server extends Thread {
 	
 	private boolean isAlive = true;
+	private RobotLobby lobby = new RobotLobby();
 	
 	public Server() {
 		// TODO Auto-generated constructor stub
@@ -18,12 +24,6 @@ public class Server extends Thread {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	
-	public void send(String comm){
-		// TODO The sending bit.
-		System.out.println(comm);
 	}
 	
 	public boolean serverAlive(){
