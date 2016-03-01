@@ -41,7 +41,7 @@ public class Move {
 	  * @return all parameters, seperated by commas
 	  */
 	 public String parameters() {
-		 return (direction+","+nextLocation.getX() + "," + nextLocation.getY());
+		 return (direction+","+(int)nextLocation.getX() + "," + (int)nextLocation.getY());
 	 }
 
 }
