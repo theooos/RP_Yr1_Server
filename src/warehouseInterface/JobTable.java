@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class JobTable extends JPanel
 {
-	private JTable table;
+	private JTable activeJobs;
 	private DefaultTableModel tableModel;
 
 	public JobTable()
@@ -17,37 +17,31 @@ public class JobTable extends JPanel
 		super(new BorderLayout());
 
 		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
-		table = Display.createTable(tableModel);
+		activeJobs = Display.createTable(tableModel);
 
 		JPanel buttons = new JPanel(new BorderLayout());
 		JButton addJob = new JButton("Add a job");
-		addJob.addActionListener(e -> addJob());
+		addJob.addActionListener(e -> new AddJob(this));
 		buttons.add(addJob, BorderLayout.CENTER);
 		JButton refresh = new JButton("Refresh");
 		buttons.add(refresh, BorderLayout.EAST);
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
-		viewInfo.addActionListener(e -> viewJobInfo((int) table.getValueAt(table.getSelectedRow(), 0)));
+		viewInfo.addActionListener(e -> viewJobInfo((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0)));
 		JMenuItem cancelJob = new JMenuItem("Cancel this job");
-		cancelJob.addActionListener(e -> cancelJob((int) table.getValueAt(table.getSelectedRow(), 0)));
+		cancelJob.addActionListener(e -> cancelJob((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0)));
 		popupMenu.add(viewInfo);
 		popupMenu.add(cancelJob);
-		table.setComponentPopupMenu(popupMenu);
+		activeJobs.setComponentPopupMenu(popupMenu);
 
-		add(new JScrollPane(table), BorderLayout.CENTER);
+		add(new JScrollPane(activeJobs), BorderLayout.CENTER);
 		add(buttons, BorderLayout.SOUTH);
-	}
-
-	private void addJob()
-	{
-		Random random = new Random();
-		tableModel.addRow(new Object[] { random.nextInt(20000), random.nextInt(100), "Robot " + (tableModel.getRowCount() + 1), "Executing" });
 	}
 
 	private void cancelJob(int jobID)
 	{
-		tableModel.removeRow(table.getSelectedRow());
+		tableModel.removeRow(activeJobs.getSelectedRow());
 		JOptionPane.showMessageDialog(this, "Job " + jobID + " cancelled.");
 	}
 

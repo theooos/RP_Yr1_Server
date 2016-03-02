@@ -16,13 +16,12 @@ public class Display extends JFrame
 		setResizable(false);
 		setSize(800, 600);
 
-		JobTable jobTable = new JobTable();
 		RobotTable robotTable = new RobotTable();
-		GridMap gridMap = new GridMap(robotTable);
 
-		add(jobTable);
-		add(gridMap);
+		add(new JobTable());
+		add(new GridMap(robotTable));
 		add(robotTable);
+		add(new Statistics());
 		setVisible(true);
 	}
 
@@ -44,6 +43,7 @@ public class Display extends JFrame
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //so we can't select more than one job
 		table.getTableHeader().setResizingAllowed(false);
 		table.getTableHeader().setReorderingAllowed(false);
+		table.setFocusable(false);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e)
