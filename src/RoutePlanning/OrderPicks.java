@@ -1,6 +1,7 @@
 package RoutePlanning;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 
@@ -29,6 +30,12 @@ public class OrderPicks {
 	public void cancel()
 	{
 		canceled=true;
+	}
+	
+	public ArrayList<Objects.SingleTask> getOrder()
+	{
+		if(running) return null;
+		return orderedItems;
 	}
 	
 	
