@@ -16,7 +16,8 @@ public class JobTable extends JPanel
 	{
 		super(new BorderLayout());
 
-		createTable();
+		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
+		table = Display.createTable(tableModel);
 
 		JPanel buttons = new JPanel(new BorderLayout());
 		JButton addJob = new JButton("Add a job");
@@ -53,37 +54,5 @@ public class JobTable extends JPanel
 	private void viewJobInfo(int jobID)
 	{
 		JOptionPane.showMessageDialog(this, "Nothing here...");
-	}
-
-	private void createTable()
-	{
-		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
-		table = new JTable(tableModel) {
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
-
-			@Override
-			public boolean getColumnSelectionAllowed()
-			{
-				return false;
-			}
-		};
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //so we can't select more than one job
-		table.getTableHeader().setResizingAllowed(false);
-		table.getTableHeader().setReorderingAllowed(false);
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				if(SwingUtilities.isRightMouseButton(e))
-				{
-					int row = table.rowAtPoint(e.getPoint());
-					table.setRowSelectionInterval(row, row);
-				}
-			}
-		});
 	}
 }
