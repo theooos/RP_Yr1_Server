@@ -8,7 +8,7 @@ public class RobotInfo {
 	private UUID name;
 	private Point position;
 	
-	public RobotInfo() {
+	public RobotInfo(UUID name, Point position) {
 		this.name = name;
 		this.position = position;
 	}
