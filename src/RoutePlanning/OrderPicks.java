@@ -1,4 +1,5 @@
 package RoutePlanning;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -54,7 +55,10 @@ public class OrderPicks {
 			int min=0,minI=0;
 			for(int i=0;i<=items.size();i++)
 			{
-				int x=getRouteDist(getRobotLocation(),items.get(i).getItem().getLocation());
+				int xx=items.get(i).getItem().getX();
+				int yy=items.get(i).getItem().getY();
+				Point loc=new Point(xx,yy);
+				int x=getRouteDist(getRobotLocation(),loc);
 				if(min==0 || min>x)
 				{
 					if(canceled) return;
@@ -122,7 +126,13 @@ public class OrderPicks {
 		{
 			for(int j=0;j<=orderedItems.size();j++)
 			{
-				int x=getRouteDist(orderedItems.get(j).getItem().getLocation(),items.get(i).getItem().getLocation());
+				int xx=items.get(i).getItem().getX();
+				int yy=items.get(i).getItem().getY();
+				Point loci=new Point(xx,yy);
+				int xxj=items.get(i).getItem().getX();
+				int yyj=items.get(i).getItem().getY();
+				Point locj=new Point(xxj,yyj);
+				int x=getRouteDist(locj,loci);
 				if(min==-1 || min>x)
 				{
 					if(canceled) return -1;
@@ -141,14 +151,26 @@ public class OrderPicks {
 	 */
 	private int getDistance()
 	{
-		int sum=getRouteDist(getRobotLocation(),items.get(0).getItem().getLocation());;
+		int xx=items.get(0).getItem().getX();
+		int yy=items.get(0).getItem().getY();
+		Point loc=new Point(xx,yy);
+		int sum=getRouteDist(getRobotLocation(),loc);;
 		for(int i=1;i<=orderedItems.size();i++)
 		{
 			if(canceled) return -1;
-			sum+=getRouteDist(items.get(i-1).getItem().getLocation(),items.get(i).getItem().getLocation());;
+			xx=items.get(i-1).getItem().getX();
+			yy=items.get(i-1).getItem().getY();
+			loc=new Point(xx,yy);
+			int xxi=items.get(i).getItem().getX();
+			int yyi=items.get(i).getItem().getY();
+			Point loci=new Point(xxi,yyi);
+			sum+=getRouteDist(loc,loci);;
 		}
 		
-		sum+=getRouteDist(items.get(orderedItems.size()).getItem().getLocation(),dropOff);;
+		xx=items.get(orderedItems.size()).getItem().getX();
+		yy=items.get(orderedItems.size()).getItem().getY();
+		loc=new Point(xx,yy);
+		sum+=getRouteDist(loc,dropOff);;
 		return sum;
 	}
 	
