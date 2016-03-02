@@ -1,0 +1,143 @@
+import java.util.Map;
+import java.util.HashMap;
+
+/**
+ * Class that carries out all the necessary processing and stores the data.
+ */
+public class JobProcessor {
+
+    private Map<Integer, Job> jobs;
+    private Map<String, Item> items;
+
+    /**
+     * Create a new processor.
+     */
+    public JobProcessor() {
+        jobs = new HashMap<Integer, Job>();
+        items = new HashMap<String, Item>();
+    }
+
+    /**
+     * Read a file into a list of lines.
+     * @param fileName The file to be read.
+     * @return The contents of the file as a list of strings.
+     */
+    private Optional<List<String> readFile(String fileName) {
+        try { 
+            List<String> fileContents = new ArrayList<String>();
+            
+            FileReader fr = new FileReader(fileName);
+            BufferedReader reader = new BufferedReader(fr);
+
+            String line;
+            while((line = reader.readLine()) != null) {
+                fileContents.add(line); 
+            }
+
+            fr.close();
+            reader.close();
+
+            return Optional.of(fileContents);
+        } catch (FileNotFoundException e) {
+            return Optional.empty();
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Process the job files.
+     * @param jobFile The job file.
+     * @param cancelFile The cancellation file.
+     */
+    public void processJobFile(String jobFile, String cancelFile) {
+
+        Optional<List<String>> jobs = readFile(jobFile);
+        Optional<List<String>> cancellations = readFile(cancelFile);
+
+        if(!jobs.isPresent()) {
+            System.err.println("Error processing job file.");
+            return;
+        }
+
+        if(!cancellations.isPresent()) {
+            System.err.println("Error processing cancellations file.");
+            return;
+        }
+
+        for(String jobStr : jobs.get()) {
+            // Each data element is separated by a comma.
+            String[] jobArr = jobStr.split(","); 
+
+            // Create a new job.
+            Job newJob = new Job();;
+
+            // Add each the item and the quantity of the item to the job.
+            for(int i = 1; i < jobArr.length; i+=2) {
+                newJob.addTask(Item.items.get(jobArr[i]), Integer.parseInt(jobArr[i+1]));
+            }
+
+            // Add a job to the list.
+            jobs.put(Integer.parseInt(jobArr[0]), newJob);
+        }
+
+        for(String cancelStr : cancellations.get()) {
+            String[] cancelArr = cancelStr.split(",");
+            if(cancelArr[1] == 1)
+                jobs.get(cancelArr[0]).cancelled();
+        }
+
+    }
+
+    /**
+     * Process the item files.
+     * @param itemFile The item file.
+     * @param locFile The location file.
+     */
+    public void processItemFiles(String itemFile, String locFile) {
+
+        Optional<List<String>> items = readFile(itemFile);
+        Optional<List<String>> locations = readFile(locFile);
+
+        if(!items.isPresent()) {
+            System.err.println("Error processing items file.");
+            return;
+        }
+       
+        if(!locations.isPresent()) {
+        	System.err.println("Error processing locations file");
+        	return;
+        }
+        
+
+        for(String itemStr : items.get()) {
+           
+        	// Each data element is separated by a comma.
+            String[] itemArr = itemStr.split(","); 
+            
+            for(String locationStr : locations.get()){
+            	
+            	String[] locationArr = locationStr.split(",");
+            
+            	if(Integer.parseInt(itemArr[0]) == Integer.parseInt(locationArr[0])){
+		           
+            		// Create a new item 
+		            Item newItem = new Item( 
+		            		Integer.parseInt(locationArr[1]), 
+		            		Integer.parseInt(locationArr[2]), 
+		            		Double.parseDouble(itemArr[1]), 
+		            		Double.parseDouble(itemArr[2]));
+
+            
+
+		            // Add an item object to the list.
+		            items.put(itemArr[0], newItem);
+                    break;
+            
+            	}
+            }
+        }
+
+    }
+
+}
