@@ -2,9 +2,6 @@ package warehouseInterface;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.Arrays;
-import java.util.Random;
 
 public class GridMap extends JComponent
 {
@@ -24,7 +21,6 @@ public class GridMap extends JComponent
 		grid[2][1] = false;
 		grid[2][2] = false;
 		grid[2][3] = false;
-		//this.grid = warehouseMap.getGrid();
 	}
 
 	@Override
