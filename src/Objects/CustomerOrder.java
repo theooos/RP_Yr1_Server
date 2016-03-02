@@ -37,8 +37,8 @@ public class CustomerOrder implements Serializable {
 	 * @param item Item to add
 	 * @param quanity Quantity to add
 	 */
-	public void addTask(Item item, int quantity) {
-		tasks.add(new SingleTask(item, quantity));
+	public void addTask(String itemID, int quantity) {
+		tasks.add(new SingleTask(itemID, quantity));
 	}
 
 	// toString method for debugging purposes

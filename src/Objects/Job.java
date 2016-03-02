@@ -37,23 +37,30 @@ public class Job {
 		tasks.add(t);
 	}
 
+	
 	/**
 	 * Add an item to the list of job items.
 	 * @param item The item to be added.
 	 * @param qty The amount of the item needed.
 	 */
+	/*
 	public void addTask(Item item, int qty) {
 		tasks.add(new SingleTask(item, qty));
 	}
+	*/
+	
+	
+	
+	
 
     /**
      * Get the task at the given index.
      * @param i The given index.
      * @return The task at the given index if it exists.
      */
-    public Optional<SingleTask> getTask(int i) {
+    public Optional<SingleTask> getTaskAtIndex(int i) {
         if(i >= 0 && i < tasks.size())
-            return tasks.get(i);
+        	return Optional.of(tasks.get(i));
         else
             return Optional.empty();
     }
@@ -63,9 +70,9 @@ public class Job {
      * @param itemID The item ID.
      * @return The task with the given item ID if it exists.
      */
-    public Optional<SingleTask> getTask(int itemID) {
+    public Optional<SingleTask> getTask(String itemID) {
         for(int i = 0; i < tasks.size(); i++) {
-            if(tasks.get(i).getItemID() == itemID) {
+            if(tasks.get(i).getItemID().equals(itemID)) {
                 return Optional.of(tasks.get(i));
             }
         }
@@ -88,17 +95,19 @@ public class Job {
         return cancellationProb;
     }
 
+    
 	/**
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
 	 */
+    /*
 	public double rewardPerItem() {
 
 		int numOfItems = 0;
 		double reward = 0f;
 
 		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
+			//Item item = items.get(i).
 			numOfItems += tasks.get(i).getQuantity();
 			reward += item.getReward() * tasks.get(i).getQuantity(); 
 		}
@@ -106,24 +115,28 @@ public class Job {
 		return (reward / (double) numOfItems);
 
 	}
+	*/
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
+	/*
 	public double rewardPerWeight() {
 
 		double reward = 0f;
 		double weight = 0f;
 
 		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
+			Item item = .Job..
 			reward += item.getReward() * tasks.get(i).getQuantity();
 			weight += item.getWeight() * tasks.get(i).getQuantity();
 		}
 
 		return (reward / weight);
 	}
+	*/
+	
 
 	// toString method for debugging purposes
 	@Override

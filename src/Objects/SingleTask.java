@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class SingleTask implements Serializable {
 	
-	private int itemID;
+	private String itemID;
 	private int quantity;
 
     /**
@@ -16,7 +16,7 @@ public class SingleTask implements Serializable {
      * @param itemID The item id.
      * @param quantity The quantity of the item.
      */
-	public SingleTask(int itemID, int quantity) {
+	public SingleTask(String itemID, int quantity) {
 		
 		this.itemID = itemID;
 		this.quantity = quantity;
@@ -27,7 +27,7 @@ public class SingleTask implements Serializable {
 	 * Get the item id.
 	 * @return The item id.
 	 */
-	public Item getItemID() {
+	public String getItemID() {
 		return itemID;
 	}
 	
