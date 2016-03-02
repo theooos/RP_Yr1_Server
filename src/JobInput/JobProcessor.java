@@ -1,5 +1,7 @@
 import java.util.Map;
 import java.util.HashMap;
+import Objects.Job;
+import Objects.Item;
 
 /**
  * Class that carries out all the necessary processing and stores the data.
@@ -15,6 +17,40 @@ public class JobProcessor {
     public JobProcessor() {
         jobs = new HashMap<Integer, Job>();
         items = new HashMap<String, Item>();
+    }
+
+    /**
+     * Get an item from its ID.
+     * @param id The item id.
+     * @return The item.
+     */
+    public Item getItem(String id) {
+        return items.get(id);
+    }
+    
+    /**
+     * Get a job from its ID.
+     * @param id The job id.
+     * @return The job.
+     */
+    public Job getJob(int id) {
+        return jobs.get(id);
+    }
+
+    /**
+     * Get all the jobs.
+     * @return All the jobs.
+     */
+    public Map<Integer, Job> getAllJobs() {
+        return jobs;
+    }
+
+    /**
+     * Get all the items.
+     * @return All the items.
+     */
+    public Map<String, Item> getAllItems() {
+        return items;
     }
 
     /**
