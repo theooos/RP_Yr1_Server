@@ -1,8 +1,9 @@
 package warehouseInterface;
 
+import Objects.RobotInfo;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -10,46 +11,34 @@ public class RobotTable extends JPanel
 {
 	private DefaultTableModel tableModel;
 	private JTable table;
+	private Objects.RobotInfo[] robots;
 
 	public RobotTable()
 	{
-		super(new BorderLayout());
+		super();
 
 		createTable();
 
-		JPanel buttons = new JPanel(new BorderLayout());
-		JButton addRobot = new JButton("Connect a robot");
-		addRobot.addActionListener(e -> connectRobot());
-		JButton refresh = new JButton("Refresh");
-		buttons.add(addRobot, BorderLayout.CENTER);
-		buttons.add(refresh, BorderLayout.EAST);
-
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
-		viewInfo.addActionListener(e -> viewRobotInfo((String) table.getValueAt(table.getSelectedRow(), 0)));
-		JMenuItem disconnect = new JMenuItem("Disconnect");
-		disconnect.addActionListener(e -> disconnectRobot((String) table.getValueAt(table.getSelectedRow(), 0)));
+		viewInfo.addActionListener(e -> viewRobotInfo(table.getSelectedRow()));
 		popupMenu.add(viewInfo);
-		popupMenu.add(disconnect);
 		table.setComponentPopupMenu(popupMenu);
 
-		add(new JScrollPane(table), BorderLayout.CENTER);
-		add(buttons, BorderLayout.SOUTH);
+		add(new JScrollPane(table));
+		connectRobot();
 	}
 
-	private void disconnectRobot(String robot)
+	private void viewRobotInfo(int robot)
 	{
-		tableModel.removeRow(table.getSelectedRow());
-		JOptionPane.showMessageDialog(this, robot + " disconnected.");
-	}
-
-	private void viewRobotInfo(String robot)
-	{
-		JOptionPane.showMessageDialog(this, "Nothing here...");
+		JOptionPane.showMessageDialog(this, "Name: " + robots[robot].getName() + "\nPosition: " + robots[robot].getPosition().toString());
 	}
 
 	private void connectRobot()
 	{
+		tableModel.addRow(new Object[] { "Robot " + (tableModel.getRowCount() + 1), "Ready" });
+		robots[0] = new RobotInfo();
+		tableModel.addRow(new Object[] { "Robot " + (tableModel.getRowCount() + 1), "Ready" });
 		tableModel.addRow(new Object[] { "Robot " + (tableModel.getRowCount() + 1), "Ready" });
 	}
 
