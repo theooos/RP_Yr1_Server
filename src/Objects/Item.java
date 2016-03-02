@@ -1,44 +1,58 @@
 package Objects;
 
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SHARED OBJECTS
  * Used to represent a single item: it's ID, location, weight and reward.
  */
 public class Item {
-	
-	private String ID;
-	private Point location;
-	private double weight;
-	private double reward;
 
-	public Item(String ID, int x, int y, Double weight, Double reward) {
-	
-		this.ID = ID;
-		this.location = new Point(x, y);
-		
-		this.weight = weight;
+	private final String ID;
+	private final int x;
+	private final int y;
+	private final double reward;
+	private final double weight;
+
+	public static Map<String, Item> items = new HashMap<String, Item>();
+
+	public Item(String ID, int x, int y, double reward, double weight) {
+
+		this.ID = ID;	
+		this.x = x;
+		this.y = y;
 		this.reward = reward;
+		this.weight = weight;
+
 	}
-	
-	
+
+
 	/**
-	 * Get the ID of the item.
-	 * @return The ID.
+	 * Get the x - coord.
+	 * @return y coord.
 	 */
-	public String getID() {
-		return ID;
+	public int getX() {
+		return x;
 	}
-	
+
 	/**
-	 * Get location of the item.
-	 * @return The location.
+	 * Get the y - coord.
+	 * @return x coord.
 	 */
-	public Point getLocation() {
-		return location;
+	public int getY() {
+		return y;
 	}
-	
+
+	/**
+	 * Get reward of the item.
+	 * @return The reward.
+	 */
+	public double getReward() {
+		return reward;
+	}
+
 	/**
 	 * Get weight of the item.
 	 * @return The weight.
@@ -48,18 +62,17 @@ public class Item {
 	}
 	
 	/**
-	 * Get reward of the item.
-	 * @return The reward.
+	 * Get ID of the item.
+	 * @return The ID.
 	 */
-	public double getReward() {
-		return reward;
+	public String getID() {
+		return ID;
 	}
 
 	// toString method for debugging purposes
 	@Override
 	public String toString() {
-		return "Item [ID=" + ID + ", location=" + location + ", weight=" + weight + ", reward=" + reward + "]";
+		return "Item [ID=" + ID + ", x=" + x + ", y=" + y + ", reward=" + reward + ", weight=" + weight + "]";
 	}
-
 
 }
