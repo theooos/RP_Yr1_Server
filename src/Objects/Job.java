@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents a job to be carried out.
  */
 public class Job {
-
-	public static Map<Integer, Job> currentJobs = new HashMap<Integer, Job>();
 
 	private List<SingleTask> tasks;
     private float cancellationProb;
@@ -28,9 +27,6 @@ public class Job {
 	 */
 	public Job(List<SingleTask> tasks) {
 		this.tasks = tasks;
-
-		rewardPerItem();
-		rewardPerWeight();
 	}
 
 	/**
@@ -39,22 +35,49 @@ public class Job {
 	 */
 	public void addTask(SingleTask t) {
 		tasks.add(t);
-
-		rewardPerItem();
-		rewardPerWeight();
 	}
 
+	
 	/**
 	 * Add an item to the list of job items.
 	 * @param item The item to be added.
 	 * @param qty The amount of the item needed.
 	 */
+	/*
 	public void addTask(Item item, int qty) {
 		tasks.add(new SingleTask(item, qty));
-
-		rewardPerItem();
-		rewardPerWeight();
 	}
+	*/
+	
+	
+	
+	
+
+    /**
+     * Get the task at the given index.
+     * @param i The given index.
+     * @return The task at the given index if it exists.
+     */
+    public Optional<SingleTask> getTaskAtIndex(int i) {
+        if(i >= 0 && i < tasks.size())
+        	return Optional.of(tasks.get(i));
+        else
+            return Optional.empty();
+    }
+
+    /**
+     * Get the task with the given item ID.
+     * @param itemID The item ID.
+     * @return The task with the given item ID if it exists.
+     */
+    public Optional<SingleTask> getTask(String itemID) {
+        for(int i = 0; i < tasks.size(); i++) {
+            if(tasks.get(i).getItemID().equals(itemID)) {
+                return Optional.of(tasks.get(i));
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * Set the cancellation probability.
@@ -72,17 +95,19 @@ public class Job {
         return cancellationProb;
     }
 
+    
 	/**
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
 	 */
+    /*
 	public double rewardPerItem() {
 
 		int numOfItems = 0;
 		double reward = 0f;
 
 		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
+			//Item item = items.get(i).
 			numOfItems += tasks.get(i).getQuantity();
 			reward += item.getReward() * tasks.get(i).getQuantity(); 
 		}
@@ -90,24 +115,28 @@ public class Job {
 		return (reward / (double) numOfItems);
 
 	}
+	*/
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
+	/*
 	public double rewardPerWeight() {
 
 		double reward = 0f;
 		double weight = 0f;
 
 		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
+			Item item = .Job..
 			reward += item.getReward() * tasks.get(i).getQuantity();
 			weight += item.getWeight() * tasks.get(i).getQuantity();
 		}
 
 		return (reward / weight);
 	}
+	*/
+	
 
 	// toString method for debugging purposes
 	@Override
