@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PuppetListener extends Thread {
 
-	ArrayList<?> commands = new ArrayList<>();
+	ArrayList<Object> commands = new ArrayList<Object>();
 	
 	public PuppetListener(){
 		// TODO Auto-generated constructor stub

@@ -2,7 +2,9 @@ package Networking;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.util.ArrayList;
 import java.util.UUID;
+
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 
@@ -23,11 +25,14 @@ public class Client {
 		DataInputStream in = connection.openDataInputStream();
 		DataOutputStream out = connection.openDataOutputStream();
 		
-	    this.sender = new ClientSender(out);
-	    sender.start();
-	    
-    	this.receiver = new ClientReceiver(in);
+	    sender = new ClientSender(out);
+    	receiver = new ClientReceiver(in);
+	    sender.start();	    
 	    receiver.start();
+	    
+	    // Ronan(name);
+	    // Luyobmir(whatever he needs);
+	    // Lyuobmir.start();
 	    
 	    // TODO Once objects are set up, use a name object.
 	    send(name);

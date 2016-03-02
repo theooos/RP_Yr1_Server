@@ -44,8 +44,7 @@ public class ClientReceiver extends Thread {
 	// TODO This bad boy. Re-instantiates correct object types and adds to appropriate list.
 	private synchronized void figureType(String cT, String command) {
 		
-		switch(cT){
-			case "Move":
+		if(cT.equals("Move")){
 				// Move moveObj = gson.fromJson(command, Move.class);
 				// addComm(moveObj);
 				// Creates a move object, adds to to the right list, etc...
