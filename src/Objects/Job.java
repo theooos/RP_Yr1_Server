@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents a job to be carried out.
  */
 public class Job {
-
-	public static Map<Integer, Job> currentJobs = new HashMap<Integer, Job>();
 
 	private List<SingleTask> tasks;
     private float cancellationProb;
@@ -28,9 +27,6 @@ public class Job {
 	 */
 	public Job(List<SingleTask> tasks) {
 		this.tasks = tasks;
-
-		rewardPerItem();
-		rewardPerWeight();
 	}
 
 	/**
@@ -39,9 +35,6 @@ public class Job {
 	 */
 	public void addTask(SingleTask t) {
 		tasks.add(t);
-
-		rewardPerItem();
-		rewardPerWeight();
 	}
 
 	/**
@@ -51,10 +44,33 @@ public class Job {
 	 */
 	public void addTask(Item item, int qty) {
 		tasks.add(new SingleTask(item, qty));
-
-		rewardPerItem();
-		rewardPerWeight();
 	}
+
+    /**
+     * Get the task at the given index.
+     * @param i The given index.
+     * @return The task at the given index if it exists.
+     */
+    public Optional<SingleTask> getTask(int i) {
+        if(i >= 0 && i < tasks.size())
+            return tasks.get(i);
+        else
+            return Optional.empty();
+    }
+
+    /**
+     * Get the task with the given item ID.
+     * @param itemID The item ID.
+     * @return The task with the given item ID if it exists.
+     */
+    public Optional<SingleTask> getTask(int itemID) {
+        for(int i = 0; i < tasks.size(); i++) {
+            if(tasks.get(i).getItemID() == itemID) {
+                return Optional.of(tasks.get(i));
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * Set the cancellation probability.
