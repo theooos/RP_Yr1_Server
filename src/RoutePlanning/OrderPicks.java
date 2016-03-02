@@ -48,12 +48,12 @@ public class OrderPicks {
 		int miny=-1;
 		ArrayList<Objects.SingleTask> orderedItemsForMiny=orderedItems;
 		int minTotalDistance=-1;
-		for(int y=0;y<=dropOffs.size();y++)
+		for(int y=0;y<dropOffs.size();y++)
 		{
 			dropOff=dropOffs.get(y);
 			//picking the first item (the one closest to the robot)
 			int min=0,minI=0;
-			for(int i=0;i<=items.size();i++)
+			for(int i=0;i<items.size();i++)
 			{
 				int xx=items.get(i).getItem().getX();
 				int yy=items.get(i).getItem().getY();
@@ -98,7 +98,7 @@ public class OrderPicks {
 	private void findInsertLocation(int index)
 	{
 		int minj=-1,minD=-1;
-		for(int j=1;j<=orderedItems.size();j++)
+		for(int j=1;j<orderedItems.size();j++)
 		{
 			orderedItems.add(j, items.get(index));
 			int dist=this.getDistance();
@@ -122,9 +122,9 @@ public class OrderPicks {
 	private int findClosestPick()
 	{
 		int min=-1,minI=-1;
-		for(int i=0;i<=items.size();i++)
+		for(int i=0;i<items.size();i++)
 		{
-			for(int j=0;j<=orderedItems.size();j++)
+			for(int j=0;j<orderedItems.size();j++)
 			{
 				int xx=items.get(i).getItem().getX();
 				int yy=items.get(i).getItem().getY();
@@ -155,7 +155,7 @@ public class OrderPicks {
 		int yy=items.get(0).getItem().getY();
 		Point loc=new Point(xx,yy);
 		int sum=getRouteDist(getRobotLocation(),loc);;
-		for(int i=1;i<=orderedItems.size();i++)
+		for(int i=1;i<orderedItems.size();i++)
 		{
 			if(canceled) return -1;
 			xx=items.get(i-1).getItem().getX();
