@@ -59,7 +59,7 @@ public class Job {
      * Calculate the reward for this job per item.
      * @return The reward per item.
      */
-    public double rewardPerItem() {
+    public double reward() {
         
         int numOfItems = 0;
         double reward = 0f;
@@ -70,7 +70,7 @@ public class Job {
             reward += item.getReward() * tasks.get(i).getQuantity(); 
         }
 
-        return (reward / (double) numOfItems);
+        return (reward / (double) tasks.size());
 
     }
 
