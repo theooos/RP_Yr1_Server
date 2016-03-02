@@ -22,7 +22,20 @@ public class OrderPicks {
 	{
 		this.dropOffs=dropOffs;
 		this.items=items;
+		orderedItems=new ArrayList<Objects.SingleTask>();
 		planOrder();
+	}
+	
+	public String toString()
+	{
+		String s="";
+		for(int i=0;i<orderedItems.size();i++)
+		{
+			s=s+orderedItems.get(i).toString()+"  ";
+			
+		}
+		
+		return s;
 	}
 	
 	/**
@@ -46,7 +59,7 @@ public class OrderPicks {
 	private void planOrder()
 	{
 		int miny=-1;
-		ArrayList<Objects.SingleTask> orderedItemsForMiny=orderedItems;
+		ArrayList<Objects.SingleTask> orderedItemsForMiny=new ArrayList<Objects.SingleTask>();
 		int minTotalDistance=-1;
 		for(int y=0;y<dropOffs.size();y++)
 		{
@@ -66,6 +79,7 @@ public class OrderPicks {
 					minI=i;
 				}
 			}
+			
 			orderedItems.add(items.get(minI));
 			items.remove(minI);
 			
@@ -81,10 +95,19 @@ public class OrderPicks {
 			{
 				miny=y;
 				minTotalDistance=x;
-				orderedItemsForMiny=orderedItems;
+				orderedItemsForMiny.clear();
+				
+				orderedItemsForMiny.addAll(orderedItems);
+				
+				
 			}
+			items=orderedItems;
+			
+			orderedItems.clear();
 		}
-		orderedItems=orderedItemsForMiny;
+		
+		orderedItems.addAll(orderedItemsForMiny);
+		
 		running=false;
 	}
 	
@@ -98,7 +121,7 @@ public class OrderPicks {
 	private void findInsertLocation(int index)
 	{
 		int minj=-1,minD=-1;
-		for(int j=1;j<orderedItems.size();j++)
+		for(int j=0;j<orderedItems.size();j++)
 		{
 			orderedItems.add(j, items.get(index));
 			int dist=this.getDistance();
@@ -110,6 +133,15 @@ public class OrderPicks {
 			}
 			orderedItems.remove(j);
 		}
+		orderedItems.add( items.get(index));
+		int dist=this.getDistance();
+		if(minD==-1 || dist<minD)
+		{
+			if(canceled) return;
+			minD=dist;
+			minj=orderedItems.size();
+		}
+		orderedItems.remove(orderedItems.size()-1);
 		orderedItems.add(minj, items.get(index));		
 	}
 	
@@ -151,24 +183,25 @@ public class OrderPicks {
 	 */
 	private int getDistance()
 	{
-		int xx=items.get(0).getItem().getX();
-		int yy=items.get(0).getItem().getY();
+		int xx=orderedItems.get(0).getItem().getX();
+		int yy=orderedItems.get(0).getItem().getY();
 		Point loc=new Point(xx,yy);
 		int sum=getRouteDist(getRobotLocation(),loc);;
 		for(int i=1;i<orderedItems.size();i++)
 		{
 			if(canceled) return -1;
-			xx=items.get(i-1).getItem().getX();
-			yy=items.get(i-1).getItem().getY();
+			xx=orderedItems.get(i-1).getItem().getX();
+			yy=orderedItems.get(i-1).getItem().getY();
 			loc=new Point(xx,yy);
-			int xxi=items.get(i).getItem().getX();
-			int yyi=items.get(i).getItem().getY();
+			int xxi=orderedItems.get(i).getItem().getX();
+			int yyi=orderedItems.get(i).getItem().getY();
 			Point loci=new Point(xxi,yyi);
 			sum+=getRouteDist(loc,loci);;
 		}
 		
-		xx=items.get(orderedItems.size()).getItem().getX();
-		yy=items.get(orderedItems.size()).getItem().getY();
+		
+		xx=orderedItems.get(orderedItems.size()-1).getItem().getX();
+		yy=orderedItems.get(orderedItems.size()-1).getItem().getY();
 		loc=new Point(xx,yy);
 		sum+=getRouteDist(loc,dropOff);;
 		return sum;
