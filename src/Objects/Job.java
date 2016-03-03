@@ -56,9 +56,9 @@ public class Job {
      * @param i The given index.
      * @return The task at the given index if it exists.
      */
-    public Optional<SingleTask> getTask(int i) {
+    public Optional<SingleTask> getTaskAtIndex(int i) {
         if(i >= 0 && i < tasks.size())
-            return tasks.get(i);
+        	return Optional.of(tasks.get(i));
         else
             return Optional.empty();
     }
@@ -68,9 +68,9 @@ public class Job {
      * @param itemID The item ID.
      * @return The task with the given item ID if it exists.
      */
-    public Optional<SingleTask> getTask(int itemID) {
+    public Optional<SingleTask> getTask(String itemID) {
         for(int i = 0; i < tasks.size(); i++) {
-            if(tasks.get(i).getItemID() == itemID) {
+            if(tasks.get(i).getItemID().equals(itemID)) {
                 return Optional.of(tasks.get(i));
             }
         }
@@ -104,6 +104,7 @@ public class Job {
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
 	 */
+    /* ADD BACK LATER
 	public double rewardPerItem() {
 
 		int numOfItems = 0;
@@ -118,11 +119,13 @@ public class Job {
 		return (reward / (double) numOfItems);
 
 	}
+	*/
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
+	/* WILL ADD BACK LATER
 	public double rewardPerWeight() {
 
 		double reward = 0f;
@@ -136,6 +139,7 @@ public class Job {
 
 		return (reward / weight);
 	}
+	*/
 
 	// toString method for debugging purposes
 	@Override

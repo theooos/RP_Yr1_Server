@@ -7,21 +7,21 @@ package Objects;
  * @param <Person> The person type, we'll use String.
  * @param <Command> The command type, we'll use Object.
  */
-public class Commands<Person, Command> {
+public class Commands {
 
-	private Person person;
-	private Command command;
+	private String person;
+	private Object command;
 	
-	public Commands(Person person, Command command) {
+	public Commands(String person, Object command) {
 		this.person = person;
 		this.command = command;
 	}
 
-	public Person getPerson(){
+	public String getPerson(){
 		return person;
 	}
 	
-	public Command getCommand(){
+	public Object getCommand(){
 		return command;
 	}
 }
