@@ -99,20 +99,20 @@ public class JobProcessor {
      */
     public void processJobFiles(String jobFile, String cancelFile) {
 
-        Optional<List<String>> jobs = readFile(jobFile);
-        Optional<List<String>> cancellations = readFile(cancelFile);
+        Optional<List<String>> jobsContents = readFile(jobFile);
+        Optional<List<String>> cancellationsContents = readFile(cancelFile);
 
-        if(!jobs.isPresent()) {
+        if(!jobsContents.isPresent()) {
             System.err.println("Error processing job file.");
             return;
         }
 
-        if(!cancellations.isPresent()) {
+        if(!cancellationsContents.isPresent()) {
             System.err.println("Error processing cancellations file.");
             return;
         }
 
-        for(String jobStr : jobs.get()) {
+        for(String jobStr : jobsContents.get()) {
             // Each data element is separated by a comma.
             String[] jobArr = jobStr.split(","); 
 
@@ -121,14 +121,14 @@ public class JobProcessor {
 
             // Add each the item and the quantity of the item to the job.
             for(int i = 1; i < jobArr.length; i+=2) {
-                newJob.addTask(Item.items.get(jobArr[i]), Integer.parseInt(jobArr[i+1]));
+                newJob.addTask(items.get(jobArr[i]), Integer.parseInt(jobArr[i+1]));
             }
 
             // Add a job to the list.
             jobs.put(Integer.parseInt(jobArr[0]), newJob);
         }
 
-        for(String cancelStr : cancellations.get()) {
+        for(String cancelStr : cancellationsContents.get()) {
             String[] cancelArr = cancelStr.split(",");
             if(cancelArr[1].equals("1"))
                 jobs.get(cancelArr[0]).cancelled();
@@ -143,26 +143,26 @@ public class JobProcessor {
      */
     public void processItemFiles(String itemFile, String locFile) {
 
-        Optional<List<String>> items = readFile(itemFile);
-        Optional<List<String>> locations = readFile(locFile);
+        Optional<List<String>> itemsContents = readFile(itemFile);
+        Optional<List<String>> locationsContents = readFile(locFile);
 
-        if(!items.isPresent()) {
+        if(!itemsContents.isPresent()) {
             System.err.println("Error processing items file.");
             return;
         }
        
-        if(!locations.isPresent()) {
+        if(!locationsContents.isPresent()) {
         	System.err.println("Error processing locations file");
         	return;
         }
         
 
-        for(String itemStr : items.get()) {
+        for(String itemStr : itemsContents.get()) {
            
         	// Each data element is separated by a comma.
             String[] itemArr = itemStr.split(","); 
             
-            for(String locationStr : locations.get()){
+            for(String locationStr : locationsContents.get()){
             	
             	String[] locationArr = locationStr.split(",");
             
@@ -170,8 +170,8 @@ public class JobProcessor {
 		           
             		// Create a new item 
 		            Item newItem = new Item( 
-		            		new Point(Integer.parseInt(locationArr[1]), 
-		            		Integer.parseInt(locationArr[2])), 
+		            		Integer.parseInt(locationArr[1]), 
+		            		Integer.parseInt(locationArr[2]), 
 		            		Double.parseDouble(itemArr[1]), 
 		            		Double.parseDouble(itemArr[2]));
 
