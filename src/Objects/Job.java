@@ -12,6 +12,7 @@ import java.util.Optional;
 public class Job {
 
 	private List<SingleTask> tasks;
+    private boolean cancelled;
     private float cancellationProb;
 
 	/**
@@ -19,6 +20,8 @@ public class Job {
 	 */
 	public Job() {
 		this.tasks = new ArrayList<SingleTask>();
+        this.cancelled = false;
+        this.cancellationProb = 0.0f;
 	}
 
 	/**
@@ -27,6 +30,8 @@ public class Job {
 	 */
 	public Job(List<SingleTask> tasks) {
 		this.tasks = tasks;
+        this.cancelled = false;
+        this.cancellationProb = 0.0f;
 	}
 
 	/**
@@ -86,6 +91,13 @@ public class Job {
      */
     public float getCancellationProb() {
         return cancellationProb;
+    }
+
+    /**
+     * Cancel this job.
+     */
+    public void cancelled() {
+        cancelled = true;
     }
 
 	/**
