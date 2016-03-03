@@ -44,11 +44,11 @@ public class Job {
 
 	/**
 	 * Add an item to the list of job items.
-	 * @param item The item to be added.
+	 * @param itemID The item id to be added.
 	 * @param qty The amount of the item needed.
 	 */
-	public void addTask(Item item, int qty) {
-		tasks.add(new SingleTask(item, qty));
+	public void addTask(String itemID, int qty) {
+		tasks.add(new SingleTask(itemID, qty));
 	}
 
     /**
