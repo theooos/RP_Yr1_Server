@@ -1,7 +1,18 @@
-import java.util.Map;
+package JobInput;
+
+import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import Objects.Job;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import Objects.Item;
+import Objects.Job;
 
 /**
  * Class that carries out all the necessary processing and stores the data.
@@ -14,7 +25,7 @@ public class JobProcessor {
     /**
      * Create a new processor.
      */
-    public JobProcessor() {
+    public JobProcessor(){
         jobs = new HashMap<Integer, Job>();
         items = new HashMap<String, Item>();
     }
@@ -58,7 +69,7 @@ public class JobProcessor {
      * @param fileName The file to be read.
      * @return The contents of the file as a list of strings.
      */
-    private Optional<List<String> readFile(String fileName) {
+    public static Optional<List<String>> readFile(String fileName) {
         try { 
             List<String> fileContents = new ArrayList<String>();
             
@@ -86,7 +97,7 @@ public class JobProcessor {
      * @param jobFile The job file.
      * @param cancelFile The cancellation file.
      */
-    public void processJobFile(String jobFile, String cancelFile) {
+    public void processJobFiles(String jobFile, String cancelFile) {
 
         Optional<List<String>> jobs = readFile(jobFile);
         Optional<List<String>> cancellations = readFile(cancelFile);
@@ -119,7 +130,7 @@ public class JobProcessor {
 
         for(String cancelStr : cancellations.get()) {
             String[] cancelArr = cancelStr.split(",");
-            if(cancelArr[1] == 1)
+            if(cancelArr[1].equals("1"))
                 jobs.get(cancelArr[0]).cancelled();
         }
 
@@ -159,8 +170,8 @@ public class JobProcessor {
 		           
             		// Create a new item 
 		            Item newItem = new Item( 
-		            		Integer.parseInt(locationArr[1]), 
-		            		Integer.parseInt(locationArr[2]), 
+		            		new Point(Integer.parseInt(locationArr[1]), 
+		            		Integer.parseInt(locationArr[2])), 
 		            		Double.parseDouble(itemArr[1]), 
 		            		Double.parseDouble(itemArr[2]));
 

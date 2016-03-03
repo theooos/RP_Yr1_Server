@@ -2,46 +2,97 @@ package JobInput;
 
 import java.awt.Point;
 import java.util.List;
+import java.util.ArrayList;
+import Objects.Direction;
 
 /**
  * Represents the warehouse map.
  */
 public class WarehouseMap {
-	
-	enum Object {
-		ROBOT, OBSTACLE, 
-	}
 
     // TRUE = OBSTACLE, FALSE = EMPTY
     private boolean[][] grid;
     private int gridWidth; 
     private int gridHeight;
+    private List<Point> dropoffs;
 
-    public WarehouseMap(int gridWidth, int gridHeight) {
+    /**
+     * Create a new warehouse map.
+     * @param gridWith The warehouse width.
+     * @param gridHeight The warehouse height.
+     * @param doFile The file containing the drop off locations.
+     */
+    public WarehouseMap(int gridWidth, int gridHeight, String doFile) {
         
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         grid = new boolean[gridWidth][gridHeight];
 
+        // Read dropoff locations
+        Optional<List<String>> dos = JobProcessor.readFile(doFile);
+        
+        if(!dos.isPresent()) {
+            throw new IllegalArgumentException("Could not create dropoff points from the file.");
+        }
+       
+        dropoffs = new ArrayList<Point>();
+        for(String doPoints : dos) {
+            String[] doArr = doPoints.split(",");
+            dropoffs.add(new Point(doArr[0], doArr[1]));
+        }
+
     }
 
+    /**
+     * Set the obstacles from a list of points.
+     * @param obstacles The list of obstacles.
+     */
     public void setObstacles(List<Point> obstacles) {
         for(Point obstacle : obstacles)
             grid[(int) obstacle.getX()][(int) obstacle.getY()] = true;
     }
 
+    /**
+     * Add a single obstacle to the warehouse.
+     * @param o The obstacle.
+     */
     public void addObstacle(Point o) {
         grid[(int) o.getX()][(int) o.getY()] = true;
     }
 
+    /**
+     * Check if a given position is an obstacle.
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @return If the position is an obstacle or not.
+     */
     public boolean isObstacle(int x, int y) {
         return grid[x][y];
     }
 
+    /**
+     * Check if a given position is an obstacle.
+     * @param p The point to check.
+     * @return If the position is an obstacle or not.
+     */
     public boolean isObstacle(Point p) {
         return grid[(int) p.getX()][(int) p.getY()];
     }
 
+    /**
+     * Get the drop off points in the warehouse.
+     * @return The drop off locations.
+     */
+    public List<Point> getDropoffPoints() {
+        return dropoffs;
+    }
+
+    /**
+     * Calculate the distance to the wall at a given point and heading.
+     * @param p The position.
+     * @param heading The direction to check.
+     * @return The number of grid positions to a wall.
+     */
     public int distanceToWall(Point p, Direction heading) {
         int distance = 0;
         switch(heading) {        
@@ -86,10 +137,17 @@ public class WarehouseMap {
         }
     }
 
+    /**
+     * Free a position (remove an obstacle).
+     * @param pos The position to free.
+     */
     public void freePosition(Point pos) {
         grid[(int) pos.getX()][(int) pos.getY()] = false;
     }
 
+    /**
+     * Reset the entire grid to empty.
+     */
     public void resetGrid() {
         for(int i = 0; i < gridWidth; i++)
             for(int j = 0; j < gridHeight; j++)
