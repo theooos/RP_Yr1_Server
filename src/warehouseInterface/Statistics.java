@@ -27,9 +27,8 @@ public class Statistics extends JPanel
 		table.getTableHeader().setReorderingAllowed(false);
 		table.setFocusable(false);
 		table.setRowSelectionAllowed(false);
-		table.setValueAt(0, 0, 0); //set default values for stats
-		table.setValueAt(0, 0, 1);
-		table.setValueAt(0, 0, 2);
+		for(int i = 0; i < 3; i++)
+			table.setValueAt(0, 0, i); //set default values for stats
 
 		add(title);
 		add(new JScrollPane(table));

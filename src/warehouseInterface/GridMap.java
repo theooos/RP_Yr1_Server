@@ -1,19 +1,18 @@
 package warehouseInterface;
 
+import Objects.AllRobots;
 import Objects.Direction;
-import Objects.RobotInfo;
+import Objects.Sendable.RobotInfo;
 import javax.swing.*;
 import java.awt.*;
 
 public class GridMap extends JPanel
 {
-	private boolean[][] grid;
-	private RobotTable robotTable;
+	private static boolean[][] grid;
 
-	public GridMap(RobotTable robotTable)
+	public GridMap()
 	{
 		super();
-		this.robotTable = robotTable;
 		grid = new boolean[12][8];
 		for(int i = 0; i < grid.length; i++)
 			for(int j = 0; j < grid[0].length; j++)
@@ -52,7 +51,7 @@ public class GridMap extends JPanel
 				}
 			}
 		g2d.setStroke(new BasicStroke(3));
-		for(RobotInfo robot : robotTable.getRobots())
+		for(RobotInfo robot : AllRobots.getAllRobots())
 		{
 			if(robot.getDirection() == Direction.NORTH || robot.getDirection() == Direction.SOUTH)
 				g2d.drawRect((robot.getPosition().x + 1) * xScale - 8, (robot.getPosition().y + 1) * yScale - 15, 16, 30);

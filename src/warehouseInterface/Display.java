@@ -16,13 +16,12 @@ public class Display extends JFrame
 		setResizable(false);
 		setSize(800, 600);
 
-		RobotTable robotTable = new RobotTable();
-		GridMap gridMap = new GridMap(robotTable);
-		robotTable.setGridMap(gridMap);
+		//RobotTable robotTable = new RobotTable();
+		//GridMap gridMap = new GridMap(robotTable);
 
 		add(new JobTable());
-		add(gridMap);
-		add(robotTable);
+		add(new GridMap());
+		add(new RobotTable());
 		add(new Statistics());
 		setVisible(true);
 	}
