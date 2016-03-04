@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import Objects.Sendable.SingleTask;
+
 /**
  * Represents a job to be carried out.
  */

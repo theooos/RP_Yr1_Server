@@ -3,6 +3,8 @@ package Objects;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import Objects.Sendable.RobotInfo;
+
 public class AllRobots {
 
 	private static ArrayList<RobotInfo> robots = new ArrayList<RobotInfo>();
