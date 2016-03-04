@@ -1,8 +1,8 @@
-package Objects;
+package Objects.Sendable;
 
 import java.awt.Point;
 
-public class Move {
+public class Move implements SendableObject {
 
 	private char direction;
 	private Point nextLocation;
