@@ -17,9 +17,11 @@ public class Display extends JFrame
 		setSize(800, 600);
 
 		RobotTable robotTable = new RobotTable();
+		GridMap gridMap = new GridMap(robotTable);
+		robotTable.setGridMap(gridMap);
 
 		add(new JobTable());
-		add(new GridMap(robotTable));
+		add(gridMap);
 		add(robotTable);
 		add(new Statistics());
 		setVisible(true);
@@ -40,7 +42,7 @@ public class Display extends JFrame
 				return false;
 			}
 		};
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //so we can't select more than one job
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //so we can't select more than one row
 		table.getTableHeader().setResizingAllowed(false);
 		table.getTableHeader().setReorderingAllowed(false);
 		table.setFocusable(false);

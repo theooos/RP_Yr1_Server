@@ -1,5 +1,6 @@
 package warehouseInterface;
 
+import Objects.Direction;
 import Objects.RobotInfo;
 import javax.swing.*;
 import java.awt.*;
@@ -52,6 +53,11 @@ public class GridMap extends JPanel
 			}
 		g2d.setStroke(new BasicStroke(3));
 		for(RobotInfo robot : robotTable.getRobots())
-			g2d.drawRect((robot.getPosition().x + 1) * xScale - 8, (robot.getPosition().y + 1) * yScale - 15, 16, 30);
+		{
+			if(robot.getDirection() == Direction.NORTH || robot.getDirection() == Direction.SOUTH)
+				g2d.drawRect((robot.getPosition().x + 1) * xScale - 8, (robot.getPosition().y + 1) * yScale - 15, 16, 30);
+			else
+				g2d.drawRect((robot.getPosition().x + 1) * xScale - 15, (robot.getPosition().y + 1) * yScale - 8, 30, 16);
+		}
 	}
 }
