@@ -19,7 +19,7 @@ public class Job {
 	 * Create an empty job.
 	 */
 	public Job() {
-		this.tasks = new ArrayList<SingleTask>();
+		this.tasks = new ArrayList<>();
         this.cancelled = false;
         this.cancellationProb = 0.0f;
 	}
@@ -35,8 +35,8 @@ public class Job {
 	}
 
 	/**
-	 * Add an item to the list of job items.
-	 * @param item The job item to be added.
+	 * Add a task to the list of tasks.
+	 * @param t The task to be added.
 	 */
 	public void addTask(SingleTask t) {
 		tasks.add(t);
@@ -75,6 +75,11 @@ public class Job {
         return Optional.empty();
     }
 
+	public List<SingleTask> getTasks()
+	{
+		return tasks;
+	}
+
     /**
      * Set the cancellation probability.
      * @param p The cancellation probability.
@@ -92,9 +97,17 @@ public class Job {
     }
 
     /**
+     * Check if this job is cancelled.
+     * @return If this job is cancelled.
+     */
+    public boolean cancelled() {
+        return cancelled;
+    }
+
+    /**
      * Cancel this job.
      */
-    public void cancelled() {
+    public void cancel() {
         cancelled = true;
     }
 
