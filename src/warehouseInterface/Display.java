@@ -1,5 +1,7 @@
 package warehouseInterface;
 
+import JobInput.JobProcessor;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -21,6 +23,9 @@ public class Display
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
 		frame.setVisible(true);
+
+		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
+		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 	}
 
 	public static JTable createTable(DefaultTableModel tableModel)

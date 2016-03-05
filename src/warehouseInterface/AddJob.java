@@ -1,13 +1,21 @@
 package warehouseInterface;
 
 import JobInput.JobProcessor;
+import Objects.AllRobots;
+import Objects.Sendable.RobotInfo;
+import Objects.Sendable.SingleTask;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class AddJob extends JFrame
 {
+	private JTable table;
+
 	public AddJob()
 	{
 		super("Add a new job");
@@ -15,7 +23,7 @@ public class AddJob extends JFrame
 		setSize(640, 480);
 
 		DefaultTableModel tableModel = new DefaultTableModel(new String[] { "Job ID", "Tasks", "Reward" }, 0);
-		JTable table = new JTable(tableModel) {
+		table = new JTable(tableModel) {
 			@Override
 			public boolean isCellEditable(int row, int column)
 			{
@@ -31,16 +39,24 @@ public class AddJob extends JFrame
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //so we can't select more than one job
 		table.getTableHeader().setResizingAllowed(false);
 		table.getTableHeader().setReorderingAllowed(false);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.getColumnModel().getColumn(0).setMaxWidth(100);
+		table.getColumnModel().getColumn(2).setMaxWidth(100);
+		table.setAutoCreateRowSorter(true);
 
-		JobProcessor processor = new JobProcessor();
-		processor.processItemFiles("res/items.csv", "res/locations.csv");
-		processor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 		for(int i = 10000; i < 10100; i++)
-			tableModel.addRow(new Object[] { i, "", 0 });
+		{
+			String tasks = "";
+			double reward = 0;
+			for(SingleTask task : JobProcessor.getJob(i).getTasks())
+			{
+				tasks += "(" + task.getItemID() + ", " + task.getQuantity() + ") ";
+				reward += JobProcessor.getItem(task.getItemID()).getReward();
+			}
+			tableModel.addRow(new Object[] { i, tasks, String.format("%.2f", reward) });
+		}
 
 		JButton ok = new JButton("OK");
-		ok.addActionListener(e -> dispose());
+		ok.addActionListener(e -> addJob());
 
 		JPanel comp = new JPanel(new BorderLayout());
 		comp.add(new JScrollPane(table), BorderLayout.CENTER);
@@ -48,5 +64,21 @@ public class AddJob extends JFrame
 
 		add(comp);
 		setVisible(true);
+	}
+
+	private void addJob()
+	{
+		if(table.getSelectedRow() != -1)
+		{
+			ArrayList<String> robots = AllRobots.getAllRobots().stream().map(robot -> String.valueOf(robot.getName())).collect(Collectors.toCollection(ArrayList::new));
+			String robot = (String) JOptionPane.showInputDialog(this, "Select the robot which should carry out this job:", "Add a new job", JOptionPane.PLAIN_MESSAGE, null, robots.toArray(), 0);
+			if(robot != null)
+			{
+				JobTable.addJob((int) table.getValueAt(table.getSelectedRow(), 0), (String) table.getValueAt(table.getSelectedRow(), 2), UUID.fromString(robot));
+				dispose();
+			}
+		}
+		else
+			JOptionPane.showMessageDialog(this, "Select a job first!", "Error", JOptionPane.PLAIN_MESSAGE);
 	}
 }
