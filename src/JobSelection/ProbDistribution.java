@@ -1,5 +1,3 @@
-package JobSelection;
-
 public class ProbDistribution {
 
     private float[] probabilities;

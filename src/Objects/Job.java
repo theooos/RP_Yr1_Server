@@ -97,9 +97,17 @@ public class Job {
     }
 
     /**
+     * Check if this job is cancelled.
+     * @return If this job is cancelled.
+     */
+    public boolean cancelled() {
+        return cancelled;
+    }
+
+    /**
      * Cancel this job.
      */
-    public void cancelled() {
+    public void cancel() {
         cancelled = true;
     }
 
