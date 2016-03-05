@@ -47,4 +47,16 @@ public class RobotTable
 	{
 		tableModel.addRow(new Object[] { robot.getName(), "Ready" });
 	}
+
+	public static void updateStatus(UUID robot, String status)
+	{
+		for(int i = 0; i < tableModel.getRowCount(); i++)
+		{
+			if(tableModel.getValueAt(i, 0).equals(robot))
+			{
+				tableModel.setValueAt(status, i, 1);
+				break;
+			}
+		}
+	}
 }

@@ -29,7 +29,7 @@ public class JobTable
 		JMenuItem viewInfo = new JMenuItem("Information");
 		viewInfo.addActionListener(e -> viewJobInfo((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0)));
 		JMenuItem cancelJob = new JMenuItem("Cancel this job");
-		cancelJob.addActionListener(e -> cancelJob((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0)));
+		cancelJob.addActionListener(e -> cancelJob((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0), (UUID) activeJobs.getValueAt(activeJobs.getSelectedRow(), 2)));
 		popupMenu.add(viewInfo);
 		popupMenu.add(cancelJob);
 		activeJobs.setComponentPopupMenu(popupMenu);
@@ -48,11 +48,13 @@ public class JobTable
 	public static void addJob(int job, String reward, UUID robot)
 	{
 		tableModel.addRow(new Object[] { job, reward, robot, "Waiting for job confirmation"});
+		RobotTable.updateStatus(robot, "Received job offer (ID " + job + ")");
 	}
 
-	private static void cancelJob(int jobID)
+	private static void cancelJob(int jobID, UUID robot)
 	{
 		tableModel.removeRow(activeJobs.getSelectedRow());
+		RobotTable.updateStatus(robot, "Ready");
 		JOptionPane.showMessageDialog(panel, "Job " + jobID + " cancelled.");
 	}
 

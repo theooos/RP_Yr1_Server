@@ -68,11 +68,11 @@ public class AddJob extends JFrame
 
 	private void addJob()
 	{
-		if(table.getSelectedRow() != -1)
+		if(table.getSelectedRow() != -1) //we know a row has been selected
 		{
 			ArrayList<String> robots = AllRobots.getAllRobots().stream().map(robot -> String.valueOf(robot.getName())).collect(Collectors.toCollection(ArrayList::new));
 			String robot = (String) JOptionPane.showInputDialog(this, "Select the robot which should carry out this job:", "Add a new job", JOptionPane.PLAIN_MESSAGE, null, robots.toArray(), 0);
-			if(robot != null)
+			if(robot != null) //we know that the user hasn't cancelled or closed the window
 			{
 				JobTable.addJob((int) table.getValueAt(table.getSelectedRow(), 0), (String) table.getValueAt(table.getSelectedRow(), 2), UUID.fromString(robot));
 				dispose();
