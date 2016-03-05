@@ -1,10 +1,10 @@
 package Objects;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
+import Objects.Sendable.SingleTask;
 
 /**
  * Represents a job to be carried out.
@@ -69,11 +69,9 @@ public class Job {
      * @return The task with the given item ID if it exists.
      */
     public Optional<SingleTask> getTask(String itemID) {
-        for(int i = 0; i < tasks.size(); i++) {
-            if(tasks.get(i).getItemID().equals(itemID)) {
-                return Optional.of(tasks.get(i));
-            }
-        }
+	    for(SingleTask task : tasks)
+		    if(task.getItemID().equals(itemID))
+			    return Optional.of(task);
         return Optional.empty();
     }
 

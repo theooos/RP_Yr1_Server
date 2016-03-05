@@ -1,15 +1,16 @@
 package Objects;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
+
+import Objects.Sendable.SingleTask;
 
 /**
  * SHARED OBJECTS
  * Used to represent a customer order: the currentJobs, the JobID and the items
  */
 
-public class CustomerOrder implements Serializable {
+public class CustomerOrder {
 	
 	public List<Job> currentJobs;
 	private UUID JobID;

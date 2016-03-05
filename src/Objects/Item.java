@@ -1,10 +1,9 @@
  package Objects;
 
-import java.awt.Point;
-import java.util.HashMap;
-import java.util.Map;
 
-/**
+ import java.awt.*;
+
+ /**
  * SHARED OBJECTS
  * Used to represent a single item: It's location, weight and reward.
  */

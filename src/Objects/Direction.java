@@ -1,5 +1,6 @@
 package Objects;
 
-public enum Direction {
-    NORTH, EAST, SOUTH, WEST
+public enum Direction
+{
+	NORTH, SOUTH, EAST, WEST
 }

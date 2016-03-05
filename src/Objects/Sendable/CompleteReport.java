@@ -1,8 +1,7 @@
-package Objects;
+package Objects.Sendable;
 
-import java.io.Serializable;
 
-public class CompleteReport implements Serializable {
+public class CompleteReport implements SendableObject {
 	
 	private Boolean isPickup;
 	private Boolean wasCompleted;	
