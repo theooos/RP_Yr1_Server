@@ -1,7 +1,8 @@
 package JobInput;
-import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
-import Objects.Direction;
+import Objects.Job;
 
 public class Test {
 
@@ -12,6 +13,13 @@ public class Test {
         JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
         JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 
+        List<Job> jl = new ArrayList<Job>(JobProcessor.getAllJobs().values());
+        int count = 0;
+        for(Job j : jl) {
+        	count += j.cancelled() ? 1 : 0;
+        }
+        System.out.println(count);
+        
 	}
 	
 }
