@@ -1,5 +1,7 @@
 package warehouseInterface;
 
+import JobInput.JobProcessor;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -29,6 +31,13 @@ public class AddJob extends JFrame
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //so we can't select more than one job
 		table.getTableHeader().setResizingAllowed(false);
 		table.getTableHeader().setReorderingAllowed(false);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+		JobProcessor processor = new JobProcessor();
+		processor.processItemFiles("res/items.csv", "res/locations.csv");
+		processor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		for(int i = 10000; i < 10100; i++)
+			tableModel.addRow(new Object[] { i, "", 0 });
 
 		JButton ok = new JButton("OK");
 		ok.addActionListener(e -> dispose());

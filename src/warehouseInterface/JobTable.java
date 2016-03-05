@@ -1,5 +1,7 @@
 package warehouseInterface;
 
+import Objects.Job;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -35,6 +37,11 @@ public class JobTable
 		panel.add(new JScrollPane(activeJobs), BorderLayout.CENTER);
 		panel.add(buttons, BorderLayout.SOUTH);
 		return panel;
+	}
+
+	public static void addJob(Job job)
+	{
+
 	}
 
 	private static void cancelJob(int jobID)
