@@ -1,8 +1,10 @@
 package JobInput;
 
 import java.awt.Point;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import Objects.Direction;
 
 /**
@@ -34,13 +36,16 @@ public class WarehouseMap {
         if(!dos.isPresent()) {
             throw new IllegalArgumentException("Could not create dropoff points from the file.");
         }
-       
         dropoffs = new ArrayList<Point>();
-        for(String doPoints : dos) {
-            String[] doArr = doPoints.split(",");
-            dropoffs.add(new Point(doArr[0], doArr[1]));
+        for(String doPoints : dos.get()) {
+        	if(doPoints.equals("") || doPoints.equals(" "))
+        		continue;
+            String[] doArr = doPoints.replaceAll("\\s","")
+.split(",");
+            Point p = new Point(Integer.parseInt(doArr[0]), Integer.parseInt(doArr[1]));
+            dropoffs.add(p);
         }
-
+            
     }
 
     /**

@@ -19,15 +19,11 @@ import Objects.Job;
  */
 public class JobProcessor {
 
-    private Map<Integer, Job> jobs;
-    private Map<String, Item> items;
+    private static Map<Integer, Job> jobs = new HashMap<Integer, Job>();
+    private static Map<String, Item> items = new HashMap<String, Item>();
 
-    /**
-     * Create a new processor.
-     */
-    public JobProcessor(){
-        jobs = new HashMap<Integer, Job>();
-        items = new HashMap<String, Item>();
+    private JobProcessor() {
+
     }
 
     /**
@@ -35,7 +31,7 @@ public class JobProcessor {
      * @param id The item id.
      * @return The item.
      */
-    public Item getItem(String id) {
+    public static Item getItem(String id) {
         return items.get(id);
     }
     
@@ -44,7 +40,7 @@ public class JobProcessor {
      * @param id The job id.
      * @return The job.
      */
-    public Job getJob(int id) {
+    public static Job getJob(int id) {
         return jobs.get(id);
     }
 
@@ -52,7 +48,7 @@ public class JobProcessor {
      * Get all the jobs.
      * @return All the jobs.
      */
-    public Map<Integer, Job> getAllJobs() {
+    public static Map<Integer, Job> getAllJobs() {
         return jobs;
     }
 
@@ -60,7 +56,7 @@ public class JobProcessor {
      * Get all the items.
      * @return All the items.
      */
-    public Map<String, Item> getAllItems() {
+    public static Map<String, Item> getAllItems() {
         return items;
     }
 
@@ -97,7 +93,7 @@ public class JobProcessor {
      * @param jobFile The job file.
      * @param cancelFile The cancellation file.
      */
-    public void processJobFiles(String jobFile, String cancelFile) {
+    public static void processJobFiles(String jobFile, String cancelFile) {
 
         Optional<List<String>> jobsContents = readFile(jobFile);
         Optional<List<String>> cancellationsContents = readFile(cancelFile);
@@ -121,7 +117,7 @@ public class JobProcessor {
 
             // Add each the item and the quantity of the item to the job.
             for(int i = 1; i < jobArr.length; i+=2) {
-                newJob.addTask(items.get(jobArr[i]), Integer.parseInt(jobArr[i+1]));
+                newJob.addTask(jobArr[i], Integer.parseInt(jobArr[i+1]));
             }
 
             // Add a job to the list.
@@ -131,7 +127,7 @@ public class JobProcessor {
         for(String cancelStr : cancellationsContents.get()) {
             String[] cancelArr = cancelStr.split(",");
             if(cancelArr[1].equals("1"))
-                jobs.get(cancelArr[0]).cancelled();
+                jobs.get(Integer.parseInt(cancelArr[0])).cancelled();
         }
 
     }
@@ -141,7 +137,7 @@ public class JobProcessor {
      * @param itemFile The item file.
      * @param locFile The location file.
      */
-    public void processItemFiles(String itemFile, String locFile) {
+    public static void processItemFiles(String itemFile, String locFile) {
 
         Optional<List<String>> itemsContents = readFile(itemFile);
         Optional<List<String>> locationsContents = readFile(locFile);
@@ -165,13 +161,14 @@ public class JobProcessor {
             for(String locationStr : locationsContents.get()){
             	
             	String[] locationArr = locationStr.split(",");
-            
-            	if(Integer.parseInt(itemArr[0]) == Integer.parseInt(locationArr[0])){
-		           
+            	
+            	if(itemArr[0].equals(locationArr[2])){
+            		
             		// Create a new item 
 		            Item newItem = new Item( 
-		            		Integer.parseInt(locationArr[1]), 
-		            		Integer.parseInt(locationArr[2]), 
+		            		new Point(
+		            		Integer.parseInt(locationArr[0]), 
+		            		Integer.parseInt(locationArr[1])), 
 		            		Double.parseDouble(itemArr[1]), 
 		            		Double.parseDouble(itemArr[2]));
 
