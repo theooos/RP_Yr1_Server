@@ -4,12 +4,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class Statistics extends JPanel
+public class Statistics
 {
-	public Statistics()
+	public static JPanel draw()
 	{
-		super();
-		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
 		JLabel title = new JLabel("Warehouse Interface");
 		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 32));
@@ -30,8 +30,9 @@ public class Statistics extends JPanel
 		for(int i = 0; i < 3; i++)
 			table.setValueAt(0, 0, i); //set default values for stats
 
-		add(title);
-		add(new JScrollPane(table));
-		setBorder(BorderFactory.createEmptyBorder(0, 30, 150, 30));
+		panel.add(title);
+		panel.add(new JScrollPane(table));
+		panel.setBorder(BorderFactory.createEmptyBorder(0, 30, 150, 30));
+		return panel;
 	}
 }

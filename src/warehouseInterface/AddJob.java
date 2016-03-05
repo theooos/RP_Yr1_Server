@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class AddJob extends JFrame
 {
-	public AddJob(JobTable jobTable)
+	public AddJob()
 	{
 		super("Add a new job");
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

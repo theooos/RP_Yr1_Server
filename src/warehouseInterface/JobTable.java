@@ -3,25 +3,22 @@ package warehouseInterface;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Random;
 
-public class JobTable extends JPanel
+public class JobTable
 {
-	private JTable activeJobs;
-	private DefaultTableModel tableModel;
+	private static JTable activeJobs;
+	private static DefaultTableModel tableModel;
+	private static JPanel panel;
 
-	public JobTable()
+	public static JPanel draw()
 	{
-		super(new BorderLayout());
-
+		panel = new JPanel(new BorderLayout());
 		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
 		activeJobs = Display.createTable(tableModel);
 
 		JPanel buttons = new JPanel(new BorderLayout());
 		JButton addJob = new JButton("Add a job");
-		addJob.addActionListener(e -> new AddJob(this));
+		addJob.addActionListener(e -> new AddJob());
 		buttons.add(addJob, BorderLayout.CENTER);
 		JButton refresh = new JButton("Refresh");
 		buttons.add(refresh, BorderLayout.EAST);
@@ -35,18 +32,19 @@ public class JobTable extends JPanel
 		popupMenu.add(cancelJob);
 		activeJobs.setComponentPopupMenu(popupMenu);
 
-		add(new JScrollPane(activeJobs), BorderLayout.CENTER);
-		add(buttons, BorderLayout.SOUTH);
+		panel.add(new JScrollPane(activeJobs), BorderLayout.CENTER);
+		panel.add(buttons, BorderLayout.SOUTH);
+		return panel;
 	}
 
-	private void cancelJob(int jobID)
+	private static void cancelJob(int jobID)
 	{
 		tableModel.removeRow(activeJobs.getSelectedRow());
-		JOptionPane.showMessageDialog(this, "Job " + jobID + " cancelled.");
+		JOptionPane.showMessageDialog(panel, "Job " + jobID + " cancelled.");
 	}
 
-	private void viewJobInfo(int jobID)
+	private static void viewJobInfo(int jobID)
 	{
-		JOptionPane.showMessageDialog(this, "Nothing here...");
+		JOptionPane.showMessageDialog(panel, "Nothing here...");
 	}
 }

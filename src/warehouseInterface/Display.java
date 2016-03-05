@@ -6,24 +6,21 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Display extends JFrame
+public class Display
 {
-	public Display()
+	public static void main(String[] args)
 	{
-		super("Warehouse Interface");
-		setLayout(new GridLayout(2, 2));
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setResizable(false);
-		setSize(800, 600);
+		JFrame frame = new JFrame("Warehouse Interface");
+		frame.setLayout(new GridLayout(2, 2));
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setSize(800, 600);
 
-		//RobotTable robotTable = new RobotTable();
-		//GridMap gridMap = new GridMap(robotTable);
-
-		add(new JobTable());
-		add(new GridMap());
-		add(new RobotTable());
-		add(new Statistics());
-		setVisible(true);
+		frame.add(JobTable.draw());
+		frame.add(GridMap.createGrid());
+		frame.add(RobotTable.draw());
+		frame.add(Statistics.draw());
+		frame.setVisible(true);
 	}
 
 	public static JTable createTable(DefaultTableModel tableModel)
@@ -57,10 +54,5 @@ public class Display extends JFrame
 			}
 		});
 		return table;
-	}
-
-	public static void main(String[] args)
-	{
-		new Display();
 	}
 }

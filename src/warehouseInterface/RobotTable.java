@@ -7,20 +7,18 @@ import Objects.Sendable.RobotInfo;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 
-public class RobotTable extends JPanel
+public class RobotTable
 {
-	private final DefaultTableModel tableModel;
-	private final JTable table;
+	private static DefaultTableModel tableModel;
+	private static JPanel panel;
 
-	public RobotTable()
+	public static JPanel draw()
 	{
-		super(new BorderLayout());
+		panel = new JPanel(new BorderLayout());
 		tableModel = new DefaultTableModel(new String[] {"Robot", "Status"}, 0);
-		table = Display.createTable(tableModel);
+		JTable table = Display.createTable(tableModel);
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
@@ -28,7 +26,7 @@ public class RobotTable extends JPanel
 		popupMenu.add(viewInfo);
 		table.setComponentPopupMenu(popupMenu);
 
-		add(new JScrollPane(table), BorderLayout.CENTER);
+		panel.add(new JScrollPane(table), BorderLayout.CENTER);
 
 		RobotInfo robot1 = new RobotInfo(UUID.randomUUID(), new Point(5, 1)), robot2 = new RobotInfo(UUID.randomUUID(), new Point(9, 5), Direction.EAST), robot3 = new RobotInfo(UUID.randomUUID(), new Point(1, 7), Direction.SOUTH);
 		addRobot(robot1);
@@ -37,23 +35,16 @@ public class RobotTable extends JPanel
 		AllRobots.addRobot(robot2);
 		addRobot(robot3);
 		AllRobots.addRobot(robot3);
+		return panel;
 	}
 
-	private void viewRobotInfo(RobotInfo robot)
+	private static void viewRobotInfo(RobotInfo robot)
 	{
-		JOptionPane.showMessageDialog(this, "Name: " + robot.getName() + "\nPosition: (" + robot.getPosition().x + ", " + robot.getPosition().y + ")");
+		JOptionPane.showMessageDialog(panel, "Name: " + robot.getName() + "\nPosition: (" + robot.getPosition().x + ", " + robot.getPosition().y + ")");
 	}
 
-	private void addRobot(RobotInfo robot)
+	private static void addRobot(RobotInfo robot)
 	{
 		tableModel.addRow(new Object[] { robot.getName(), "Ready" });
-	}
-
-	public RobotInfo getRobot(UUID robotID)
-	{
-		for(RobotInfo robot : AllRobots.getAllRobots())
-			if(robot.getName().equals(robotID))
-				return robot;
-		return null;
 	}
 }
