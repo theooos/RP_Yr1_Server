@@ -44,7 +44,7 @@ public class Job {
 
 	/**
 	 * Add an item to the list of job items.
-	 * @param item The item to be added.
+	 * @param itemID The item id to be added.
 	 * @param qty The amount of the item needed.
 	 */
 	public void addTask(String itemID, int qty) {
@@ -69,11 +69,9 @@ public class Job {
      * @return The task with the given item ID if it exists.
      */
     public Optional<SingleTask> getTask(String itemID) {
-        for(int i = 0; i < tasks.size(); i++) {
-            if(tasks.get(i).getItemID().equals(itemID)) {
-                return Optional.of(tasks.get(i));
-            }
-        }
+	    for(SingleTask task : tasks)
+		    if(task.getItemID().equals(itemID))
+			    return Optional.of(task);
         return Optional.empty();
     }
 
