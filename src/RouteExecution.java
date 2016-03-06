@@ -3,8 +3,6 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import Objects.Move;
-import Objects.MoveReport;
 
 /*
  * @author Maria
@@ -13,9 +11,9 @@ import Objects.MoveReport;
 
 public class RouteExecution {
 
-	private ArrayList<Objects.SingleTask> tasks;
+	private ArrayList<Objects.Sendable.SingleTask> tasks;
 	
-	public RouteExecution(ArrayList<Objects.SingleTask> tasks)
+	public RouteExecution(ArrayList<Objects.Sendable.SingleTask> tasks)
 	{
 		this.tasks=tasks;
 	}
@@ -25,7 +23,7 @@ public class RouteExecution {
 		while(!tasks.isEmpty())
 		{
 			Point loc1=getRobotLocation();
-			Point loc2=new Point(tasks.get(0).getItem().getX(),tasks.get(0).getItem().getY());
+			Point loc2=this.getItemLocation(tasks.get(0).getItemID());
 			Vector<Integer> v=OrderPicks.getPath(loc1, loc2);
 			while(!v.isEmpty())
 			{
@@ -33,7 +31,7 @@ public class RouteExecution {
 				Point loc=getRobotLocation();
 				int k=getRobotFacingDirection();
 				Point newLoc = null;
-				Move mv=null;
+				Objects.Sendable.Move mv=null;
 				switch(v.get(0))
 				{
 				case 0:					
@@ -41,23 +39,23 @@ public class RouteExecution {
 					{
 					case 0:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
-						mv=new Move('f', newLoc );
+						mv=new Objects.Sendable.Move('f', newLoc );
 						break;
 						
 					case 1:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
-						mv=new Move('b', newLoc );
+						mv=new Objects.Sendable.Move('b', newLoc );
 						break;
 					
 					case 2:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
-						mv=new Move('l', newLoc );
+						mv=new Objects.Sendable.Move('l', newLoc );
 						break;
 						
 					
 					case 3:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
-						mv=new Move('r', newLoc );
+						mv=new Objects.Sendable.Move('r', newLoc );
 						break;
 					
 					default:
@@ -70,23 +68,23 @@ public class RouteExecution {
 					{
 					case 0:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
-						mv=new Move('b', newLoc );
+						mv=new Objects.Sendable.Move('b', newLoc );
 						break;
 						
 					case 1:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
-						mv=new Move('f', newLoc );
+						mv=new Objects.Sendable.Move('f', newLoc );
 						break;
 					
 					case 2:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
-						mv=new Move('r', newLoc );
+						mv=new Objects.Sendable.Move('r', newLoc );
 						break;
 						
 					
 					case 3:
 						newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
-						mv=new Move('l', newLoc );
+						mv=new Objects.Sendable.Move('l', newLoc );
 						break;
 					
 					default:
@@ -99,23 +97,23 @@ public class RouteExecution {
 					{
 					case 0:
 						newLoc=new Point((int)loc.getX()+1,(int)loc.getY() );
-						mv=new Move('r', newLoc );
+						mv=new Objects.Sendable.Move('r', newLoc );
 						break;
 						
 					case 1:
 						newLoc=new Point((int)loc.getX()+1,(int)loc.getY() );
-						mv=new Move('l', newLoc );
+						mv=new Objects.Sendable.Move('l', newLoc );
 						break;
 					
 					case 2:
 						newLoc=new Point((int)loc.getX()+1,(int)loc.getY() );
-						mv=new Move('f', newLoc );
+						mv=new Objects.Sendable.Move('f', newLoc );
 						break;
 						
 					
 					case 3:
 						newLoc=new Point((int)loc.getX()+1,(int)loc.getY() );
-						mv=new Move('b', newLoc );
+						mv=new Objects.Sendable.Move('b', newLoc );
 						break;
 					
 					default:
@@ -128,23 +126,23 @@ public class RouteExecution {
 					{
 					case 0:
 						newLoc=new Point((int)loc.getX()-1,(int)loc.getY() );
-						mv=new Move('l', newLoc );
+						mv=new Objects.Sendable.Move('l', newLoc );
 						break;
 						
 					case 1:
 						newLoc=new Point((int)loc.getX()-1,(int)loc.getY() );
-						mv=new Move('r', newLoc );
+						mv=new Objects.Sendable.Move('r', newLoc );
 						break;
 					
 					case 2:
 						newLoc=new Point((int)loc.getX()-1,(int)loc.getY() );
-						mv=new Move('b', newLoc );
+						mv=new Objects.Sendable.Move('b', newLoc );
 						break;
 						
 					
 					case 3:
 						newLoc=new Point((int)loc.getX()-1,(int)loc.getY() );
-						mv=new Move('f', newLoc );
+						mv=new Objects.Sendable.Move('f', newLoc );
 						break;
 					
 					default:
@@ -161,13 +159,13 @@ public class RouteExecution {
 					System.out.println("could not create move object");
 				}else
 				{
-					Commands com=new Commands("robot",mv);
-					CommandHolder.add("robot", com);
+					Objects.Commands com=new Objects.Commands("robot",mv);
+					Objects.CommandHolder.add("robot", com);
 					commandsent=true;
 				}
 				if(commandsent)
 				{
-					MoveReport report =waitForResponse();
+					Objects.Sendable.MoveReport report =waitForResponse();
 					if(report.hasMoved())
 					{
 						v.remove(0);
@@ -185,7 +183,14 @@ public class RouteExecution {
 		}
 	}
 	
-	private MoveReport waitForResponse()
+	private Point getItemLocation(String ItemID)
+	{
+		
+		//TODO get item location somehow
+		return null;
+	}
+	
+	private Objects.Sendable.MoveReport waitForResponse()
 	{
 		boolean waiting=true;
 		while(waiting)

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Vector;
 
+import Objects.Sendable.SingleTask;
+
 /*
  * @author Maria
  * Orders a list of items in a job and returns vectors of integers with the moves required to take by the robot
@@ -15,19 +17,19 @@ public class OrderPicks {
 
 	
 	
-	public ArrayList<Objects.SingleTask> items; //the list of items in the job
-	public ArrayList<Objects.SingleTask> orderedItems; //the ordered list of items
+	public ArrayList<Objects.Sendable.SingleTask> items; //the list of items in the job
+	public ArrayList<Objects.Sendable.SingleTask> orderedItems; //the ordered list of items
 	public ArrayList<Point2D> dropOffs;
 	public Point2D dropOff;
 	private boolean running=true;
 	private boolean canceled=false;
 	
 	
-	public OrderPicks(ArrayList<Objects.SingleTask> items,ArrayList<Point2D> dropOffs)
+	public OrderPicks(ArrayList<Objects.Sendable.SingleTask> items,ArrayList<Point2D> dropOffs)
 	{
 		this.dropOffs=dropOffs;
 		this.items=items;
-		orderedItems=new ArrayList<Objects.SingleTask>();
+		orderedItems=new ArrayList<Objects.Sendable.SingleTask>();
 		planOrder();
 	}
 	
@@ -51,7 +53,7 @@ public class OrderPicks {
 		canceled=true;
 	}
 	
-	public ArrayList<Objects.SingleTask> getOrder()
+	public ArrayList<Objects.Sendable.SingleTask> getOrder()
 	{
 		if(running) return null;
 		return orderedItems;
@@ -64,7 +66,7 @@ public class OrderPicks {
 	private void planOrder()
 	{
 		int miny=-1;
-		ArrayList<Objects.SingleTask> orderedItemsForMiny=new ArrayList<Objects.SingleTask>();
+		ArrayList<Objects.Sendable.SingleTask> orderedItemsForMiny=new ArrayList<Objects.Sendable.SingleTask>();
 		int minTotalDistance=-1;
 		for(int y=0;y<dropOffs.size();y++)
 		{
@@ -72,10 +74,8 @@ public class OrderPicks {
 			//picking the first item (the one closest to the robot)
 			int min=0,minI=0;
 			for(int i=0;i<items.size();i++)
-			{
-				int xx=items.get(i).getItem().getX();
-				int yy=items.get(i).getItem().getY();
-				Point loc=new Point(xx,yy);
+			{				
+				Point loc=this.getItemLocation(items.get(i).getItemID());
 				int x=getRouteDist(dropOff,loc);
 				if(min==0 || min>x)
 				{
@@ -163,12 +163,8 @@ public class OrderPicks {
 		{
 			for(int j=0;j<orderedItems.size();j++)
 			{
-				int xx=items.get(i).getItem().getX();
-				int yy=items.get(i).getItem().getY();
-				Point loci=new Point(xx,yy);
-				int xxj=items.get(i).getItem().getX();
-				int yyj=items.get(i).getItem().getY();
-				Point locj=new Point(xxj,yyj);
+				Point loci=this.getItemLocation(items.get(i).getItemID());
+				Point locj=this.getItemLocation(orderedItems.get(j).getItemID());
 				int x=getRouteDist(locj,loci);
 				if(min==-1 || min>x)
 				{
@@ -188,26 +184,18 @@ public class OrderPicks {
 	 */
 	private int getDistance()
 	{
-		int xx=orderedItems.get(0).getItem().getX();
-		int yy=orderedItems.get(0).getItem().getY();
-		Point loc=new Point(xx,yy);
+		Point loc=this.getItemLocation(orderedItems.get(0).getItemID());
 		int sum=getRouteDist(dropOff,loc);;
 		for(int i=1;i<orderedItems.size();i++)
 		{
 			if(canceled) return -1;
-			xx=orderedItems.get(i-1).getItem().getX();
-			yy=orderedItems.get(i-1).getItem().getY();
-			loc=new Point(xx,yy);
-			int xxi=orderedItems.get(i).getItem().getX();
-			int yyi=orderedItems.get(i).getItem().getY();
-			Point loci=new Point(xxi,yyi);
+			loc=this.getItemLocation(orderedItems.get(i-1).getItemID());
+			Point loci=this.getItemLocation(orderedItems.get(i).getItemID());
 			sum+=getRouteDist(loc,loci);;
 		}
 		
 		
-		xx=orderedItems.get(orderedItems.size()-1).getItem().getX();
-		yy=orderedItems.get(orderedItems.size()-1).getItem().getY();
-		loc=new Point(xx,yy);
+		loc=this.getItemLocation(orderedItems.get(orderedItems.size()-1).getItemID());
 		sum+=getRouteDist(loc,dropOff);;
 		return sum;
 	}
@@ -242,5 +230,12 @@ public class OrderPicks {
 		return null;
 	}
 	
+	
+	private Point getItemLocation(String ItemID)
+	{
 		
+		//TODO get item location somehow
+		return null;
+	}
+	
 }
