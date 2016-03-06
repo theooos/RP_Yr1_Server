@@ -1,25 +1,27 @@
 package Objects;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+
+import Objects.Sendable.SingleTask;
 
 /**
  * Represents a job to be carried out.
  */
 public class Job {
 
-	public static Map<Integer, Job> currentJobs = new HashMap<Integer, Job>();
-
 	private List<SingleTask> tasks;
+    private boolean cancelled;
     private float cancellationProb;
 
 	/**
 	 * Create an empty job.
 	 */
 	public Job() {
-		this.tasks = new ArrayList<SingleTask>();
+		this.tasks = new ArrayList<>();
+        this.cancelled = false;
+        this.cancellationProb = 0.0f;
 	}
 
 	/**
@@ -28,32 +30,54 @@ public class Job {
 	 */
 	public Job(List<SingleTask> tasks) {
 		this.tasks = tasks;
-
-		rewardPerItem();
-		rewardPerWeight();
+        this.cancelled = false;
+        this.cancellationProb = 0.0f;
 	}
 
 	/**
-	 * Add an item to the list of job items.
-	 * @param item The job item to be added.
+	 * Add a task to the list of tasks.
+	 * @param t The task to be added.
 	 */
 	public void addTask(SingleTask t) {
 		tasks.add(t);
-
-		rewardPerItem();
-		rewardPerWeight();
 	}
 
 	/**
 	 * Add an item to the list of job items.
-	 * @param item The item to be added.
+	 * @param itemID The item id to be added.
 	 * @param qty The amount of the item needed.
 	 */
-	public void addTask(Item item, int qty) {
-		tasks.add(new SingleTask(item, qty));
+	public void addTask(String itemID, int qty) {
+		tasks.add(new SingleTask(itemID, qty));
+	}
 
-		rewardPerItem();
-		rewardPerWeight();
+    /**
+     * Get the task at the given index.
+     * @param i The given index.
+     * @return The task at the given index if it exists.
+     */
+    public Optional<SingleTask> getTaskAtIndex(int i) {
+        if(i >= 0 && i < tasks.size())
+        	return Optional.of(tasks.get(i));
+        else
+            return Optional.empty();
+    }
+
+    /**
+     * Get the task with the given item ID.
+     * @param itemID The item ID.
+     * @return The task with the given item ID if it exists.
+     */
+    public Optional<SingleTask> getTask(String itemID) {
+	    for(SingleTask task : tasks)
+		    if(task.getItemID().equals(itemID))
+			    return Optional.of(task);
+        return Optional.empty();
+    }
+
+	public List<SingleTask> getTasks()
+	{
+		return tasks;
 	}
 
     /**
@@ -72,10 +96,26 @@ public class Job {
         return cancellationProb;
     }
 
+    /**
+     * Check if this job is cancelled.
+     * @return If this job is cancelled.
+     */
+    public boolean cancelled() {
+        return cancelled;
+    }
+
+    /**
+     * Cancel this job.
+     */
+    public void cancel() {
+        cancelled = true;
+    }
+
 	/**
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
 	 */
+    /* ADD BACK LATER
 	public double rewardPerItem() {
 
 		int numOfItems = 0;
@@ -90,11 +130,13 @@ public class Job {
 		return (reward / (double) numOfItems);
 
 	}
+	*/
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
+	/* WILL ADD BACK LATER
 	public double rewardPerWeight() {
 
 		double reward = 0f;
@@ -108,6 +150,7 @@ public class Job {
 
 		return (reward / weight);
 	}
+	*/
 
 	// toString method for debugging purposes
 	@Override
