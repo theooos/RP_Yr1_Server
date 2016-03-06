@@ -3,7 +3,12 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Vector;
 
+/*
+ * @author Maria
+ * Orders a list of items in a job and returns vectors of integers with the moves required to take by the robot
+ */
 
 
 public class OrderPicks {
@@ -71,7 +76,7 @@ public class OrderPicks {
 				int xx=items.get(i).getItem().getX();
 				int yy=items.get(i).getItem().getY();
 				Point loc=new Point(xx,yy);
-				int x=getRouteDist(getRobotLocation(),loc);
+				int x=getRouteDist(dropOff,loc);
 				if(min==0 || min>x)
 				{
 					if(canceled) return;
@@ -186,7 +191,7 @@ public class OrderPicks {
 		int xx=orderedItems.get(0).getItem().getX();
 		int yy=orderedItems.get(0).getItem().getY();
 		Point loc=new Point(xx,yy);
-		int sum=getRouteDist(getRobotLocation(),loc);;
+		int sum=getRouteDist(dropOff,loc);;
 		for(int i=1;i<orderedItems.size();i++)
 		{
 			if(canceled) return -1;
@@ -222,13 +227,20 @@ public class OrderPicks {
 	
 	private int getRouteDist( Point2D loc1, Point2D loc2)
 	{		
-		return 0;		
+		
+		return getPathImaginary(loc1,loc2).size();		
 	}
 	
-	private Point2D getRobotLocation()
+	public static Vector<Integer> getPathImaginary(Point2D loc1, Point2D loc2)
 	{
+		//TODO get path between 2 locations on the map in an imaginary case in which there are no other robots around
+		return null;
+	}
+	public static Vector<Integer> getPath(Point2D loc1, Point2D loc2)
+	{
+		//TODO get path between 2 locations on the map normally, at a certain time
 		return null;
 	}
 	
-	
+		
 }
