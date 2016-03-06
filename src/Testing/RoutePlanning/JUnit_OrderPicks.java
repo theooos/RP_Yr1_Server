@@ -12,6 +12,8 @@ import org.junit.Test;
 import Objects.Item;
 import Objects.SingleTask;
 
+// TO BE UPDATED AT A LATER DATE, DUE TO CONFUSION ON DATA TYPES
+
 
 /**
  * @author georgesabourin

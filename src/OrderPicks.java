@@ -15,19 +15,19 @@ public class OrderPicks {
 
 	
 	
-	public ArrayList<Objects.SingleTask> items; //the list of items in the job
-	public ArrayList<Objects.SingleTask> orderedItems; //the ordered list of items
+	public ArrayList<Objects.Sendable.SingleTask> items; //the list of items in the job
+	public ArrayList<Objects.Sendable.SingleTask> orderedItems; //the ordered list of items
 	public ArrayList<Point2D> dropOffs;
 	public Point2D dropOff;
 	private boolean running=true;
 	private boolean canceled=false;
 	
 	
-	public OrderPicks(ArrayList<Objects.SingleTask> items,ArrayList<Point2D> dropOffs)
+	public OrderPicks(ArrayList<Objects.Sendable.SingleTask> items,ArrayList<Point2D> dropOffs)
 	{
 		this.dropOffs=dropOffs;
 		this.items=items;
-		orderedItems=new ArrayList<Objects.SingleTask>();
+		orderedItems=new ArrayList<Objects.Sendable.SingleTask>();
 		planOrder();
 	}
 	
@@ -51,7 +51,7 @@ public class OrderPicks {
 		canceled=true;
 	}
 	
-	public ArrayList<Objects.SingleTask> getOrder()
+	public ArrayList<Objects.Sendable.SingleTask> getOrder()
 	{
 		if(running) return null;
 		return orderedItems;
