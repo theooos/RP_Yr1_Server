@@ -50,7 +50,7 @@ public class RobotInfo implements SendableObject {
 	// toString method for debugging purposes
 	@Override
 	public String toString() {
-		return "RobotInfo [name=" + name + ", position=" + position + "]";
+		return "RobotInfo [name=" + name + ", position=" + position + ", direction=" + direction + "]";
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class RobotInfo implements SendableObject {
 	 * @return all parameters, seperated by commas
 	 */
 	public String parameters() {
-		return (name + "," + (int)position.getX() + "," + (int)position.getY());
+		return ("RobotInfo," + name + "," + (int)position.getX() + "," + (int)position.getY() + "," + direction);
 	}
 
 }
