@@ -1,10 +1,10 @@
 package Objects;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
+import Objects.Sendable.SingleTask;
 
 /**
  * Represents a job to be carried out.
@@ -19,7 +19,7 @@ public class Job {
 	 * Create an empty job.
 	 */
 	public Job() {
-		this.tasks = new ArrayList<SingleTask>();
+		this.tasks = new ArrayList<>();
         this.cancelled = false;
         this.cancellationProb = 0.0f;
 	}
@@ -35,8 +35,8 @@ public class Job {
 	}
 
 	/**
-	 * Add an item to the list of job items.
-	 * @param item The job item to be added.
+	 * Add a task to the list of tasks.
+	 * @param t The task to be added.
 	 */
 	public void addTask(SingleTask t) {
 		tasks.add(t);
@@ -69,13 +69,16 @@ public class Job {
      * @return The task with the given item ID if it exists.
      */
     public Optional<SingleTask> getTask(String itemID) {
-        for(int i = 0; i < tasks.size(); i++) {
-            if(tasks.get(i).getItemID().equals(itemID)) {
-                return Optional.of(tasks.get(i));
-            }
-        }
+	    for(SingleTask task : tasks)
+		    if(task.getItemID().equals(itemID))
+			    return Optional.of(task);
         return Optional.empty();
     }
+
+	public List<SingleTask> getTasks()
+	{
+		return tasks;
+	}
 
     /**
      * Set the cancellation probability.
@@ -94,9 +97,17 @@ public class Job {
     }
 
     /**
+     * Check if this job is cancelled.
+     * @return If this job is cancelled.
+     */
+    public boolean cancelled() {
+        return cancelled;
+    }
+
+    /**
      * Cancel this job.
      */
-    public void cancelled() {
+    public void cancel() {
         cancelled = true;
     }
 
