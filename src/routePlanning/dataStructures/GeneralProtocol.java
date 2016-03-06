@@ -1,4 +1,4 @@
-package dataStructures;
+package routePlanning.dataStructures;
 
 public class GeneralProtocol {
 	public static final int NORTH = 0;

@@ -1,23 +1,25 @@
-package virtualRobot;
+package routePlanning.virtualRobot;
 
 import java.util.Vector;
 
-import dataStructures.GeneralProtocol;
-import dataStructures.Map;
-import dataStructures.Node;
-import dataStructures.Reservation;
+import routePlanning.dataStructures.GeneralProtocol;
+import routePlanning.dataStructures.Map;
+import routePlanning.dataStructures.Node;
+import routePlanning.dataStructures.Reservation;
+import routePlanning.pathFinding.TimePosReservations;
 
 public class Robot {
 	private int robotID;
 	private Map map;
 	private Node currentNode;
 	private Vector<Integer> pathSequence;
+	private TimePosReservations timePosReservations;
 	private int pathSequenceProgress = 0;//Index of the next move
 	
 	/**
 	 * After robot stops at goal and remains stationary(no jobs) it becomes an obstacle and has the node it resides at reserved until the next move
 	 */
-	private Reservation lastReservation;
+	private boolean stopped;
 	
 	
 	public Robot(int robotID, Map map){
@@ -25,13 +27,29 @@ public class Robot {
 		this.map = map;
 	}
 	
-	public void setUpPath(Node currentNode, Vector<Integer> pathSequence){
+	public void SetUpPath(Node currentNode){
+		this.currentNode = currentNode;
+		stopped = true;
+	}
+	
+	public void SetUpPath(Node currentNode, Vector<Integer> pathSequence, TimePosReservations timePosReservations){
 		this.currentNode = currentNode;
 		this.pathSequence = pathSequence;
+		this.timePosReservations = timePosReservations;
+		stopped = false;
+	}
+
+	///////////////////////////////////////////////////////////////////Time & Pos Reservations///////////////////////////////////////////////////////////////////////////
+	public boolean IsReserved(Node node, int time){
+		if (timePosReservations == null)
+			return false;//object created yet SetUp Method hasnt been called on this instance
+		if (stopped)
+			return node.equals(currentNode);// stopped e.g. No reservations yet, therefore return true if the current node is being checked for reservations as this robot is occupying it
+		return timePosReservations.isReserved(node, time);
 	}
 	
 	public void goToNextNode(){
-		if (pathSequenceProgress >= pathSequence.size())
+		if (stopped)
 			return;//End of path
 		
 		switch (pathSequence.get(pathSequenceProgress++)) {
@@ -51,6 +69,9 @@ public class Robot {
 			moveLeft();
 			break;
 		}
+		
+		if (pathSequenceProgress == pathSequence.size())
+			stopped = true;
 	}
 	
 	private void move(Node destinationNode){
@@ -73,14 +94,6 @@ public class Robot {
 	
 	public void moveRight() {
 		move(map.getRightNode(currentNode));
-	}
-	
-	public void setLastReservation(Reservation lastReservation) {
-		this.lastReservation = lastReservation;
-	}
-	
-	public Reservation getLastReservation() {
-		return lastReservation;
 	}
 	
 	public int getID(){

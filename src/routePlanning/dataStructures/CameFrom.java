@@ -1,4 +1,4 @@
-package dataStructures;
+package routePlanning.dataStructures;
 
 public class CameFrom {
 	public Node fromNode;

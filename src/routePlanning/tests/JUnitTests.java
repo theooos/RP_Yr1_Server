@@ -1,3 +1,4 @@
+package routePlanning.tests;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Vector;
@@ -6,10 +7,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import dataStructures.Map;
-import dataStructures.Node;
-import pathFinding.PathFinding;
-import virtualRobot.Robot;
+import routePlanning.dataStructures.Map;
+import routePlanning.dataStructures.Node;
+import routePlanning.pathFinding.PathFinding;
+import routePlanning.virtualRobot.Robot;
 
 public class JUnitTests {
 	private Map map = new Map(10, 10);

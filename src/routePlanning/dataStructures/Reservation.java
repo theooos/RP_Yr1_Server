@@ -1,4 +1,4 @@
-package dataStructures;
+package routePlanning.dataStructures;
 
 public class Reservation {
 	private int time;

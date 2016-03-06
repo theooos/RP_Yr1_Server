@@ -1,12 +1,12 @@
-package pathFinding;
+package routePlanning.pathFinding;
 
 import java.util.Vector;
 
-import dataStructures.CameFrom;
-import dataStructures.Map;
-import dataStructures.Node;
-import dataStructures.Reservation;
-import virtualRobot.Robot;
+import routePlanning.dataStructures.CameFrom;
+import routePlanning.dataStructures.Map;
+import routePlanning.dataStructures.Node;
+import routePlanning.dataStructures.Reservation;
+import routePlanning.virtualRobot.Robot;
 
 /**
  * Returns an optimal path from a start node to the goal node considering other robots' motion i.e. avoids collisions with both walls & other robots
@@ -39,6 +39,9 @@ public class PathFinding {
 	
 	/**
 	 * gCosts(cost of journey from start to current node) for explored & frontier nodes
+	 * 
+	 * Each frontier node has the time at which the robot could be at that node
+	 * this time is equal to the gCost of the frontier node
 	 */
 	private int gCost = Integer.MAX_VALUE;
 	private Vector<Integer> gCosts = new Vector<Integer>(0);
@@ -50,7 +53,7 @@ public class PathFinding {
 	private Vector<Integer> fCosts = new Vector<Integer>(0);
 	
 	///////////////////////////////////////////////////////////////////Time & Pos Reservations///////////////////////////////////////////////////////////////////////////
-	TimePosReservations timePosReservations;
+	TimePosReservations timePosReservations;//Reset every time a new path is generated
 	int time;
 	private Vector<Node> nodePath = new Vector<Node>(0);
 	private Vector<Robot> robots = new Vector<Robot>(0);
@@ -61,11 +64,19 @@ public class PathFinding {
 	 */
 	public PathFinding(Map map) {
 		this.map = map;
-		timePosReservations = new TimePosReservations();
 	}
 
 	public void addRobot(Robot robot){
 		robots.add(robot);
+		RobotsReservations.AddRobot(robot);
+	}
+	
+	/**
+	 * Get the time-position reservations for a robot instance after getting the path
+	 * @return
+	 */
+	public TimePosReservations getTimePosReservations() {
+		return timePosReservations;
 	}
 	
 	public Vector<Integer> GetPath(Node startNode, Node goalNode, int time, Robot robot) {
@@ -98,13 +109,18 @@ public class PathFinding {
 					neighbourNode = map.getRightNode(current);
 					break;
 				}
-				if(neighbourNode == null || explored.contains(neighbourNode) || neighbourNode.status == Node.WALL){//null - Tried to find neighbour out of bounds
+				
+				//null - Tried to find neighbour out of bounds vvv
+				if(neighbourNode == null || explored.contains(neighbourNode) 
+					|| neighbourNode.status == Node.WALL || RobotsReservations.IsReserved(neighbourNode, currentGCost + 1)){
 					continue;
 				}
 				
 				fCost = GetFCost(currentGCost, current, goalNode);
 				
 				if(!frontier.contains(neighbourNode)){
+					//AddToFrontier(neighbourNode, currentGCost + 1, GetFCost(neighbourNode, goalNode));
+					//Doesnt work with above, I suspect the reason being is: it saves a copy of neighbourNode when using AddToFrontier
 					frontier.add(neighbourNode);
 					gCosts.add(currentGCost + 1);
 					fCosts.add(GetFCost(neighbourNode, goalNode));
@@ -121,26 +137,32 @@ public class PathFinding {
 		return null;//Return Failure
 	}
 	
+	/**
+	 * SetUp before calling GetPath
+	 * @param startNode
+	 * @param goalNode
+	 * @param time
+	 */
 	private void SetUp(Node startNode, Node goalNode, int time){
 		this.time = time;
+		timePosReservations = new TimePosReservations();
 		
 		explored.clear();
 		
 		frontier.clear();
-		frontier.add(startNode);
 		
 		pathTrace.clear();
 		nodePath.clear();
 		
 		gCost = Integer.MAX_VALUE;
 		gCosts.clear();
-		gCosts.add(0);
 		
 		fCost = Integer.MAX_VALUE;
 		fCosts.clear();
-		fCosts.add(GetFCost(0, startNode, goalNode));
+		
+		AddToFrontier(startNode, 0, GetFCost(0, startNode, goalNode));
 	}
-
+	
 	private int GetGCost(Node node){
 		return gCosts.get(frontier.indexOf(node));
 	}
@@ -178,6 +200,12 @@ public class PathFinding {
 		}
 		
 		return frontier.get(bestNodeID);
+	}
+	
+	private void AddToFrontier(Node node, int gCost, int fCost){
+		frontier.add(node);
+		gCosts.add(gCost);
+		fCosts.add(fCost);
 	}
 	
 	private void RemoveFromFrontier(Node node){
@@ -246,10 +274,6 @@ public class PathFinding {
 					System.out.println("Added reservation Time: " + (time + d + 1) + " Node: " + nodePath.get(d).x + "," + nodePath.get(d).y);
 					//System.out.print(directions.get(d) + ", ");
 				}
-				d--;
-				robot.setLastReservation(new Reservation(time + d + 1, nodePath.get(d)));//Set last reservation for robot
-				System.out.println("Robot last reservation " + "RobotID: " + robot.getID() + " Time: " + (time + d + 1) + " Node: " + nodePath.get(d).x + "," + nodePath.get(d).y);
-				
 				System.out.println();
 				return directions;
 			}
