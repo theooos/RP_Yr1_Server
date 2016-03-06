@@ -11,7 +11,7 @@ public class Server extends Thread {
 	private RobotLobby lobby = new RobotLobby();
 	
 	public Server() {
-		// TODO Auto-generated constructor stub
+		lobby.start();
 	}
 	
 	@Override
@@ -20,8 +20,7 @@ public class Server extends Thread {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				out("Server sleep failed.");
 			}
 		}
 	}
@@ -29,4 +28,10 @@ public class Server extends Thread {
 	public boolean serverAlive(){
 		return isAlive;
 	}
+	
+	// Helper command
+	private void out(Object n) {
+		System.out.println(""+n);
+	}
+
 }

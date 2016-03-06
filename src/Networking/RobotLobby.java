@@ -3,13 +3,17 @@ package Networking;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import Objects.Sendable.Move;
+import Objects.Sendable.SendableObject;
+import Objects.Sendable.SingleTask;
+
 public class RobotLobby extends Thread {
 
 	private boolean alive = true;
 	private ArrayList<Puppet> puppets = new ArrayList<Puppet>();
 
 	public RobotLobby() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	@Override
@@ -28,10 +32,23 @@ public class RobotLobby extends Thread {
 	// TODO This when objects are sorted and I know where things are going
 	synchronized private void checkCommands(){
 		for(Puppet pup : puppets){
-//			Object comm = pup.nextCommand();
-//			if(comm instanceof Move){
-//				blah
-//			}
+			SendableObject comm = null;
+ 			
+ 		    while((comm = pup.popCommand()) != null)
+ 		    {
+ 		    	if(comm instanceof Move){
+ 		    		// Do blah
+ 		    	}
+ 		    	else if(comm instanceof SingleTask){
+ 		    		// Do blah
+ 		    	}
+ 		    }
+		}
+		try {
+			Thread.sleep(200);
+		}
+		catch (InterruptedException e) {
+			out("Sleep failed in the lobby");
 		}
 	}
 	
