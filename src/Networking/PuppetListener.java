@@ -28,18 +28,24 @@ public class PuppetListener extends Thread {
 		while(alive){
 			try {
 				String fullComm = fromRobot.readUTF();
+				out("Full comm: " + fullComm);
 				Object[] splitComm = Splitter.split(fullComm);
 				String type = (String) splitComm[0];
-				Object[] objParams = Arrays.copyOfRange(splitComm, 1, splitComm.length);
+				Object[] objParams = new Object[splitComm.length-1];
+				for(int i = 1; i < splitComm.length; i++){
+					objParams[i-1] = splitComm[i];
+				}
 				figureType(type, objParams);
 			}
 			catch (IOException e) {
 				out("Connection died, shutting down.");
+				alive = false;
 			}
 		}
 	}
 	
 	private synchronized void figureType(String type, Object[] parameters) {
+		type = "Console";
 		if(type.equals("Console")){
 			String message = "";
 			for(Object param : parameters){

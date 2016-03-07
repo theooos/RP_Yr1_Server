@@ -1,14 +1,17 @@
 package Networking;
 
+import java.awt.Point;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import Objects.Sendable.Move;
+import Objects.Sendable.SendableObject;
+import Objects.Sendable.SingleTask;
 import lejos.pc.comm.NXTComm;
 import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
-import Objects.Sendable.SendableObject;
 
 public class Puppet extends Thread {
 	
@@ -25,8 +28,15 @@ public class Puppet extends Thread {
 			
 			listener = new PuppetListener(fromRobot);
 			listener.start();
+			
+			Thread.sleep(5000);
+			
+			Move testMove = new Move('f',new Point(2,3));
+			send(testMove);
+			SingleTask testTask = new SingleTask("Something", 42);
+			send(testTask);
 		}
-		catch (NXTCommException e) {
+		catch (NXTCommException | InterruptedException e) {
 			out("Failed to connect with: " + name);
 		}
 	}
@@ -59,8 +69,11 @@ public class Puppet extends Thread {
 	
 	public void send(SendableObject command) {
 		String dissolve = command.parameters();
+		out("Dissolve: " + dissolve);
 		try {
 			toRobot.writeUTF(dissolve);
+			toRobot.flush();
+			out("Wrote dissolve.");			
 		} catch (IOException e) {
 			out("Sending " + dissolve + " failed");
 		}
