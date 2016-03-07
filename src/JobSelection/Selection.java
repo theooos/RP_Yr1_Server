@@ -39,7 +39,7 @@ public class Selection implements Comparator<Job>{
 			@Override
 			public int compare(Job job1, Job job2) {
 	
-		
+			
 				return (job1.getRewardPerItem().compareTo(job1.getRewardPerItem()));
 		
 			}
@@ -48,7 +48,9 @@ public class Selection implements Comparator<Job>{
 		//add to queue
 		for(Job j : joblist) {
 			
-			jobQueue.add(j);
+			if(j.getTotalWeight()<50){
+				jobQueue.add(j);
+			}
 			
 		}
 		
