@@ -151,6 +151,24 @@ public class Job {
 		return (reward / weight);
 	}
 	*/
+    
+    /**
+     * calculate total weight of job
+     * @return totalweight the total weight of the task
+     */
+    /* WILL ADD BACK IN
+    public double getTotalWeight() {
+    	
+    	double totalweight = 0.0;
+    	
+    	for (int i = 0; i < tasks.size(); i++){
+    		Item item = tasks.get(i).getItem();
+    		totalweight = totalweight + (item.getWeight() * tasks.get(i).getQuantity());
+    	}
+    	
+    	return totalweight;
+    }
+    */
 
 	// toString method for debugging purposes
 	@Override
