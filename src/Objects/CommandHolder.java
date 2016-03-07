@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * 
- * @author theo
+ * @author Theo
  *
  */
 public class CommandHolder {
