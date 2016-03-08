@@ -1,7 +1,6 @@
 package Objects;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import Objects.Sendable.RobotInfo;
 
@@ -13,7 +12,7 @@ public class AllRobots {
 		return robots;
 	}
 	
-	public synchronized static RobotInfo getRobot(UUID name){
+	public synchronized static RobotInfo getRobot(String name){
 		for(RobotInfo robot : robots){
 			if(robot.getName().equals(name)) return robot;
 		}
@@ -24,14 +23,14 @@ public class AllRobots {
 		robots.add(newBot);
 	}
 	
-	public synchronized static boolean checkExists(UUID name){
+	public synchronized static boolean checkExists(String name){
 		for(RobotInfo robot : robots){
 			if(robot.getName().equals(name)) return true;
 		}
 		return false;
 	}
 	
-	public synchronized static void modifyRobot(UUID name, RobotInfo newInfo){
+	public synchronized static void modifyRobot(String name, RobotInfo newInfo){
 		ArrayList<RobotInfo> newList = new ArrayList<RobotInfo>();
 		boolean robotFound = false;
 		
@@ -49,7 +48,7 @@ public class AllRobots {
 		if(!robotFound) throw new IllegalArgumentException("Robot " + name + " not found");
 	}
 	
-	public synchronized static void removeRobot(UUID name){
+	public synchronized static void removeRobot(String name){
 		ArrayList<RobotInfo> newList = new ArrayList<RobotInfo>();
 		boolean robotFound = false;
 		
