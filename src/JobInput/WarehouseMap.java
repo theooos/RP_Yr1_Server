@@ -20,7 +20,7 @@ public class WarehouseMap {
 
     /**
      * Create a new warehouse map.
-     * @param gridWith The warehouse width.
+     * @param gridWidth The warehouse width.
      * @param gridHeight The warehouse height.
      * @param doFile The file containing the drop off locations.
      */

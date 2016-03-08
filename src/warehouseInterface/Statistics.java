@@ -6,6 +6,8 @@ import java.awt.*;
 
 public class Statistics
 {
+	private static DefaultTableModel tableModel;
+
 	public static JPanel draw()
 	{
 		JPanel panel = new JPanel();
@@ -15,7 +17,7 @@ public class Statistics
 		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 32));
 		title.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-		DefaultTableModel tableModel = new DefaultTableModel(new String[] { "Revenue made", "Jobs done", "Jobs cancelled" }, 1);
+		tableModel = new DefaultTableModel(new String[] { "Revenue made", "Jobs done", "Jobs cancelled" }, 1);
 		JTable table = new JTable(tableModel) {
 			@Override
 			public boolean isCellEditable(int row, int column)
@@ -34,5 +36,20 @@ public class Statistics
 		panel.add(new JScrollPane(table));
 		panel.setBorder(BorderFactory.createEmptyBorder(0, 30, 150, 30));
 		return panel;
+	}
+
+	public static void increaseRevenue(double amount)
+	{
+
+	}
+
+	public static void jobDone()
+	{
+
+	}
+
+	public static void jobCancelled()
+	{
+
 	}
 }

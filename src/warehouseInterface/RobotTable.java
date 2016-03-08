@@ -22,13 +22,13 @@ public class RobotTable
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
-		viewInfo.addActionListener(e -> viewRobotInfo(AllRobots.getRobot((UUID) table.getValueAt(table.getSelectedRow(), 0))));
+		viewInfo.addActionListener(e -> viewRobotInfo(AllRobots.getRobot((String) table.getValueAt(table.getSelectedRow(), 0))));
 		popupMenu.add(viewInfo);
 		table.setComponentPopupMenu(popupMenu);
 
 		panel.add(new JScrollPane(table), BorderLayout.CENTER);
 
-		RobotInfo robot1 = new RobotInfo(UUID.randomUUID(), new Point(5, 1)), robot2 = new RobotInfo(UUID.randomUUID(), new Point(9, 5), Direction.EAST), robot3 = new RobotInfo(UUID.randomUUID(), new Point(1, 7), Direction.SOUTH);
+		RobotInfo robot1 = new RobotInfo("Tay Tay", new Point(5, 1)), robot2 = new RobotInfo("Alfonso", new Point(9, 5), Direction.EAST), robot3 = new RobotInfo("John Cena", new Point(1, 7), Direction.SOUTH);
 		addRobot(robot1);
 		AllRobots.addRobot(robot1);
 		addRobot(robot2);
@@ -48,7 +48,17 @@ public class RobotTable
 		tableModel.addRow(new Object[] { robot.getName(), "Ready" });
 	}
 
-	public static void updateStatus(UUID robot, String status)
+	private static void removeRobot(RobotInfo robot)
+	{
+		for(int i = 0; i < tableModel.getRowCount(); i++)
+			if(tableModel.getValueAt(i, 0).equals(robot.getName()))
+			{
+				tableModel.removeRow(i);
+				break;
+			}
+	}
+
+	public static void updateStatus(String robot, String status)
 	{
 		for(int i = 0; i < tableModel.getRowCount(); i++)
 		{
