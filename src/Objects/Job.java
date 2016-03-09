@@ -1,5 +1,6 @@
 package Objects;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,8 +48,8 @@ public class Job {
 	 * @param itemID The item id to be added.
 	 * @param qty The amount of the item needed.
 	 */
-	public void addTask(String itemID, int qty) {
-		tasks.add(new SingleTask(itemID, qty));
+	public void addTask(String itemID, int qty, Point location) {
+		tasks.add(new SingleTask(itemID, qty, location));
 	}
 
     /**

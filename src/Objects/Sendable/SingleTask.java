@@ -45,7 +45,7 @@ public class SingleTask implements SendableObject {
 	 * Get the location.
 	 * @return The location.
 	 */
-	public int getLocation() {
+	public Point getLocation() {
 		return location;
 	}
 
