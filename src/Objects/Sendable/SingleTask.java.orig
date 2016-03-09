@@ -10,7 +10,11 @@ public class SingleTask implements SendableObject {
 	
 	private String itemID;
 	private int quantity;
+<<<<<<< HEAD
+	private Point location;
+=======
     private Point location;
+>>>>>>> objects
 
     /**
      * Create a new single task.
@@ -21,8 +25,12 @@ public class SingleTask implements SendableObject {
 		
 		this.itemID = itemID;
 		this.quantity = quantity;
+<<<<<<< HEAD
+		this.location = location;
+=======
         this.location = location;
 		
+>>>>>>> objects
 	}
 	
 	/**
@@ -40,6 +48,16 @@ public class SingleTask implements SendableObject {
 	public int getQuantity() {
 		return quantity;
 	}
+	
+	
+	/**
+	 * Get location method
+	 * @return location the item pick up point
+	 */
+	public Point getLocation() {
+		
+		return location;
+	}
 
 	/**
 	 * Get the location.
@@ -56,7 +74,7 @@ public class SingleTask implements SendableObject {
 	}
 	
 	/**
-	 * Gets the parameters in csv format.
+	 * Gets the parameters in csv format
 	 * @return all parameters, seperated by commas
 	 */
 	public String parameters() {
