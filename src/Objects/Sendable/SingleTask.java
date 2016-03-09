@@ -51,13 +51,6 @@ public class SingleTask implements SendableObject {
 		return location;
 	}
 
-	/**
-	 * Get the location.
-	 * @return The location.
-	 */
-	public Point getLocation() {
-		return location;
-	}
 
 	// toString method for debugging purposes
 	@Override
