@@ -18,9 +18,9 @@ public class GridMap
 	{
 		WarehouseMap grid = new WarehouseMap(GRID_WIDTH, GRID_HEIGHT, "res/drops.csv");
 		ArrayList<Point> obstacles = new ArrayList<>();
-		for(int i = 1; i < 9; i++)
+		for(int i = 1; i < 11; i++)
 			for(int j = 2; j < 7; j++)
-				if(i != 3 && i != 6)
+				if(i == 1 || i == 4 || i == 7 || i == 10)
 					obstacles.add(new Point(i, j));
 		grid.setObstacles(obstacles);
 		panel = new JPanel() {
