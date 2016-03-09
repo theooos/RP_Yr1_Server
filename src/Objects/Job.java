@@ -111,6 +111,14 @@ public class Job {
         cancelled = true;
     }
 
+    /**
+     * Get the number of tasks.
+     * @return The number of tasks.
+     */
+    public int getNumOfTasks() {
+        return tasks.size();
+    }
+
 	/**
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
