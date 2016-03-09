@@ -2,10 +2,11 @@ package Objects;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import JobInput.JobProcessor;
+//import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
 
 /**
@@ -16,11 +17,12 @@ public class Job {
 	private List<SingleTask> tasks;
     private boolean cancelled;
     private float cancellationProb;
+    private HashMap<String, Item> items;
 
 	/**
 	 * Create an empty job.
 	 */
-	public Job() {
+	public Job(HashMap<String, Item> items) {
 		this.tasks = new ArrayList<>();
         this.cancelled = false;
         this.cancellationProb = 0.0f;
