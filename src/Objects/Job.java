@@ -124,42 +124,40 @@ public class Job {
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
 	 */
-    /* ADD BACK LATER
 	public double rewardPerItem() {
 
 		int numOfItems = 0;
 		double reward = 0f;
 
-		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
-			numOfItems += tasks.get(i).getQuantity();
-			reward += item.getReward() * tasks.get(i).getQuantity(); 
+		for(SingleTask task : tasks)
+		{
+			Item item = JobProcessor.getItem(task.getItemID());
+			numOfItems += task.getQuantity();
+			reward += item.getReward() * task.getQuantity();
 		}
 
 		return (reward / (double) numOfItems);
 
 	}
-	*/
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
-	/* WILL ADD BACK LATER
 	public double rewardPerWeight() {
 
 		double reward = 0f;
 		double weight = 0f;
 
-		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
-			reward += item.getReward() * tasks.get(i).getQuantity();
-			weight += item.getWeight() * tasks.get(i).getQuantity();
+		for(SingleTask task : tasks)
+		{
+			Item item = JobProcessor.getItem(task.getItemID());
+			reward += item.getReward() * task.getQuantity();
+			weight += item.getWeight() * task.getQuantity();
 		}
 
 		return (reward / weight);
 	}
-	*/
 
 	// toString method for debugging purposes
 	@Override
