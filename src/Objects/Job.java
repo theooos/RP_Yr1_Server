@@ -26,6 +26,7 @@ public class Job {
 		this.tasks = new ArrayList<>();
         this.cancelled = false;
         this.cancellationProb = 0.0f;
+        this.items = items;
 	}
 
 	/**
@@ -134,7 +135,8 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-			Item item = JobProcessor.getItem(task.getItemID());
+			Item item = items.get(task.getItemID());
+			//Item item = JobProcessor.getItem(task.getItemID());
 			numOfItems += task.getQuantity();
 			reward += item.getReward() * task.getQuantity();
 		}
@@ -154,13 +156,31 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-			Item item = JobProcessor.getItem(task.getItemID());
+			Item item = items.get(task.getItemID());
 			reward += item.getReward() * task.getQuantity();
 			weight += item.getWeight() * task.getQuantity();
 		}
 
 		return (reward / weight);
 	}
+	
+	/**
+     * calculate total weight of job
+     * @return totalweight the total weight of the task
+     */
+     public double getTotalWeight() {
+    	
+    	double totalweight = 0.0;
+    	
+    	for(SingleTask task : tasks)
+    	{
+    		Item item = items.get(task.getItemID());
+    		totalweight = totalweight + (item.getWeight() * task.getQuantity());
+    	}
+    	
+    	return totalweight;
+    }
+    
 
 	// toString method for debugging purposes
 	@Override
