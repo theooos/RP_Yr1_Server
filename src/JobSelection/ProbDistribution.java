@@ -1,9 +1,9 @@
 package JobSelection;
 
+import java.util.Collection;
 import java.util.function.Predicate;
 
 import JobInput.JobProcessor;
-import Objects.Job;
 
 public class ProbDistribution {
 
@@ -32,12 +32,10 @@ public class ProbDistribution {
         return sum;
     }
 
-    public static ProbDistribution calculateProbDistrOfJobs(Predicate<Job> p) {
+    public static <T> ProbDistribution calculateProbDistr(Collection<T> col, Predicate<T> p) {
         
         float[] prob = new float[2];
-        int numSatisfyingP = (int) JobProcessor
-        						.getAllJobs()
-        						.values()
+        int numSatisfyingP = (int) col
         						.stream()
         						.filter(p)
         						.count();
