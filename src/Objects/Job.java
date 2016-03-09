@@ -2,8 +2,8 @@ package Objects;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 //import JobInput.JobProcessor;
@@ -17,12 +17,12 @@ public class Job {
 	private List<SingleTask> tasks;
     private boolean cancelled;
     private float cancellationProb;
-    private HashMap<String, Item> items;
+    private Map<String, Item> items;
 
 	/**
 	 * Create an empty job.
 	 */
-	public Job(HashMap<String, Item> items) {
+	public Job(Map<String, Item> items) {
 		this.tasks = new ArrayList<>();
         this.cancelled = false;
         this.cancellationProb = 0.0f;
@@ -33,7 +33,7 @@ public class Job {
 	 * Create a job from a list of tasks.
 	 * @param tasks The tasks in the job.
 	 */
-	public Job(List<SingleTask> tasks) {
+	public Job(List<SingleTask> tasks, Map<String, Item> items) {
 		this.tasks = tasks;
         this.cancelled = false;
         this.cancellationProb = 0.0f;

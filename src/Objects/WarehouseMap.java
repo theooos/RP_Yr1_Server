@@ -1,10 +1,12 @@
-package JobInput;
+//package JobInput;
+package Objects;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import JobInput.JobProcessor;
 import Objects.Direction;
 
 /**
