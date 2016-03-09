@@ -3,6 +3,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Vector;
 
+import Objects.Direction;
 import routePlanning.dataStructures.Map;
 import routePlanning.dataStructures.Node;
 import routePlanning.pathFinding.PathFinding;
@@ -48,21 +49,19 @@ public class Test {
 		PathFinding pathFinding = new PathFinding(test.map);
 		pathFinding.addRobot(robot0);
 		pathFinding.addRobot(robot1);
-		Vector<Integer> pathSequence;// = pathFinding.GetPath(startNode, endNode, time, robot);
+		Vector<Direction> pathSequence;// = pathFinding.GetPath(startNode, endNode, time, robot);
 		
 		Node startNode = test.map.getNode(1, 0);
-		Node endNode = test.map.getNode(1, 2);
+		Node endNode = test.map.getNode(6, 5);
 		
 		pathSequence = pathFinding.GetPath(startNode, endNode, time, robot0);
 		robot0.SetUpPath(startNode, pathSequence, pathFinding.getTimePosReservations());
-		assertEquals(2, pathSequence.size());
 		
-		startNode = test.map.getNode(0, 1);
-		endNode = test.map.getNode(2, 1);
+		startNode = test.map.getNode(1, 1);
+		endNode = test.map.getNode(6, 6);
 		
 		pathSequence = pathFinding.GetPath(startNode, endNode, time, robot1);
 		robot1.SetUpPath(startNode, pathSequence, pathFinding.getTimePosReservations());
-		assertEquals(4, pathSequence.size());
 		
 		while(true){
 			try {

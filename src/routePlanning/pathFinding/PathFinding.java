@@ -2,10 +2,10 @@ package routePlanning.pathFinding;
 
 import java.util.Vector;
 
+import Objects.Direction;
 import routePlanning.dataStructures.CameFrom;
 import routePlanning.dataStructures.Map;
 import routePlanning.dataStructures.Node;
-import routePlanning.dataStructures.Reservation;
 import routePlanning.virtualRobot.Robot;
 
 /**
@@ -20,7 +20,7 @@ public class PathFinding {
 	 */
 	Map map;
 	
-	private Node current;//Current node
+	private Node current;//Cimport routePlanning.dataStructures.Reservation;urrent node
 	
 	/**
 	 * Explored node set
@@ -79,7 +79,17 @@ public class PathFinding {
 		return timePosReservations;
 	}
 	
-	public Vector<Integer> GetPath(Node startNode, Node goalNode, int time, Robot robot) {
+	/**
+	 * Get path length assuming no other robots present on the map
+	 * @param startNode
+	 * @param goalNode
+	 * @return
+	 */
+	/*public int GetPath(Node startNode, Node goalNode){
+		
+	}*/
+
+	public Vector<Direction> GetPath(Node startNode, Node goalNode, int time, Robot robot) {
 		SetUp(startNode, goalNode, time);//Set up & clean up after potential previous search
 		
 		while(!frontier.isEmpty()) {
@@ -232,8 +242,8 @@ public class PathFinding {
 	 * @param robot 
 	 * @return set of directions to the goal
 	 */
-	private Vector<Integer> ReconstructPath(Node goalNode, Robot robot) {
-		Vector<Integer> directions = new Vector<Integer>(0);
+	private Vector<Direction> ReconstructPath(Node goalNode, Robot robot) {
+		Vector<Direction> directions = new Vector<Direction>(0);
 		
 		//Look for goal node i.e. a starting point to trace the solution path
 		for (int i = 0; i < pathTrace.size(); i++){

@@ -2,6 +2,7 @@ package routePlanning.virtualRobot;
 
 import java.util.Vector;
 
+import Objects.Direction;
 import routePlanning.dataStructures.GeneralProtocol;
 import routePlanning.dataStructures.Map;
 import routePlanning.dataStructures.Node;
@@ -12,7 +13,7 @@ public class Robot {
 	private int robotID;
 	private Map map;
 	private Node currentNode;
-	private Vector<Integer> pathSequence;
+	private Vector<Direction> pathSequence;
 	private TimePosReservations timePosReservations;
 	private int pathSequenceProgress = 0;//Index of the next move
 	
@@ -32,7 +33,7 @@ public class Robot {
 		stopped = true;
 	}
 	
-	public void SetUpPath(Node currentNode, Vector<Integer> pathSequence, TimePosReservations timePosReservations){
+	public void SetUpPath(Node currentNode, Vector<Direction> pathSequence, TimePosReservations timePosReservations){
 		this.currentNode = currentNode;
 		this.pathSequence = pathSequence;
 		this.timePosReservations = timePosReservations;
@@ -53,19 +54,19 @@ public class Robot {
 			return;//End of path
 		
 		switch (pathSequence.get(pathSequenceProgress++)) {
-		case GeneralProtocol.NORTH:
+		case NORTH:
 			moveUp();
 			break;
 
-		case GeneralProtocol.SOUTH:
+		case SOUTH:
 			moveDown();	
 			break;
 					
-		case GeneralProtocol.EAST:
+		case EAST:
 			moveRight();
 			break;
 			
-		case GeneralProtocol.WEST:
+		case WEST:
 			moveLeft();
 			break;
 		}

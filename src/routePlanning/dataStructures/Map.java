@@ -1,4 +1,5 @@
 package routePlanning.dataStructures;
+import Objects.Direction;
 
 public class Map {
 	/**
@@ -20,10 +21,6 @@ public class Map {
 				map[i][j] = new Node(i, j, ((Integer) i).toString() + "," + ((Integer) j).toString());
 			}
 		}
-	}
-	
-	public Node getNode(int x, int y){
-		return map[x][y];
 	}
 	
 	public Node getAboveNode(Node node){
@@ -68,23 +65,28 @@ public class Map {
 	 * @param node2
 	 * @return relative position defined by constants, only returns relative position in one direction i.e. never diagonal relative position
 	 */
-	public int getRelativePosition(Node node1, Node node2){
+	public Direction getRelativePosition(Node node1, Node node2){
 		if(node2.x > node1.x){
-			return GeneralProtocol.EAST;
+			return Direction.EAST;
 		}
 		else if(node2.x < node1.x){
-			return GeneralProtocol.WEST;
+			return Direction.WEST;
 		}
 		else if(node2.y > node1.y){
-			return GeneralProtocol.SOUTH;
+			return Direction.SOUTH;
 		}
 		else if(node2.y < node1.y){
-			return GeneralProtocol.NORTH;
+			return Direction.NORTH;
 		}
 		else {//Should never happen
-			return (Integer) null;
+			return null;
 		}
 		
+	}
+	
+	//DEBUG
+	public Node getNode(int x, int y){
+		return map[x][y];
 	}
 	
 	public int getWidth(){
