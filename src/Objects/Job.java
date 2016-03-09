@@ -111,11 +111,18 @@ public class Job {
         cancelled = true;
     }
 
+    /**
+     * Get the number of tasks.
+     * @return The number of tasks.
+     */
+    public int getNumOfTasks() {
+        return tasks.size();
+    }
+
 	/**
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
 	 */
-    /* ADD BACK LATER
 	public double rewardPerItem() {
 
 		int numOfItems = 0;
@@ -130,13 +137,13 @@ public class Job {
 		return (reward / (double) numOfItems);
 
 	}
-	*/
+	
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
-	/* WILL ADD BACK LATER
+	
 	public double rewardPerWeight() {
 
 		double reward = 0f;
@@ -150,7 +157,24 @@ public class Job {
 
 		return (reward / weight);
 	}
-	*/
+	
+    
+    /**
+     * calculate total weight of job
+     * @return totalweight the total weight of the task
+     */
+     public double getTotalWeight() {
+    	
+    	double totalweight = 0.0;
+    	
+    	for (int i = 0; i < tasks.size(); i++){
+    		Item item = tasks.get(i).getItem();
+    		totalweight = totalweight + (item.getWeight() * tasks.get(i).getQuantity());
+    	}
+    	
+    	return totalweight;
+    }
+    
 
 	// toString method for debugging purposes
 	@Override
