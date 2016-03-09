@@ -57,7 +57,7 @@ public class SingleTask implements SendableObject {
 	
 	/**
 	 * Gets the parameters in csv format.
-	 * @return all parameters, seperated by commas
+	 * @return all parameters, seperated by commas.
 	 */
 	public String parameters() {
 		return ("SingleTask," + itemID+","+quantity);
