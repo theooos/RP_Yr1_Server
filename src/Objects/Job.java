@@ -1,9 +1,11 @@
 package Objects;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
 
 /**
@@ -47,8 +49,8 @@ public class Job {
 	 * @param itemID The item id to be added.
 	 * @param qty The amount of the item needed.
 	 */
-	public void addTask(String itemID, int qty) {
-		tasks.add(new SingleTask(itemID, qty));
+	public void addTask(String itemID, int qty, Point location) {
+		tasks.add(new SingleTask(itemID, qty, location));
 	}
 
     /**
@@ -111,6 +113,14 @@ public class Job {
         cancelled = true;
     }
 
+    /**
+     * Get the number of tasks.
+     * @return The number of tasks.
+     */
+    public int getNumOfTasks() {
+        return tasks.size();
+    }
+
 	/**
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
@@ -120,31 +130,31 @@ public class Job {
 		int numOfItems = 0;
 		double reward = 0f;
 
-		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
-			numOfItems += tasks.get(i).getQuantity();
-			reward += item.getReward() * tasks.get(i).getQuantity(); 
+		for(SingleTask task : tasks)
+		{
+			Item item = JobProcessor.getItem(task.getItemID());
+			numOfItems += task.getQuantity();
+			reward += item.getReward() * task.getQuantity();
 		}
 
 		return (reward / (double) numOfItems);
 
 	}
-	
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
-	
 	public double rewardPerWeight() {
 
 		double reward = 0f;
 		double weight = 0f;
 
-		for(int i = 0; i < tasks.size(); i++) {
-			Item item = tasks.get(i).getItem();
-			reward += item.getReward() * tasks.get(i).getQuantity();
-			weight += item.getWeight() * tasks.get(i).getQuantity();
+		for(SingleTask task : tasks)
+		{
+			Item item = JobProcessor.getItem(task.getItemID());
+			reward += item.getReward() * task.getQuantity();
+			weight += item.getWeight() * task.getQuantity();
 		}
 
 		return (reward / weight);
@@ -167,7 +177,6 @@ public class Job {
     	return totalweight;
     }
     
-
 	// toString method for debugging purposes
 	@Override
 	public String toString() {

@@ -1,7 +1,7 @@
 package Objects;
 
+import java.awt.*;
 import java.util.List;
-import java.util.UUID;
 
 import Objects.Sendable.SingleTask;
 
@@ -13,21 +13,21 @@ import Objects.Sendable.SingleTask;
 public class CustomerOrder {
 	
 	public List<Job> currentJobs;
-	private UUID JobID;
+	private String JobID;
 	private List<SingleTask> tasks;
 
-	public CustomerOrder(UUID JobID) {
+	public CustomerOrder(String JobID) {
 		this.JobID = JobID;
 	}
 	
-	public CustomerOrder(UUID JobID, List<SingleTask> tasks) {
+	public CustomerOrder(String JobID, List<SingleTask> tasks) {
 		this.JobID = JobID;
 		this.tasks = tasks;
 	}
 	
 	/**
 	 * Add a new task to the list of tasks
-	 * @param item Item to add
+	 * @param task Task to add
 	 */
 	public void addTask(SingleTask task) {
 		tasks.add(task);
@@ -36,10 +36,11 @@ public class CustomerOrder {
 	/**
 	 * Add a new abstract item to the list of SingleTasks
 	 * @param item Item to add
-	 * @param quanity Quantity to add
+	 * @param quantity Quantity to add
+	 * @param location Location to add
 	 */
-	public void addTask(String item, int quantity) {
-		tasks.add(new SingleTask(item, quantity));
+	public void addTask(String item, int quantity, Point location) {
+		tasks.add(new SingleTask(item, quantity, location));
 	}
 
 	// toString method for debugging purposes

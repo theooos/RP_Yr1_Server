@@ -10,7 +10,7 @@ public class SingleTask implements SendableObject {
 	
 	private String itemID;
 	private int quantity;
-	private Point location;
+    private Point location;
 
     /**
      * Create a new single task.
@@ -21,7 +21,8 @@ public class SingleTask implements SendableObject {
 		
 		this.itemID = itemID;
 		this.quantity = quantity;
-		this.location = location;
+        this.location = location;
+		
 	}
 	
 	/**
@@ -50,6 +51,14 @@ public class SingleTask implements SendableObject {
 		return location;
 	}
 
+	/**
+	 * Get the location.
+	 * @return The location.
+	 */
+	public Point getLocation() {
+		return location;
+	}
+
 	// toString method for debugging purposes
 	@Override
 	public String toString() {
@@ -57,11 +66,11 @@ public class SingleTask implements SendableObject {
 	}
 	
 	/**
-	 * Gets the parameters in csv format
-	 * @return all parameters, seperated by commas
+	 * Gets the parameters in csv format.
+	 * @return all parameters, seperated by commas.
 	 */
 	public String parameters() {
-		return (itemID+","+quantity);
+		return ("SingleTask," + itemID+","+quantity);
 	}
 
 }
