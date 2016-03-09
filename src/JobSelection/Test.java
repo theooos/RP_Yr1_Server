@@ -10,7 +10,7 @@ public class Test {
     	JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
         JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
         
-        ProbDistribution prob = ProbDistribution.calculateProbDistrOfJobs(Job::cancelled);
+        ProbDistribution prob = ProbDistribution.calculateProbDistr(JobProcessor.getAllJobs().values(), Job::cancelled);
         System.out.println(prob);
         
     }
