@@ -115,7 +115,6 @@ public class Job {
 	 * Calculate the reward for this job per item.
 	 * @return The reward per item.
 	 */
-    /* ADD BACK LATER
 	public double rewardPerItem() {
 
 		int numOfItems = 0;
@@ -130,13 +129,13 @@ public class Job {
 		return (reward / (double) numOfItems);
 
 	}
-	*/
+	
 
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
 	 */
-	/* WILL ADD BACK LATER
+	
 	public double rewardPerWeight() {
 
 		double reward = 0f;
@@ -150,14 +149,13 @@ public class Job {
 
 		return (reward / weight);
 	}
-	*/
+	
     
     /**
      * calculate total weight of job
      * @return totalweight the total weight of the task
      */
-    /* WILL ADD BACK IN
-    public double getTotalWeight() {
+     public double getTotalWeight() {
     	
     	double totalweight = 0.0;
     	
@@ -168,7 +166,7 @@ public class Job {
     	
     	return totalweight;
     }
-    */
+    
 
 	// toString method for debugging purposes
 	@Override

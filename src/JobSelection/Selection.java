@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -8,30 +9,28 @@ import JobInput.JobProcessor;
 import Objects.Job;
 import Objects.Sendable.SingleTask;
 
-public class Selection implements Comparator<Job>{
+public class Selection { 
 	
-	private final List<Job> joblist;
+	private final Collection<Job> joblist;
 	
 	/**
 	 * Selection class
 	 * @param joblist the unordered list of jobs
 	 */
 	//pass the selection class a list of jobs (JobProcessor.getAllJobs.values())
-	public Selection(List<Job> joblist){
+	public Selection(){
 		
-		this.joblist = joblist;
+		this.joblist = JobProcessor.getAllJobs().values();
 	
 	}
 	
 	
-	//RUN WITH getRewardPerItem - commented out 
+	
 	/**
 	 * createQueue method 
 	 * @param joblist
 	 * @return jobQueue the priority queue
 	 */
-	
-	/**
 	public PriorityQueue<Job> createQueue(List<Job> joblist){
 	
 		PriorityQueue<Job> jobQueue = new PriorityQueue<Job>(100, new Comparator<Job>() {
@@ -39,8 +38,8 @@ public class Selection implements Comparator<Job>{
 			@Override
 			public int compare(Job job1, Job job2) {
 	
-			
-				return (job1.getRewardPerItem().compareTo(job1.getRewardPerItem()));
+				
+				return ((Integer) ( (int)   (job1.rewardPerItem()*100))).compareTo( (Integer) ( (int) (job2.rewardPerItem()*100) ) );
 		
 			}
 		});
@@ -57,14 +56,7 @@ public class Selection implements Comparator<Job>{
 		return jobQueue;
 	};	
 	
-	*/
-	
-	@Override
-	public int compare(Job o1, Job o2) {
-		
-		return 0;
-	}
-			
+
 }	
 		
 

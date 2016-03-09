@@ -11,6 +11,7 @@ public class Test {
         JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
         
         ProbDistribution prob = ProbDistribution.calculateProbDistr(JobProcessor.getAllJobs().values(), Job::cancelled);
+        ProbDistribution prob2 = ProbDistribution.calculateProbDistr(JobProcessor.getAllJobs().values(), j -> (j.getNumberOfTasks() >= 1 && j.getNumberOfTasks() <= 2));
         System.out.println(prob);
         
     }
