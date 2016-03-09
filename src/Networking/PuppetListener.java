@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import Objects.Sendable.Move;
 import Objects.Sendable.SendableObject;
