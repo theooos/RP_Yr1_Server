@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import JobInput.JobProcessor;
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
 
@@ -171,9 +172,10 @@ public class Job {
     	
     	double totalweight = 0.0;
     	
-    	for (int i = 0; i < tasks.size(); i++){
-    		Item item = tasks.get(i).getItem();
-    		totalweight = totalweight + (item.getWeight() * tasks.get(i).getQuantity());
+    	for(SingleTask task : tasks)
+    	{
+    		Item item = JobProcessor.getItem(task.getItemID());
+    		totalweight = totalweight + (item.getWeight() * task.getQuantity());
     	}
     	
     	return totalweight;
