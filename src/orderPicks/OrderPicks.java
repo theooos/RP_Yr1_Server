@@ -1,3 +1,4 @@
+package orderPicks;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
@@ -20,7 +21,7 @@ public class OrderPicks {
 	public ArrayList<Objects.Sendable.SingleTask> items; //the list of items in the job
 	public ArrayList<Objects.Sendable.SingleTask> orderedItems; //the ordered list of items
 	public ArrayList<Point2D> dropOffs;
-	public Point2D dropOff;
+	public Point dropOff;
 	private boolean running=true;
 	private boolean canceled=false;
 	
@@ -66,11 +67,12 @@ public class OrderPicks {
 	private void planOrder()
 	{
 		int miny=-1;
+		Point dropOffForMiny=dropOff ;
 		ArrayList<Objects.Sendable.SingleTask> orderedItemsForMiny=new ArrayList<Objects.Sendable.SingleTask>();
 		int minTotalDistance=-1;
 		for(int y=0;y<dropOffs.size();y++)
 		{
-			dropOff=dropOffs.get(y);
+			dropOff=(Point) dropOffs.get(y);
 			//picking the first item (the one closest to the robot)
 			int min=0,minI=0;
 			for(int i=0;i<items.size();i++)
@@ -101,7 +103,7 @@ public class OrderPicks {
 				miny=y;
 				minTotalDistance=x;
 				orderedItemsForMiny.clear();
-				
+				dropOffForMiny=dropOff;
 				orderedItemsForMiny.addAll(orderedItems);
 				
 				
@@ -112,7 +114,7 @@ public class OrderPicks {
 		}
 		
 		orderedItems.addAll(orderedItemsForMiny);
-		
+		dropOff=dropOffForMiny;
 		running=false;
 	}
 	
@@ -234,7 +236,7 @@ public class OrderPicks {
 	private Point getItemLocation(String ItemID)
 	{
 		
-		//TODO get item location somehow
+		//TODO get item location from single task
 		return null;
 	}
 	

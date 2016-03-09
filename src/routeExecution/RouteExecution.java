@@ -1,7 +1,10 @@
+package routeExecution;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Vector;
+
+import orderPicks.OrderPicks;
 
 
 /*
@@ -11,11 +14,15 @@ import java.util.Vector;
 
 public class RouteExecution {
 
+	//dropoff object location of dropoff and list of items that are being held
+	
+	
+	
 	private ArrayList<Objects.Sendable.SingleTask> tasks;
 	
-	public RouteExecution(ArrayList<Objects.Sendable.SingleTask> tasks)
+	public RouteExecution(ArrayList<Point2D> dropOffs)
 	{
-		this.tasks=tasks;
+		
 	}
 	
 	public void run()
