@@ -1,9 +1,7 @@
-package routePlanning.pathFinding;
+package routePlanning.dataStructures;
 
+import java.awt.Point;
 import java.util.Vector;
-
-import routePlanning.dataStructures.Node;
-import routePlanning.dataStructures.Reservation;
 
 public class TimePosReservations {
 	
@@ -13,7 +11,7 @@ public class TimePosReservations {
 		
 	}
 	
-	public void addReservation(int time, Node node) {
+	public void addReservation(int time, Point node) {
 		reservations.add(new Reservation(time, node));
 	}
 	
@@ -23,7 +21,7 @@ public class TimePosReservations {
 	 * @param time
 	 * @return
 	 */
-	public boolean isReserved(Node node, int time){
+	public boolean isReserved(Point node, int time){
 		for (int i = 0; i < reservations.size(); i++) {
 			if (reservations.get(i).getNode().equals(node) && reservations.get(i).getTime() == time) {
 				return true;

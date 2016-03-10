@@ -1,12 +1,14 @@
 package routePlanning.pathFinding;
 
+import java.awt.Point;
 import java.util.Vector;
 
 import Objects.Direction;
+import Objects.WarehouseMap;
+import Objects.Sendable.RobotInfo;
 import routePlanning.dataStructures.CameFrom;
-import routePlanning.dataStructures.Map;
-import routePlanning.dataStructures.Node;
-import routePlanning.virtualRobot.Robot;
+import routePlanning.dataStructures.RobotsReservations;
+import routePlanning.dataStructures.TimePosReservations;
 
 /**
  * Returns an optimal path from a start node to the goal node considering other robots' mevements i.e. avoids collisions with both walls & other robots
@@ -18,19 +20,19 @@ public class PathFinding {
 	/**
 	 * Node map
 	 */
-	Map map;
+	private WarehouseMap map;
 	
-	private Node current;//Cimport routePlanning.dataStructures.Reservation;urrent node
+	private Point current;//Current node
 	
 	/**
 	 * Explored node set
 	 */
-	private Vector<Node> explored = new Vector<Node>(0);
+	private Vector<Point> explored = new Vector<Point>(0);
 	
 	/**
 	 * Frontier node set
 	 */
-	private Vector<Node> frontier = new Vector<Node>(0);
+	private Vector<Point> frontier = new Vector<Point>(0);
 	
 	/**
 	 * PathTrace node set
@@ -55,14 +57,14 @@ public class PathFinding {
 	///////////////////////////////////////////////////////////////////Time & Pos Reservations///////////////////////////////////////////////////////////////////////////
 	TimePosReservations timePosReservations;//Reset every time a new path is generated
 	int time;
-	private Vector<Node> nodePath = new Vector<Node>(0);
-	private Vector<Robot> robots = new Vector<Robot>(0);
+	private Vector<Point> nodePath = new Vector<Point>(0);
+	private Vector<RobotInfo> robots = new Vector<RobotInfo>(0);
 	
 	/**
 	 * Only set map once and keep for the duration of the program
 	 * @param map
 	 */
-	public PathFinding(Map map) {
+	public PathFinding(WarehouseMap map) {
 		this.map = map;
 	}
 
@@ -70,7 +72,7 @@ public class PathFinding {
 	 * Add a new robot i.e. an obstacle that needs to be considered
 	 * @param robot
 	 */
-	public void addRobot(Robot robot){
+	public void addRobot(RobotInfo robot){
 		robots.add(robot);
 		RobotsReservations.AddRobot(robot);
 	}
@@ -91,7 +93,7 @@ public class PathFinding {
 	 * @param robot
 	 * @return
 	 */
-	public Vector<Direction> GetPath(Node startNode, Node goalNode, int time, Robot robot) {
+	public Vector<Direction> GetPath(Point startNode, Point goalNode, int time, RobotInfo robot) {
 		SetUp(startNode, goalNode, time);//Set up & clean up after potential previous search
 		
 		while(!frontier.isEmpty()) {
@@ -104,7 +106,7 @@ public class PathFinding {
 			RemoveFromFrontier(current);
 			explored.addElement(current);
 			
-			Node neighbourNode = null;
+			Point neighbourNode = null;
 			for(int i = 0; i < 4; i++){//For each neighbour node (at most 4) 
 				
 				switch (i) {
@@ -124,7 +126,7 @@ public class PathFinding {
 				
 				//null - Tried to find neighbour out of bounds vvv
 				if(neighbourNode == null || explored.contains(neighbourNode) 
-					|| neighbourNode.status == Node.WALL || RobotsReservations.IsReserved(neighbourNode, currentGCost + 1)){
+					|| map.isObstacle(neighbourNode) || RobotsReservations.IsReserved(neighbourNode, currentGCost + 1)){
 					continue;
 				}
 				
@@ -155,7 +157,7 @@ public class PathFinding {
 	 * @param goalNode
 	 * @param time
 	 */
-	private void SetUp(Node startNode, Node goalNode, int time){
+	private void SetUp(Point startNode, Point goalNode, int time){
 		this.time = time;
 		timePosReservations = new TimePosReservations();
 		
@@ -175,7 +177,7 @@ public class PathFinding {
 		AddToFrontier(startNode, 0, GetFCost(0, startNode, goalNode));
 	}
 	
-	private int GetGCost(Node node){
+	private int GetGCost(Point node){
 		return gCosts.get(frontier.indexOf(node));
 	}
 	
@@ -184,15 +186,15 @@ public class PathFinding {
 	 * @param node
 	 * @return
 	 */
-	private int GetHCost(Node fromNode, Node goalNode){
+	private int GetHCost(Point fromNode, Point goalNode){
 		return Math.abs(goalNode.x - fromNode.x) + Math.abs(goalNode.y - fromNode.y);
 	}
 	
-	private int GetFCost(Node node, Node goalNode){
+	private int GetFCost(Point node, Point goalNode){
 		return GetGCost(node) + GetHCost(node, goalNode);
 	}
 	
-	private int GetFCost(int gCost, Node node, Node goalNode){
+	private int GetFCost(int gCost, Point node, Point goalNode){
 		return gCost + GetHCost(node, goalNode);
 	}
 	
@@ -200,7 +202,7 @@ public class PathFinding {
 	 * Return the best node in the frontier according to fCost value
 	 * @return
 	 */
-	private Node GetBestNode(){
+	private Point GetBestNode(){
 		int bestNodeCost = Integer.MAX_VALUE;
 		int bestNodeID = 0;
 		
@@ -214,13 +216,13 @@ public class PathFinding {
 		return frontier.get(bestNodeID);
 	}
 	
-	private void AddToFrontier(Node node, int gCost, int fCost){
+	private void AddToFrontier(Point node, int gCost, int fCost){
 		frontier.add(node);
 		gCosts.add(gCost);
 		fCosts.add(fCost);
 	}
 	
-	private void RemoveFromFrontier(Node node){
+	private void RemoveFromFrontier(Point node){
 		int nodeIndex = frontier.indexOf(node);
 		
 		gCosts.remove(nodeIndex);
@@ -228,7 +230,7 @@ public class PathFinding {
 		frontier.remove(nodeIndex);
 	}
 	
-	private void AddToPathTrace(Node fromNode, Node toNode) {
+	private void AddToPathTrace(Point fromNode, Point toNode) {
 		for (int i = 0; i < pathTrace.size(); i++){
 			if (toNode.equals(pathTrace.get(i).toNode)){//A worse path from node is linked, replace it with the given(better) fromNode
 				pathTrace.get(i).fromNode = fromNode;
@@ -244,17 +246,16 @@ public class PathFinding {
 	 * @param robot 
 	 * @return set of directions to the goal
 	 */
-	private Vector<Direction> ReconstructPath(Node goalNode, Robot robot) {
+	private Vector<Direction> ReconstructPath(Point goalNode, RobotInfo robot) {
 		Vector<Direction> directions = new Vector<Direction>(0);
 		
 		//Look for goal node i.e. a starting point to trace the solution path
 		for (int i = 0; i < pathTrace.size(); i++){
-			Node toNode = pathTrace.get(i).toNode;
+			Point toNode = pathTrace.get(i).toNode;
 			if (goalNode.equals(toNode)){//Found path trace end
-				goalNode.status = Node.GOAL;
 				nodePath.insertElementAt(goalNode, 0);
 				
-				Node fromNode = pathTrace.get(i).fromNode;
+				Point fromNode = pathTrace.get(i).fromNode;
 				directions.insertElementAt(map.getRelativePosition(fromNode, toNode), 0);//insert last direction (not == orientation!) i.e. stack vector
 				
 				boolean foundPrevNode;
@@ -265,7 +266,6 @@ public class PathFinding {
 					for (int j = 0; j < pathTrace.size() - 1; j++){//Goal node at the end therefore dont need to check it again hence -1
 						toNode = pathTrace.get(j).toNode;
 						if (fromNode.equals(toNode)){//Found prev node container
-							fromNode.status = Node.GOALPATH;
 							nodePath.insertElementAt(fromNode, 0);
 							fromNode = pathTrace.get(j).fromNode;
 							directions.insertElementAt(map.getRelativePosition(fromNode, toNode), 0);
@@ -275,8 +275,6 @@ public class PathFinding {
 					
 				}
 				while(foundPrevNode);
-				
-				fromNode.status = Node.START;//Starting node
 				
 				//End of path trace
 				System.out.println("No of steps: " + directions.size());

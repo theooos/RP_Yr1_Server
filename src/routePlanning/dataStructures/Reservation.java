@@ -1,10 +1,12 @@
 package routePlanning.dataStructures;
 
+import java.awt.Point;
+
 public class Reservation {
 	private int time;
-	private Node node;
+	private Point node;
 	
-	public Reservation(int time, Node node) {
+	public Reservation(int time, Point node) {
 		this.time = time;
 		this.node = node;
 	}
@@ -13,7 +15,7 @@ public class Reservation {
 		return time;
 	}
 	
-	public Node getNode() {
+	public Point getNode() {
 		return node;
 	}
 }

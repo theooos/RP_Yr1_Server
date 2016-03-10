@@ -1,4 +1,4 @@
-package JobInput;
+package Objects;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -17,6 +17,10 @@ public class WarehouseMap {
     private int gridWidth; 
     private int gridHeight;
     private List<Point> dropoffs;
+    
+	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
+    private Point[][] map;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Create a new warehouse map.
@@ -40,12 +44,21 @@ public class WarehouseMap {
         for(String doPoints : dos.get()) {
         	if(doPoints.equals("") || doPoints.equals(" "))
         		continue;
-            String[] doArr = doPoints.replaceAll("\\s","")
-.split(",");
+            String[] doArr = doPoints.replaceAll("\\s","").split(",");
             Point p = new Point(Integer.parseInt(doArr[0]), Integer.parseInt(doArr[1]));
             dropoffs.add(p);
         }
-            
+        
+        ///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
+        //Set up & populate map
+  		map = new Point[gridWidth][gridHeight];	
+  		
+  		for (int i = 0; i < gridWidth; i++){
+  			for (int j = 0; j < gridHeight; j++){
+  				map[i][j] = new Point(i, j);
+  			}
+  		}
+  		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     /**
@@ -158,5 +171,67 @@ public class WarehouseMap {
             for(int j = 0; j < gridHeight; j++)
                 grid[i][j] = false;        
     }
-
+    
+    ///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
+    public Point getAboveNode(Point node){
+		int x = node.x;
+		int y = node.y;
+		
+		if (y == 0)
+			return null;
+		return map[x][y - 1];
+	}
+	
+	public Point getBelowNode(Point node){
+		int x = node.x;
+		int y = node.y;
+		
+		if (y == gridHeight - 1)
+			return null;
+		return map[x][y + 1];
+	}
+	
+	public Point getLeftNode(Point node){
+		int x = node.x;
+		int y = node.y;
+		
+		if (x == 0)
+			return null;
+		return map[x - 1][y];
+	}
+	
+	public Point getRightNode(Point node){
+		int x = node.x;
+		int y = node.y;
+		
+		if (x == gridWidth - 1)
+			return null;
+		return map[x + 1][y];
+	}
+	
+	/**
+	 * 
+	 * @param node1
+	 * @param node2
+	 * @return relative position defined by constants, only returns relative position in one direction i.e. never diagonal relative position
+	 */
+	public Direction getRelativePosition(Point node1, Point node2){
+		if(node2.x > node1.x){
+			return Direction.EAST;
+		}
+		else if(node2.x < node1.x){
+			return Direction.WEST;
+		}
+		else if(node2.y > node1.y){
+			return Direction.SOUTH;
+		}
+		else if(node2.y < node1.y){
+			return Direction.NORTH;
+		}
+		else {//Should never happen
+			return null;
+		}
+		
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
