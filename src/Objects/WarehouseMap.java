@@ -54,7 +54,7 @@ public class WarehouseMap {
      * Set the obstacles from a list of points.
      * @param obstacles The list of obstacles.
      */
-    public void setObstacles(List<Point> obstacles) {
+    public void setObstacles(Point[] obstacles) {
         for(Point obstacle : obstacles)
             grid[(int) obstacle.getX()][(int) obstacle.getY()] = true;
     }
