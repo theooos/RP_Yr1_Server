@@ -41,7 +41,6 @@ public class SingleTask implements SendableObject {
 		return quantity;
 	}
 
-
 	/**
 	 * Get the location.
 	 * @return The location.
