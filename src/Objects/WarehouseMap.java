@@ -1,12 +1,10 @@
-//package JobInput;
-package Objects;
+package JobInput;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import JobInput.JobProcessor;
 import Objects.Direction;
 
 /**
@@ -22,7 +20,7 @@ public class WarehouseMap {
 
     /**
      * Create a new warehouse map.
-     * @param gridWidth The warehouse width.
+     * @param gridWith The warehouse width.
      * @param gridHeight The warehouse height.
      * @param doFile The file containing the drop off locations.
      */
@@ -54,11 +52,9 @@ public class WarehouseMap {
      * Set the obstacles from a list of points.
      * @param obstacles The list of obstacles.
      */
-    public void setObstacles(Point[] obstacles) {
-        
-        for(int i = 0; i < obstacles.length; i++)
-            grid[(int) obstacles[i].getX()][(int) obstacles[i].getY()] = true;
-
+    public void setObstacles(List<Point> obstacles) {
+        for(Point obstacle : obstacles)
+            grid[(int) obstacle.getX()][(int) obstacle.getY()] = true;
     }
 
     /**
