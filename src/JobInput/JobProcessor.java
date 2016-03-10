@@ -113,11 +113,11 @@ public class JobProcessor {
             String[] jobArr = jobStr.split(","); 
 
             // Create a new job.
-            Job newJob = new Job();;
+            Job newJob = new Job(items);;
 
             // Add each the item and the quantity of the item to the job.
             for(int i = 1; i < jobArr.length; i+=2) {
-                newJob.addTask(jobArr[i], Integer.parseInt(jobArr[i+1]));
+                newJob.addTask(jobArr[i], Integer.parseInt(jobArr[i+1]), items.get(jobArr[i]).getLocation());
             }
 
             // Add a job to the list.

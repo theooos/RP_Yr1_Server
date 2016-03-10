@@ -1,9 +1,10 @@
 package warehouseInterface;
 
-import JobInput.WarehouseMap;
 import Objects.AllRobots;
 import Objects.Direction;
 import Objects.Sendable.RobotInfo;
+import Objects.WarehouseMap;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
