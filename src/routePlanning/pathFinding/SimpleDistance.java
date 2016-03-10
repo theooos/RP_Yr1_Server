@@ -7,7 +7,7 @@ public class SimpleDistance {
 		
 	}
 	
-	GetDistnace(Node startNode, Node goalNode) {
+	/*GetDistnace(Node startNode, Node goalNode) {
 		
-	}
+	}*/
 }

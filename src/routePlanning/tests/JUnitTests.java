@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import Objects.Direction;
 import routePlanning.dataStructures.Map;
 import routePlanning.dataStructures.Node;
 import routePlanning.pathFinding.PathFinding;
@@ -15,7 +16,7 @@ import routePlanning.virtualRobot.Robot;
 public class JUnitTests {
 	private Map map = new Map(10, 10);
 	private int time = 0;
-	private Vector<Integer> pathSequence;
+	private Vector<Direction> pathSequence;
 	
 	private Robot robot0;
 	private Robot robot1;

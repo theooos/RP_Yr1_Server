@@ -1,5 +1,10 @@
 package routePlanning.dataStructures;
 
+/**
+ * Data structure used for route planning to build a linked list of nodes (representing a path)
+ * @author Szymon
+ *
+ */
 public class CameFrom {
 	public Node fromNode;
 	public Node toNode;

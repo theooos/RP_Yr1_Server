@@ -9,7 +9,7 @@ import routePlanning.dataStructures.Node;
 import routePlanning.virtualRobot.Robot;
 
 /**
- * Returns an optimal path from a start node to the goal node considering other robots' motion i.e. avoids collisions with both walls & other robots
+ * Returns an optimal path from a start node to the goal node considering other robots' mevements i.e. avoids collisions with both walls & other robots
  * @author Szymon
  * As an extension I could make the algorithm tell the robot to wait for a mobile robot to pass instead of moving around the mobile robot to minimise travel distance
  * e.g. in the case Robot0 1,0 -> 1,2 Robot1 0,1 -> 2,1
@@ -66,6 +66,10 @@ public class PathFinding {
 		this.map = map;
 	}
 
+	/**
+	 * Add a new robot i.e. an obstacle that needs to be considered
+	 * @param robot
+	 */
 	public void addRobot(Robot robot){
 		robots.add(robot);
 		RobotsReservations.AddRobot(robot);
@@ -78,17 +82,15 @@ public class PathFinding {
 	public TimePosReservations getTimePosReservations() {
 		return timePosReservations;
 	}
-	
+
 	/**
-	 * Get path length assuming no other robots present on the map
+	 * Returns a path from startNode to goalNode which avoids collisions and registers the returned path data so that other robots will not interfere in the future
 	 * @param startNode
 	 * @param goalNode
+	 * @param time current time
+	 * @param robot
 	 * @return
 	 */
-	/*public int GetPath(Node startNode, Node goalNode){
-		
-	}*/
-
 	public Vector<Direction> GetPath(Node startNode, Node goalNode, int time, Robot robot) {
 		SetUp(startNode, goalNode, time);//Set up & clean up after potential previous search
 		
@@ -237,7 +239,7 @@ public class PathFinding {
 	}
 	
 	/**
-	 * 
+	 * Returns a path as a set of directions relative to the North(Top of map)
 	 * @param goalNode
 	 * @param robot 
 	 * @return set of directions to the goal
