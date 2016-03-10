@@ -55,7 +55,7 @@ public class SingleTask implements SendableObject {
 	// toString method for debugging purposes
 	@Override
 	public String toString() {
-		return "SingleTask [item=" + itemID + ", quantity=" + quantity + "]";
+		return "SingleTask [item=" + itemID + ", quantity=" + quantity + ", location=" + location + "]";
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class SingleTask implements SendableObject {
 	 * @return all parameters, seperated by commas.
 	 */
 	public String parameters() {
-		return ("SingleTask," + itemID+","+quantity);
+		return ("SingleTask," + itemID + "," + quantity + "," + location);
 	}
 
 }
