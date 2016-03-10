@@ -1,5 +1,6 @@
 package Objects.Sendable;
 
+import java.awt.Point;
 
 /**
  * SHARED OBJECTS
@@ -9,16 +10,18 @@ public class SingleTask implements SendableObject {
 	
 	private String itemID;
 	private int quantity;
+    private Point location;
 
     /**
      * Create a new single task.
      * @param itemID The item id.
      * @param quantity The quantity of the item.
      */
-	public SingleTask(String itemID, int quantity) {
+	public SingleTask(String itemID, int quantity, Point location) {
 		
 		this.itemID = itemID;
 		this.quantity = quantity;
+        this.location = location;
 		
 	}
 	
@@ -38,18 +41,26 @@ public class SingleTask implements SendableObject {
 		return quantity;
 	}
 
+	/**
+	 * Get the location.
+	 * @return The location.
+	 */
+	public Point getLocation() {
+		return location;
+	}
+
 	// toString method for debugging purposes
 	@Override
 	public String toString() {
-		return "SingleTask [item=" + itemID + ", quantity=" + quantity + "]";
+		return "SingleTask [item=" + itemID + ", quantity=" + quantity + ", location=" + location + "]";
 	}
 	
 	/**
-	 * Gets the parameters in csv format
-	 * @return all parameters, seperated by commas
+	 * Gets the parameters in csv format.
+	 * @return all parameters, seperated by commas.
 	 */
 	public String parameters() {
-		return ("SingleTask," + itemID+","+quantity);
+		return ("SingleTask," + itemID + "," + quantity + "," + location);
 	}
 
 }

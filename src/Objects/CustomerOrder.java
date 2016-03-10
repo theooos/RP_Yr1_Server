@@ -1,5 +1,6 @@
 package Objects;
 
+import java.awt.*;
 import java.util.List;
 
 import Objects.Sendable.SingleTask;
@@ -26,7 +27,7 @@ public class CustomerOrder {
 	
 	/**
 	 * Add a new task to the list of tasks
-	 * @param item Item to add
+	 * @param task Task to add
 	 */
 	public void addTask(SingleTask task) {
 		tasks.add(task);
@@ -35,10 +36,11 @@ public class CustomerOrder {
 	/**
 	 * Add a new abstract item to the list of SingleTasks
 	 * @param item Item to add
-	 * @param quanity Quantity to add
+	 * @param quantity Quantity to add
+	 * @param location Location to add
 	 */
-	public void addTask(String item, int quantity) {
-		tasks.add(new SingleTask(item, quantity));
+	public void addTask(String item, int quantity, Point location) {
+		tasks.add(new SingleTask(item, quantity, location));
 	}
 
 	// toString method for debugging purposes
