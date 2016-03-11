@@ -14,14 +14,6 @@ import routeExecution.RouteExecution;
  */
 public class RunMe {
 
-	/**
-	 * 
-	 */
-	public RunMe() {
-		// TODO Auto-generated constructor stub
-	}
-
-
 	public static void main(String[] args) {
 		// Some stuff will go here, pending it works, which it likely won't.
 		
