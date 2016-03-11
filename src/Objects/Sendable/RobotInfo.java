@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Vector;
 
 import Objects.Direction;
+import Objects.Job;
 import Objects.WarehouseMap;
 import routePlanning.dataStructures.TimePosReservations;
 
@@ -12,6 +13,19 @@ public class RobotInfo implements SendableObject {
 	private String name;
 	private Point position;
 	private Direction direction;
+	public Job currJob;
+	public int currTaskIndex;
+	public boolean pickingUp;
+	public boolean isDoingJob;
+	public Vector<Direction> directions;
+	public int currDirectionsIndex;
+	public boolean droppingOff;
+	public boolean waitingForMoveReport;
+	public boolean hasMoved;
+	public boolean hasCompletedTask;
+	public boolean finishedDroppingItems;
+	
+	
 	
 	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
 	private Point currentNode;

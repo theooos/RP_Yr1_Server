@@ -12,7 +12,6 @@ public class Server extends Thread {
 	
 	public Server() {
 		lobby.start();
-		Puppet testPup = new Puppet("Alfonso", "00165308DA58");
 //		lobby.addRobot(testPup);
 	}
 	
@@ -35,10 +34,8 @@ public class Server extends Thread {
 	private void out(Object n) {
 		System.out.println(""+n);
 	}
-	
-	public static void main(String[] args){
-		Server serv = new Server();
-		serv.start();
-	}
 
+	public void addRobot(Puppet pup){
+		lobby.addRobot(pup);
+	}
 }

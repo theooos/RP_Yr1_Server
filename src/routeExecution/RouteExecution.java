@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import Objects.AllRobots;
 import Objects.Direction;
 import Objects.Sendable.Move;
 import routePlanning.orderPicks.OrderPicks;
@@ -23,9 +24,9 @@ public class RouteExecution extends Thread {
 	
 	private ArrayList<Objects.Sendable.SingleTask> tasks;
 	
-	public RouteExecution(int nrOfRobots)
+	public RouteExecution()
 	{
-		this.nrOfRobots=nrOfRobots;
+		
 	}
 	
 	/**
@@ -37,6 +38,7 @@ public class RouteExecution extends Thread {
 	{
 		while(running)
 		{
+			nrOfRobots = AllRobots.getAllRobots().size();
 			initVariables();
 			
 			for(int ir=0;ir<nrOfRobots;ir++){

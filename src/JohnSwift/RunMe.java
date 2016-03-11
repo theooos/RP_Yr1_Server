@@ -3,17 +3,10 @@
  */
 package JohnSwift;
 
-import java.awt.GridLayout;
-
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
-
 import JobInput.JobProcessor;
+import Networking.Puppet;
 import Networking.Server;
-import warehouseInterface.GridMap;
-import warehouseInterface.JobTable;
-import warehouseInterface.RobotTable;
-import warehouseInterface.Statistics;
+import routeExecution.RouteExecution;
 
 /**
  * @author georgesabourin
@@ -39,6 +32,13 @@ public class RunMe {
 		
         // Local Server (Theo) -- Starting the server
         Server server = new Server();
+        server.start();
+		Puppet testPup = new Puppet("Alfonso", "00165308DA58");
+		server.addRobot(testPup);
+		
+		RouteExecution theExecutor = new RouteExecution();
+		theExecutor.start();
+		
 		
         /*
         // WarehouseInterface (Artur) -- Create and launch the interface
