@@ -51,6 +51,12 @@ public class RobotInfo implements SendableObject {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//By default, all robots start facing 'north' (which is west IRL)
+	public RobotInfo(String name) {
+		this.name = name;
+		this.position = new Point(1,1);
+		direction = Direction.NORTH;
+	}
+	
 	public RobotInfo(String name, Point position) {
 		this.name = name;
 		this.position = position;

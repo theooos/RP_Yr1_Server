@@ -1,7 +1,5 @@
 package routeExecution;
 import java.awt.Point;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
@@ -12,9 +10,10 @@ import Objects.AllRobots;
 import Objects.Direction;
 import Objects.Job;
 import Objects.WarehouseMap;
+import Objects.Sendable.DropOffPoint;
 import Objects.Sendable.Move;
+import Objects.Sendable.SendableObject;
 import Objects.Sendable.SingleTask;
-import routePlanning.orderPicks.OrderPicks;
 import routePlanning.pathFinding.PathFinding;
 import warehouseInterface.GridMap;
 import warehouseInterface.JobTable;
@@ -562,6 +561,20 @@ public class RouteExecution extends Thread {
 	{
 		
 		return AllRobots.getRobot(name).getDirection();
+	}
+
+	public void addMoveReport(String name, SendableObject comm) {
+		AllRobots.getRobot(name).hasMoved=true;
+		
+	}
+
+	public void addCompleteReport(String name, SendableObject comm) {
+		if(this.isPickingUpItem(name)){
+			AllRobots.getRobot(name).hasCompletedTask=true;
+		}
+		if(this.dropingItems(name)){
+			AllRobots.getRobot(name).finishedDroppingItems=true;
+		}
 	}
 	
 }
