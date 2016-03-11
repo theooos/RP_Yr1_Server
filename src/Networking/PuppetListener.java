@@ -58,7 +58,8 @@ public class PuppetListener extends Thread {
 				newObj = new Move((Character)parameters[0], new Point((Integer)parameters[1],(Integer)parameters[2]));
 			}
 			else if(type.equals("SingleTask")){
-				newObj = new SingleTask((String) parameters[0], (Integer) parameters[1]);
+				///// EDIT ME LATER
+				newObj = new SingleTask((String) parameters[0], (Integer) parameters[1], new Point(1,1));
 			}
 			
 			if(newObj == null){
