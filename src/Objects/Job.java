@@ -19,29 +19,37 @@ public class Job {
     private boolean cancelled;
     private float cancellationProb;
     private Map<String, Item> items;
+    private int jobid;
 
 	/**
 	 * Create an empty job.
 	 */
-	public Job(Map<String, Item> items) {
+	public Job(int jobid, Map<String, Item> items) {
 		this.tasks = new ArrayList<>();
         this.cancelled = false;
         this.cancellationProb = 0.0f;
         this.items = items;
+        this.jobid = jobid;
 	}
 
 	/**
 	 * Create a job from a list of tasks.
 	 * @param tasks The tasks in the job.
 	 */
-	public Job(List<SingleTask> tasks, Map<String, Item> items) {
+	public Job(int jobid, List<SingleTask> tasks, Map<String, Item> items) {
 		this.tasks = tasks;
         this.cancelled = false;
         this.cancellationProb = 0.0f;
+        this.jobid = jobid;
+	}
+	
+	public int getjobid(){
+		
+		return jobid;
 	}
 
 	/**
-	 * Add a task to the list of tasks.
+	 * Add a task to the list of tsasks.
 	 * @param t The task to be added.
 	 */
 	public void addTask(SingleTask t) {
