@@ -29,12 +29,29 @@ public class Puppet extends Thread {
 			listener = new PuppetListener(fromRobot);
 			listener.start();
 			
-			Thread.sleep(5000);
-			
-			Move testMove = new Move('f',new Point(2,3));
-			send(testMove);
-			SingleTask testTask = new SingleTask("Something", 42, new Point(1,1));
-			send(testTask);
+//			Thread.sleep(8000);
+//			
+//			Move l = new Move('l',new Point(2,3));
+//			send(l);
+//			
+//			Thread.sleep(8000);
+//			
+//			Move r = new Move('r',new Point(2,3));
+//			send(r);
+//			
+//			Thread.sleep(8000);
+//			
+//			Move f = new Move('f',new Point(2,3));
+//			send(f);
+//			
+//			Thread.sleep(8000);
+//			
+//			Move b = new Move('b',new Point(2,3));
+//			send(b);
+//			
+			Thread.sleep(8000);
+			SingleTask task1 = new SingleTask("FK", 4, new Point(3,5));
+			send(task1);
 		}
 		catch (NXTCommException | InterruptedException e) {
 			out("Failed to connect with: " + name);

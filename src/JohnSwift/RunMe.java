@@ -33,8 +33,12 @@ public class RunMe {
         // Local Server (Theo) -- Starting the server
         Server server = new Server();
         server.start();
-		Puppet testPup = new Puppet("Alfonso", "00165308DA58");
-		server.addRobot(testPup);
+		Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
+		server.addRobot(johnCena);        
+//        Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+//        server.addRobot(alfonso);
+		Puppet tay = new Puppet("TayTay", "0016531AF6E5");
+		server.addRobot(tay);
 		
 		RouteExecution theExecutor = new RouteExecution();
 		theExecutor.start();
