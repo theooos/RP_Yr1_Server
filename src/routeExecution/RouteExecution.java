@@ -6,8 +6,12 @@ import java.util.Vector;
 
 import Objects.AllRobots;
 import Objects.Direction;
+import Objects.Job;
+import Objects.WarehouseMap;
 import Objects.Sendable.Move;
+import Objects.Sendable.SingleTask;
 import routePlanning.orderPicks.OrderPicks;
+import routePlanning.pathFinding.PathFinding;
 
 
 /*
@@ -21,12 +25,14 @@ public class RouteExecution extends Thread {
 	
 	private boolean running=true;
 	private int nrOfRobots=0;
+	private PathFinding pathfinder;
 	
 	private ArrayList<Objects.Sendable.SingleTask> tasks;
 	
-	public RouteExecution()
+	public RouteExecution( int nrOfRobots,WarehouseMap map)
 	{
-		
+		this.nrOfRobots=nrOfRobots;
+		this.pathfinder=new PathFinding(map);
 	}
 	
 	/**
@@ -36,32 +42,32 @@ public class RouteExecution extends Thread {
 	
 	public void run()
 	{
+		initVariables();
 		while(running)
-		{
-			nrOfRobots = AllRobots.getAllRobots().size();
-			initVariables();
+		{		
 			
 			for(int ir=0;ir<nrOfRobots;ir++){
 				//check if all the robots are doing jobs and assign them jobs if not
 				String name=this.getRobotName(ir);
-				if(!this.IsRobotDoingAJob(name))
+				if(isFunctioning(name))
 				{
-					ArrayList<Objects.Sendable.SingleTask> job=this.getJob();
-					this.assignJob(name, job);
+					if(!this.IsRobotDoingAJob(name))
+					{
+						Job job=this.getJob();
+						this.assignJob(name, job);
+					}
 				}
 			}
 			for(int ir=0;ir<nrOfRobots;ir++){
 				//check if all the robots have a task they are doing or not and assign tasks to them
 				String name=this.getRobotName(ir);
-				if(!this.isGoingToDropoff(name)){
+				if(isFunctioning(name))
+				{
 					if(!this.RobotHasATask(name))
 					{
 						Vector<Direction> task=this.getNextTask(name);
 						this.assignTask( task,name);
 					}
-				}else
-				{
-					//TODO robot needs to go to the dropOff point
 				}
 			}
 			
@@ -71,36 +77,44 @@ public class RouteExecution extends Thread {
 			{
 				String name=this.getRobotName(ir);
 				
-				//check if robot reached the item
-				if(this.getItemLocation(this.getCurrentTaskIndex(name),name)==this.getRobotLocation(name))
+				if(isFunctioning(name))
 				{
-					
-					
-					//TODO sent object to robot to tell it to pick up item
-					
-					
-				
-				}else
-				{ //execute next move
-					Direction facingDir=this.getRobotFacingDirection(name);
-					Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
-					Move nextmove=this.getMove(facingDir, moveDir,name);
-					if(nextmove==null)System.out.println("error generating the move object");
-					else
+					//check if robot reached the item
+					if(this.getItemLocation(this.getCurrentTaskIndex(name),name)==this.getRobotLocation(name))
 					{
-						//send the move to the server
 						
 						
-						//TODO use Theo's new class for sending objects to robots 
+						//TODO use Theo's new class for sending objects to robots when he finally makes it
+						if(this.getCurrentTaskIndex(name)==AllRobots.getRobot(name).currJob.getNumOfTasks())
+						{
+							//object.send(name,"dropItems");
+						}else
+						{
+							//object.send(name,getTask(name));
+						}
 						
 						
-						this.setWaitingForMR(name);
-						
-						
+					
+					}else
+					{ //execute next move
+						Direction facingDir=this.getRobotFacingDirection(name);
+						Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+						Move nextmove=this.getMove(facingDir, moveDir,name);
+						if(nextmove==null)System.out.println("error generating the move object");
+						else
+						{
+							//send the move to the server
+							AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
+							
+							//TODO use Theo's new class for sending objects to robots when he finally makes it
+							//object.send(name,nextmove);
+							
+							AllRobots.getRobot(name).waitingForMoveReport=true;					
+							
+						}
+					
 					}
-				
 				}
-				
 			}
 			
 			//commands have been sent now to wait for movereports
@@ -110,7 +124,17 @@ public class RouteExecution extends Thread {
 				for(int ir=0;ir<nrOfRobots;ir++)
 				{
 					String name=this.getRobotName(ir);
-					notYetDone=notYetDone&&this.hasMoved(name);
+					if(this.isWaitingForMR(name)){
+					
+						notYetDone=notYetDone&&this.hasMoved(name);
+						
+						if(hasMoved(name)){
+							AllRobots.getRobot(name).waitingForMoveReport=false;
+							this.robotHasMoved(AllRobots.getRobot(name).nextRobotLocation, name);
+							AllRobots.getRobot(name).hasMoved=false;
+						}
+					}
+					
 				}				
 			}
 			
@@ -119,14 +143,17 @@ public class RouteExecution extends Thread {
 			for(int ir=0;ir<nrOfRobots;ir++)
 			{
 				String name=this.getRobotName(ir);
-				if(this.isPickingUpItem(name)){
-					if(this.hasPickedUpItem(name))
-					{
-						this.setHasATask(name, false);
+				if(this.isFunctioning(name)){
+					if(this.isPickingUpItem(name)){
+						if(this.hasPickedUpItem(name))
+						{
+							this.setHasATask(name, false);
+						}
 					}
-				}				
+				}
 			}
 			
+			/*
 			//check if any of the robots have reached dropOff
 			for(int ir=0;ir<nrOfRobots;ir++)
 			{
@@ -135,27 +162,31 @@ public class RouteExecution extends Thread {
 					if(this.getRobotLocation(name).equals(this.getDropOffLocation(name)))
 					{
 						
-						//TODO send command to drop items
-						
+						//TODO use Theo's new class for sending objects to robots when he finally makes it
+						//object.send(name,"dropItems");
 						
 						this.setDropingItems(name, true);
 					}					
 				}				
 			}
+			*/
 			
 			//check if any of the robots have dropped the items at the dropOff point
 			for(int ir=0;ir<nrOfRobots;ir++)
 			{
 				String name=this.getRobotName(ir);
-				if(this.dropingItems(name)){
-					if(this.finishedDropingItems(name))
-					{
-						//job complete!!
-						//TODO notify whoever needs to be notified about the fact that the job is complete
-						//TODO remove the job from the queue
-						//TODO reset the variables for the robot in robot info
+				if(this.isFunctioning(name)){
+					if(this.dropingItems(name)){
+						if(this.finishedDropingItems(name))
+						{
+							//job complete!!
+							this.initVariables(name);
+							//TODO notify whoever needs to be notified about the fact that the job is complete
+							//TODO remove the job from the queue
+							
+						}
 					}
-				}				
+				}
 			}
 			
 			
@@ -305,120 +336,156 @@ public class RouteExecution extends Thread {
 			
 	}
 
+	private SingleTask getTask(String name)
+	{
+		int index=AllRobots.getRobot(name).currTaskIndex;
+		return AllRobots.getRobot(name).currJob.getTaskAtIndex(index).get();
+		
+	}
+	
+	
 	private boolean finishedDropingItems(String name)
 	{
-		return true;
-		//TODO return the variable from robot info
+		return AllRobots.getRobot(name).finishedDroppingItems;
 	}
 	
 	private boolean dropingItems(String name)
 	{
-		return true;
-		//TODO return the variable from robot info
+		return AllRobots.getRobot(name).droppingOff;
 	}
 	
 	private void setDropingItems(String name,boolean value)
 	{
-		//TODO change variables in robot info
+		AllRobots.getRobot(name).droppingOff=value;
 	}
-	
+	/*
 	private Point getDropOffLocation(String name)
 	{
 		return null;
-		//TODO return the variable from robot info
+		
 	}
-	
+	*/
 	
 	private void setHasATask(String name,boolean value)
 	{
-		//TODO change variables in robot info
+		AllRobots.getRobot(name).hasATask=value;
 	}
 	
 	private boolean isPickingUpItem(String name)
 	{
-		//TODO return the boolean variable from robot info
-		return true;
+		return AllRobots.getRobot(name).pickingUp;
 	}
 	
 	private boolean hasPickedUpItem(String name)
 	{
-		return true;
-		//TODO return the boolean variable from robot info
+		return AllRobots.getRobot(name).hasCompletedTask;
+	}
+	
+	
+	private boolean isFunctioning(String name)
+	{
+		return AllRobots.getRobot(name).functioning;
 	}
 	
 	private void initVariables()
 	{
-		//TODO make all variables regarding movement false in robot info
+		for(int i=0;i<this.nrOfRobots;i++)
+		{
+			String name=this.getRobotName(i);
+			AllRobots.getRobot(name).isDoingJob=false;
+			AllRobots.getRobot(name).pickingUp=false;
+			AllRobots.getRobot(name).droppingOff=false;
+			AllRobots.getRobot(name).hasATask=false;
+			AllRobots.getRobot(name).finishedDroppingItems=false;
+			AllRobots.getRobot(name).waitingForMoveReport=false;
+			AllRobots.getRobot(name).hasMoved=false;
+			AllRobots.getRobot(name).hasCompletedTask=false;
+		}
+		
+	}
+	
+	private void initVariables(String name)
+	{
+		
+			AllRobots.getRobot(name).isDoingJob=false;
+			AllRobots.getRobot(name).pickingUp=false;
+			AllRobots.getRobot(name).droppingOff=false;
+			AllRobots.getRobot(name).hasATask=false;
+			AllRobots.getRobot(name).finishedDroppingItems=false;
+			AllRobots.getRobot(name).waitingForMoveReport=false;
+			AllRobots.getRobot(name).hasMoved=false;
+			AllRobots.getRobot(name).hasCompletedTask=false;
+		
+		
 	}
 	
 	private boolean hasMoved(String name)
 	{
-		return true;
-		//TODO return the boolean variable from robot info
+		return AllRobots.getRobot(name).hasMoved;
 	}
 	
 	private boolean isWaitingForMR(String name)
 	{
-		return true;
-		//TODO return the boolean variable from robot info
+		return AllRobots.getRobot(name).waitingForMoveReport;
 	}
 	
-	private void setWaitingForMR(String name)
-	{
-		//TODO set the boolean variable to true in robot info
-	}
 	
-	private boolean isGoingToDropoff(String name)
-	{
-		//TODO get info from AllRobots
-		return false;
-		
-	}
+	
 	
 	private void assignTask(Vector<Direction> task,String name)
 	{
 		this.setHasATask(name, true);
-		//TODO change info in AllRobots to show it's now doing a task
+		AllRobots.getRobot(name).currDirectionsIndex=0;
+		AllRobots.getRobot(name).hasATask=true;
+		AllRobots.getRobot(name).directions=task;
 	}
 	
 	private int getCurrentTaskIndex(String name)
 	{
+		return AllRobots.getRobot(name).currTaskIndex;
+	}
+	
+	private int GetTime(){
 		return 0;
-		//TODO get the index of the SingleTask object from the job arraylist that the robot is doing now
+		//TODO
 	}
 	
 	private Vector<Direction> getNextTask(String name)
 	{
-		//TODO get info from AllRobots after it's implemented
-		//TODO computer the route for it using path finding and allocate times for it
-		return null;
+		if(getCurrentTaskIndex(name)+1>AllRobots.getRobot(name).currJob.getNumOfTasks()){
+			return null;
+		}else{
+			SingleTask nextTask=AllRobots.getRobot(name).currJob.getTaskAtIndex(getCurrentTaskIndex(name)).get();
+			Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),nextTask.getLocation(), GetTime()+1, AllRobots.getRobot(name));
+		
+			
+			return path;
+		}
 	}
 	
 	private Vector<Direction> getCurrentTask(String name)
 	{
-		//TODO get info from AllRobots after it's implemented
-		return null;
+		return AllRobots.getRobot(name).directions;
 	}
 	
 	private int getTaskMoveIndex(String name)
 	{
-		//TODO get info from AllRobots after it's implemented
-		return 0;
+		
+		return AllRobots.getRobot(name).currDirectionsIndex;
 	}
 	
 	private boolean RobotHasATask(String name)
 	{
-		return true;
-		//TODO get info from AllRobots after it's implemented
+		return AllRobots.getRobot(name).hasATask;
 	}
 	
-	private void assignJob(String name,ArrayList<Objects.Sendable.SingleTask> job)
+	private void assignJob(String name,Job job)
 	{
-		//TODO change info in AllRobots to show that the robot is now doing a job
+		AllRobots.getRobot(name).currJob=job;
 	}
 	
 	
-	private ArrayList<Objects.Sendable.SingleTask> getJob()
+	private Job getJob()
 	{
 		//TODO get the next job in the priority queue
 		return null;
@@ -432,26 +499,25 @@ public class RouteExecution extends Thread {
 	
 	private String getRobotName(int index)
 	{
-		//TODO get info from AllRobots after it's implemented
-		return null;
+		
+		return AllRobots.getAllRobots().get(index).getName();
 	}
 	
 	
 	private boolean IsRobotDoingAJob(String name)
 	{
-		//TODO get info from AllRobots after it's implemented
-		return true;
+		
+		return AllRobots.getRobot(name).isDoingJob;
 	}
 	
 	
-	private Point getItemLocation(int index,String robotName)
+	private Point getItemLocation(int index,String name)
 	{
 		
-		//TODO get item location somehow
-		return null;
+		return AllRobots.getRobot(name).currJob.getTaskAtIndex(index).get().getLocation();
 	}
 	
-	
+	/*
 	private Objects.Sendable.MoveReport waitForResponse()
 	{
 		boolean waiting=true;
@@ -460,25 +526,26 @@ public class RouteExecution extends Thread {
 			
 		}
 		return null;
-		//TODO get move report from server somehow
+		
 	}
-	
-	private void robotHasMoved(Point newLoc)
+	*/
+	private void robotHasMoved(Point newLoc,String name)
 	{
 		//TODO notify other classes about the change in the robot location
+		AllRobots.getRobot(name).setPosition(newLoc);
 	}
 	
 	
 	private Point getRobotLocation(String name)
 	{
-		//TODO get robotlocation from the localization classes
-		return null;
+		
+		return AllRobots.getRobot(name).getPosition();
 	}
 	
 	private Direction getRobotFacingDirection(String name)
 	{
-		//TODO get robot facing direction from the localization classes
-		return null;
+		
+		return AllRobots.getRobot(name).getDirection();
 	}
 	
 }
