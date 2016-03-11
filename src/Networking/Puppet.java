@@ -33,7 +33,7 @@ public class Puppet extends Thread {
 			
 			Move testMove = new Move('f',new Point(2,3));
 			send(testMove);
-			SingleTask testTask = new SingleTask("Something", 42);
+			SingleTask testTask = new SingleTask("Something", 42, new Point(1,1));
 			send(testTask);
 		}
 		catch (NXTCommException | InterruptedException e) {

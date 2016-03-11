@@ -1,5 +1,11 @@
+package JobSelection;
 
-public class LearningCancellations {
+
+public class LearningCancellations { 
+	
+public LearningCancellations {
+	
+}
 
 /**
  * CLASS FOR FEATURES FOR JOB CANCELLLATION
@@ -33,4 +39,7 @@ public class LearningCancellations {
  *
  * 
  */
+	
+
+	
 }

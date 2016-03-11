@@ -1,4 +1,4 @@
-package orderPicks;
+package routePlanning.orderPicks;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Vector;
 
+import Objects.WarehouseMap;
 import Objects.Sendable.SingleTask;
+import routePlanning.pathFinding.SimpleDistance;
 
 /*
  * @author Maria
@@ -24,10 +26,13 @@ public class OrderPicks {
 	public Point dropOff;
 	private boolean running=true;
 	private boolean canceled=false;
+	private WarehouseMap map; 
+	private SimpleDistance dist;
 	
-	
-	public OrderPicks(ArrayList<Objects.Sendable.SingleTask> items,ArrayList<Point2D> dropOffs)
+	public OrderPicks(ArrayList<Objects.Sendable.SingleTask> items,ArrayList<Point2D> dropOffs,WarehouseMap map)
 	{
+		this.map=map;
+		this.dist=new SimpleDistance(map);
 		this.dropOffs=dropOffs;
 		this.items=items;
 		orderedItems=new ArrayList<Objects.Sendable.SingleTask>();
@@ -77,8 +82,8 @@ public class OrderPicks {
 			int min=0,minI=0;
 			for(int i=0;i<items.size();i++)
 			{				
-				Point loc=this.getItemLocation(items.get(i).getItemID());
-				int x=getRouteDist(dropOff,loc);
+				Point loc=items.get(i).getLocation();
+				int x=getDistance(dropOff,loc);
 				if(min==0 || min>x)
 				{
 					if(canceled) return;
@@ -165,9 +170,9 @@ public class OrderPicks {
 		{
 			for(int j=0;j<orderedItems.size();j++)
 			{
-				Point loci=this.getItemLocation(items.get(i).getItemID());
-				Point locj=this.getItemLocation(orderedItems.get(j).getItemID());
-				int x=getRouteDist(locj,loci);
+				Point loci=items.get(i).getLocation();
+				Point locj=orderedItems.get(j).getLocation();
+				int x=getDistance(locj,loci);
 				if(min==-1 || min>x)
 				{
 					if(canceled) return -1;
@@ -186,19 +191,19 @@ public class OrderPicks {
 	 */
 	private int getDistance()
 	{
-		Point loc=this.getItemLocation(orderedItems.get(0).getItemID());
-		int sum=getRouteDist(dropOff,loc);;
+		Point loc=orderedItems.get(0).getLocation();
+		int sum=getDistance(dropOff,loc);;
 		for(int i=1;i<orderedItems.size();i++)
 		{
 			if(canceled) return -1;
-			loc=this.getItemLocation(orderedItems.get(i-1).getItemID());
-			Point loci=this.getItemLocation(orderedItems.get(i).getItemID());
-			sum+=getRouteDist(loc,loci);;
+			loc=orderedItems.get(i-1).getLocation();
+			Point loci=orderedItems.get(i).getLocation();
+			sum+=getDistance(loc,loci);;
 		}
 		
 		
-		loc=this.getItemLocation(orderedItems.get(orderedItems.size()-1).getItemID());
-		sum+=getRouteDist(loc,dropOff);;
+		loc=orderedItems.get(orderedItems.size()-1).getLocation();
+		sum+=getDistance(loc,dropOff);;
 		return sum;
 	}
 	
@@ -214,30 +219,13 @@ public class OrderPicks {
 		else return getDistance();
 	}
 	
-	
-	private int getRouteDist( Point2D loc1, Point2D loc2)
-	{		
 		
-		return getPathImaginary(loc1,loc2).size();		
-	}
-	
-	public static Vector<Integer> getPathImaginary(Point2D loc1, Point2D loc2)
+	public int getDistance(Point loc1, Point loc2)
 	{
-		//TODO get path between 2 locations on the map in an imaginary case in which there are no other robots around
-		return null;
-	}
-	public static Vector<Integer> getPath(Point2D loc1, Point2D loc2)
-	{
-		//TODO get path between 2 locations on the map normally, at a certain time
-		return null;
+		Integer distance=dist.GetDistnace(loc1, loc2);
+		return distance.intValue();
 	}
 	
 	
-	private Point getItemLocation(String ItemID)
-	{
-		
-		//TODO get item location from single task
-		return null;
-	}
 	
 }
