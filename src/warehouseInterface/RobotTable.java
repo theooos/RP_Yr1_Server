@@ -7,7 +7,6 @@ import Objects.Sendable.RobotInfo;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.UUID;
 
 public class RobotTable
 {
@@ -27,14 +26,6 @@ public class RobotTable
 		table.setComponentPopupMenu(popupMenu);
 
 		panel.add(new JScrollPane(table), BorderLayout.CENTER);
-
-		RobotInfo robot1 = new RobotInfo("Tay Tay", new Point(5, 1)), robot2 = new RobotInfo("Alfonso", new Point(9, 5), Direction.EAST), robot3 = new RobotInfo("John Cena", new Point(1, 7), Direction.SOUTH);
-		addRobot(robot1);
-		AllRobots.addRobot(robot1);
-		addRobot(robot2);
-		AllRobots.addRobot(robot2);
-		addRobot(robot3);
-		AllRobots.addRobot(robot3);
 		return panel;
 	}
 
@@ -43,12 +34,12 @@ public class RobotTable
 		JOptionPane.showMessageDialog(panel, "Name: " + robot.getName() + "\nPosition: (" + robot.getPosition().x + ", " + robot.getPosition().y + ")");
 	}
 
-	private static void addRobot(RobotInfo robot)
+	public static void addRobot(RobotInfo robot)
 	{
 		tableModel.addRow(new Object[] { robot.getName(), "Ready" });
 	}
 
-	private static void removeRobot(RobotInfo robot)
+	public static void removeRobot(RobotInfo robot)
 	{
 		for(int i = 0; i < tableModel.getRowCount(); i++)
 			if(tableModel.getValueAt(i, 0).equals(robot.getName()))

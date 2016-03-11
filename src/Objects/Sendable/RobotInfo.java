@@ -24,8 +24,9 @@ public class RobotInfo implements SendableObject {
 	public boolean hasMoved;
 	public boolean hasCompletedTask;
 	public boolean finishedDroppingItems;
-	
-	
+	public boolean hasATask;
+	public boolean functioning;
+	public Point nextRobotLocation;
 	
 	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
 	private Point currentNode;

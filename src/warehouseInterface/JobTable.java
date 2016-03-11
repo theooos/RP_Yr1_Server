@@ -1,14 +1,8 @@
 package warehouseInterface;
 
-import JobInput.JobProcessor;
-import Objects.AllRobots;
-import Objects.Job;
-import Objects.Sendable.RobotInfo;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.UUID;
 
 public class JobTable
 {
@@ -22,8 +16,8 @@ public class JobTable
 		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
 		activeJobs = Display.createTable(tableModel);
 
-		JButton addJob = new JButton("Add a job");
-		addJob.addActionListener(e -> new AddJob());
+		//Button addJob = new JButton("Add a job");
+		//addJob.addActionListener(e -> new AddJob());
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
@@ -41,7 +35,7 @@ public class JobTable
 		activeJobs.getColumnModel().getColumn(2).setPreferredWidth(100);
 
 		panel.add(new JScrollPane(activeJobs), BorderLayout.CENTER);
-		panel.add(addJob, BorderLayout.SOUTH);
+		//panel.add(addJob, BorderLayout.SOUTH);
 		return panel;
 	}
 

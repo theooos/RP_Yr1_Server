@@ -34,7 +34,9 @@ public class Statistics
 
 		panel.add(title);
 		panel.add(new JScrollPane(table));
-		panel.setBorder(BorderFactory.createEmptyBorder(0, 30, 150, 30));
+		panel.add(Box.createRigidArea(new Dimension(0, 20)));
+		panel.add(new JLabel(new ImageIcon("res/1.1 Logo.png")));
+		panel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
 		return panel;
 	}
 
