@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import JobInput.JobProcessor;
 import JobSelection.Selection;
+import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.Direction;
 import Objects.Job;
@@ -89,13 +90,14 @@ public class RouteExecution extends Thread {
 					{
 						
 						
-						//TODO use Theo's new class for sending objects to robots when he finally makes it
+						// use Theo's new class for sending objects to robots when he finally makes it
 						if(this.getCurrentTaskIndex(name)==AllRobots.getRobot(name).currJob.getNumOfTasks())
 						{
-							//object.send(name,"dropItems");
+							
+							AllPuppets.send(name,new DropOffPoint((int)getTask(name).getLocation().getX(),(int)getTask(name).getLocation().getY()));
 						}else
 						{
-							//object.send(name,getTask(name));
+							AllPuppets.send(name,getTask(name));
 						}
 						
 						
@@ -114,8 +116,8 @@ public class RouteExecution extends Thread {
 							
 							
 							AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
-							//TODO use Theo's new class for sending objects to robots when he finally makes it
-							//object.send(name,nextmove);
+							// use Theo's new class for sending objects to robots when he finally makes it
+							AllPuppets.send(name,nextmove);
 							
 							AllRobots.getRobot(name).waitingForMoveReport=true;					
 							
@@ -170,8 +172,8 @@ public class RouteExecution extends Thread {
 					if(this.getRobotLocation(name).equals(this.getDropOffLocation(name)))
 					{
 						
-						//TODO use Theo's new class for sending objects to robots when he finally makes it
-						//object.send(name,"dropItems");
+						// use Theo's new class for sending objects to robots when he finally makes it
+						AllPuppets.send(name,"dropItems");
 						
 						this.setDropingItems(name, true);
 					}					
@@ -190,7 +192,7 @@ public class RouteExecution extends Thread {
 							//job complete!!
 							this.initVariables(name);
 							//TODO notify whoever needs to be notified about the fact that the job is complete
-							//TODO remove the job from the queue
+							
 							
 						}
 					}
@@ -543,7 +545,7 @@ public class RouteExecution extends Thread {
 	*/
 	private void robotHasMoved(Point newLoc,String name,Direction newDir)
 	{
-		//TODO notify other classes about the change in the robot location
+	
 		AllRobots.getRobot(name).setPosition(newLoc);
 		AllRobots.getRobot(name).setDirection(newDir);
 		GridMap.refresh();
