@@ -23,9 +23,7 @@ public class Job {
 	/**
 	 * Create an empty job.
 	 */
-
 	public Job(Map<String, Item> items) {
-
 		this.tasks = new ArrayList<>();
         this.cancelled = false;
         this.cancellationProb = 0.0f;
