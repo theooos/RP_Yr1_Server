@@ -14,6 +14,7 @@ import Objects.Sendable.SingleTask;
 public class Selection { 
 	
 	private final Collection<Job> joblist;
+	public static PriorityQueue<Job>  PriorityQueue;
 	
 	/**
 	 * Selection class
@@ -54,7 +55,7 @@ public class Selection {
 			}
 			
 		}
-		
+		this.PriorityQueue = jobQueue;
 		return jobQueue;
 	};	
 	

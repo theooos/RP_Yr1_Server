@@ -3,10 +3,21 @@
  */
 package JohnSwift;
 
+import java.awt.GridLayout;
+import java.awt.Point;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import JobInput.JobProcessor;
-import Networking.Puppet;
-import Networking.Server;
+import Objects.AllRobots;
+import Objects.WarehouseMap;
+import Objects.Sendable.RobotInfo;
 import routeExecution.RouteExecution;
+import warehouseInterface.GridMap;
+import warehouseInterface.JobTable;
+import warehouseInterface.RobotTable;
+import warehouseInterface.Statistics;
 
 /**
  * @author georgesabourin
@@ -18,25 +29,25 @@ public class RunMe {
 		// Some stuff will go here, pending it works, which it likely won't.
 		
 		
-		// JobSelection (Fran & Brendan) -- Process the items
+		//// JobSelection (Fran & Brendan) -- Process the items
         JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
         JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+        //JobProcessor.getAllItems()
 		
-        // Local Server (Theo) -- Starting the server
+        /*
         Server server = new Server();
         server.start();
 		Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
 		server.addRobot(johnCena);        
-//        Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-//        server.addRobot(alfonso);
+        Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+        server.addRobot(alfonso);
 		Puppet tay = new Puppet("TayTay", "0016531AF6E5");
 		server.addRobot(tay);
-		
-		RouteExecution theExecutor = new RouteExecution();
-		theExecutor.start();
-		
-		
-        /*
+		*/
+        
+      
+        WarehouseMap grid = new WarehouseMap(12, 8, "res/drops.csv");
+        
         // WarehouseInterface (Artur) -- Create and launch the interface
 		JFrame frame = new JFrame("Warehouse Interface");
 		frame.setLayout(new GridLayout(2, 2));
@@ -45,11 +56,17 @@ public class RunMe {
 		frame.setSize(800, 600);
 
 		frame.add(JobTable.draw());
-		frame.add(GridMap.createGrid());
+		frame.add(GridMap.createGrid(grid));
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
 		frame.setVisible(true);
-		*/
+		
+        grid.setObstacles(new Point[] { new Point(1, 2), new Point(1, 3), new Point(1, 4), new Point(1, 5), new Point(1, 6), new Point(4, 2), new Point(4, 3), new Point(4, 4), new Point(4, 5), new Point(4, 6), new Point(7, 2), new Point(7, 3), new Point(7, 4), new Point(7, 5), new Point(7, 6), new Point(10, 2), new Point(10, 3), new Point(10, 4), new Point(10, 5), new Point(10, 6) });
+
+		AllRobots.addRobot(new RobotInfo("test", new Point(1,1)));
+		
+		RouteExecution theExecutor = new RouteExecution(1, grid);
+		theExecutor.start();
 	}
 
 }

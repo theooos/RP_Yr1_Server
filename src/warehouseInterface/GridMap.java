@@ -15,11 +15,8 @@ public class GridMap
 	private static JPanel panel;
 	private static final int GRID_WIDTH = 12, GRID_HEIGHT = 8;
 
-	public static JPanel createGrid()
+	public static JPanel createGrid(WarehouseMap grid)
 	{
-		WarehouseMap grid = new WarehouseMap(GRID_WIDTH, GRID_HEIGHT, "res/drops.csv");
-		ArrayList<Point> obstacles = new ArrayList<>();
-		grid.setObstacles(new Point[] { new Point(1, 2), new Point(1, 3), new Point(1, 4), new Point(1, 5), new Point(1, 6), new Point(4, 2), new Point(4, 3), new Point(4, 4), new Point(4, 5), new Point(4, 6), new Point(7, 2), new Point(7, 3), new Point(7, 4), new Point(7, 5), new Point(7, 6), new Point(10, 2), new Point(10, 3), new Point(10, 4), new Point(10, 5), new Point(10, 6) });
 		panel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g)

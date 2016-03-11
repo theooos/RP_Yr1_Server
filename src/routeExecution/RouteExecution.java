@@ -2,8 +2,11 @@ package routeExecution;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Vector;
 
+import JobInput.JobProcessor;
+import JobSelection.Selection;
 import Objects.AllRobots;
 import Objects.Direction;
 import Objects.Job;
@@ -12,6 +15,8 @@ import Objects.Sendable.Move;
 import Objects.Sendable.SingleTask;
 import routePlanning.orderPicks.OrderPicks;
 import routePlanning.pathFinding.PathFinding;
+import warehouseInterface.GridMap;
+import warehouseInterface.JobTable;
 
 
 /*
@@ -26,13 +31,13 @@ public class RouteExecution extends Thread {
 	private boolean running=true;
 	private int nrOfRobots=0;
 	private PathFinding pathfinder;
-	
-	private ArrayList<Objects.Sendable.SingleTask> tasks;
+	private PriorityQueue<Job> priorityQueue;
 	
 	public RouteExecution( int nrOfRobots,WarehouseMap map)
 	{
 		this.nrOfRobots=nrOfRobots;
 		this.pathfinder=new PathFinding(map);
+		this.priorityQueue = Selection.PriorityQueue;
 	}
 	
 	/**
@@ -106,6 +111,9 @@ public class RouteExecution extends Thread {
 							//send the move to the server
 							AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
 							
+							
+							
+							AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
 							//TODO use Theo's new class for sending objects to robots when he finally makes it
 							//object.send(name,nextmove);
 							
@@ -130,7 +138,7 @@ public class RouteExecution extends Thread {
 						
 						if(hasMoved(name)){
 							AllRobots.getRobot(name).waitingForMoveReport=false;
-							this.robotHasMoved(AllRobots.getRobot(name).nextRobotLocation, name);
+							this.robotHasMoved(AllRobots.getRobot(name).nextRobotLocation, name,AllRobots.getRobot(name).nextDir);
 							AllRobots.getRobot(name).hasMoved=false;
 						}
 					}
@@ -482,13 +490,17 @@ public class RouteExecution extends Thread {
 	private void assignJob(String name,Job job)
 	{
 		AllRobots.getRobot(name).currJob=job;
+		int reward = 0;
+		for(SingleTask task : job.getTasks())
+			reward += JobProcessor.getItem(task.getItemID()).getReward();
+		JobTable.addJob(job.getjobid(), String.valueOf(reward), name);
 	}
 	
 	
 	private Job getJob()
 	{
-		//TODO get the next job in the priority queue
-		return null;
+		return priorityQueue.remove();
+		
 	}
 	
 	public void stopThread()
@@ -529,10 +541,12 @@ public class RouteExecution extends Thread {
 		
 	}
 	*/
-	private void robotHasMoved(Point newLoc,String name)
+	private void robotHasMoved(Point newLoc,String name,Direction newDir)
 	{
 		//TODO notify other classes about the change in the robot location
 		AllRobots.getRobot(name).setPosition(newLoc);
+		AllRobots.getRobot(name).setDirection(newDir);
+		GridMap.refresh();
 	}
 	
 	
