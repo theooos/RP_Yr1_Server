@@ -2,6 +2,7 @@ package Objects;
 
 import java.util.ArrayList;
 
+import warehouseInterface.RobotTable;
 import Objects.Sendable.RobotInfo;
 
 public class AllRobots {
@@ -21,6 +22,7 @@ public class AllRobots {
 
 	public synchronized static void addRobot(RobotInfo newBot){
 		robots.add(newBot);
+		RobotTable.addRobot(newBot);
 	}
 	
 	public synchronized static boolean checkExists(String name){
@@ -55,6 +57,7 @@ public class AllRobots {
 		for(RobotInfo robot : robots){
 			if(robot.getName().equals(name)){
 				robotFound = true;
+				RobotTable.removeRobot(robot);
 			}
 			else{
 				newList.add(robot);

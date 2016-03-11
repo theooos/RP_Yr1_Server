@@ -34,12 +34,12 @@ public class RobotTable
 		JOptionPane.showMessageDialog(panel, "Name: " + robot.getName() + "\nPosition: (" + robot.getPosition().x + ", " + robot.getPosition().y + ")");
 	}
 
-	private static void addRobot(RobotInfo robot)
+	public static void addRobot(RobotInfo robot)
 	{
 		tableModel.addRow(new Object[] { robot.getName(), "Ready" });
 	}
 
-	private static void removeRobot(RobotInfo robot)
+	public static void removeRobot(RobotInfo robot)
 	{
 		for(int i = 0; i < tableModel.getRowCount(); i++)
 			if(tableModel.getValueAt(i, 0).equals(robot.getName()))
