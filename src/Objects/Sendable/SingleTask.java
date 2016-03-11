@@ -40,17 +40,14 @@ public class SingleTask implements SendableObject {
 	public int getQuantity() {
 		return quantity;
 	}
-	
-	
+
 	/**
-	 * Get location method
-	 * @return location the item pick up point
+	 * Get the location.
+	 * @return The location.
 	 */
 	public Point getLocation() {
-		
 		return location;
 	}
-
 
 	// toString method for debugging purposes
 	@Override

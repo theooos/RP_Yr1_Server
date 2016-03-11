@@ -34,7 +34,7 @@ public class JobProcessor {
     public static Item getItem(String id) {
         return items.get(id);
     }
-    
+
     /**
      * Get a job from its ID.
      * @param id The job id.
@@ -66,15 +66,15 @@ public class JobProcessor {
      * @return The contents of the file as a list of strings.
      */
     public static Optional<List<String>> readFile(String fileName) {
-        try { 
+        try {
             List<String> fileContents = new ArrayList<String>();
-            
+
             FileReader fr = new FileReader(fileName);
             BufferedReader reader = new BufferedReader(fr);
 
             String line;
             while((line = reader.readLine()) != null) {
-                fileContents.add(line); 
+                fileContents.add(line);
             }
 
             fr.close();
@@ -110,7 +110,7 @@ public class JobProcessor {
 
         for(String jobStr : jobsContents.get()) {
             // Each data element is separated by a comma.
-            String[] jobArr = jobStr.split(","); 
+            String[] jobArr = jobStr.split(",");
 
             // Create a new job.
             Job newJob = new Job(items);;
@@ -146,42 +146,42 @@ public class JobProcessor {
             System.err.println("Error processing items file.");
             return;
         }
-       
+
         if(!locationsContents.isPresent()) {
-        	System.err.println("Error processing locations file");
-        	return;
+            System.err.println("Error processing locations file");
+            return;
         }
-        
+
 
         for(String itemStr : itemsContents.get()) {
-           
-        	// Each data element is separated by a comma.
-            String[] itemArr = itemStr.split(","); 
-            
+
+            // Each data element is separated by a comma.
+            String[] itemArr = itemStr.split(",");
+
             for(String locationStr : locationsContents.get()){
-            	
-            	String[] locationArr = locationStr.split(",");
-            	
-            	if(itemArr[0].equals(locationArr[2])){
-            		
-            		// Create a new item 
-		            Item newItem = new Item( 
-		            		new Point(
-		            		Integer.parseInt(locationArr[0]), 
-		            		Integer.parseInt(locationArr[1])), 
-		            		Double.parseDouble(itemArr[1]), 
-		            		Double.parseDouble(itemArr[2]));
 
-            
+                String[] locationArr = locationStr.split(",");
 
-		            // Add an item object to the list.
-		            items.put(itemArr[0], newItem);
+                if(itemArr[0].equals(locationArr[2])){
+
+                    // Create a new item
+                    Item newItem = new Item(
+                                                   new Point(
+                                                                    Integer.parseInt(locationArr[0]),
+                                                                    Integer.parseInt(locationArr[1])),
+                                                   Double.parseDouble(itemArr[1]),
+                                                   Double.parseDouble(itemArr[2]));
+
+
+
+                    // Add an item object to the list.
+                    items.put(itemArr[0], newItem);
                     break;
-            
-            	}
+
+                }
             }
         }
 
     }
-
+    
 }
