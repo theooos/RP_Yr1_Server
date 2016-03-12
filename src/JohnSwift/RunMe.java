@@ -39,20 +39,30 @@ public class RunMe extends Thread{
         JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
         JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
         //JobProcessor.getAllItems()
-		
         
+        // These are the Puppets to uncomment if you want to do anything with them.
 //        Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
 //        AllPuppets.addPuppet(johnCena);        
 //        Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
 //        AllPuppets.addPuppet(alfonso);
 //        Puppet tay = new Puppet("TayTay", "0016531AF6E5");
 //        AllPuppets.addPuppet(tay);
+        
 		
 //        setUpWarehouse();
         
-        // Starts up new robot testing class. (*HAS NOT BEEN TESTED WITH ROBOTS*).
-        RobotMovementSuite testSuite = new RobotMovementSuite();
-        testSuite.start(); 
+        
+        /* Starts up new robot testing class. (*HAS NOT BEEN TESTED WITH ROBOTS*).
+         * If the above 3 puppets are commented out, then it won't have the puppets to talk to.
+         * 1. Add the bots to your computer in your system bluetooth devices.
+         * 2. Ensure you have all the NXJ shite set up on your pc. (Don't use a mac. Linux OK).
+         * 3. Uncomment the above puppets.
+         * 4. Turn on robots and have them started up before you start the server.
+         * 5. Once all robots are on, start the server.
+         * 6. Cross all your fingers.
+         */
+//        RobotMovementSuite testSuite = new RobotMovementSuite();
+//        testSuite.start(); 
 	}
 	
 	/**
