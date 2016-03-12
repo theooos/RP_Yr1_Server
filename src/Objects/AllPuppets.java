@@ -16,6 +16,7 @@ public class AllPuppets {
 				return;
 			}
 		}
+		System.out.println("Could not find puppet " + name + " and send it: " + obj.parameters());
 	}
 	
 	public static synchronized ArrayList<Puppet> getPuppets(){

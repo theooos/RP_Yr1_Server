@@ -10,9 +10,13 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import routeExecution.RouteExecution;
+import warehouseInterface.GridMap;
+import warehouseInterface.JobTable;
+import warehouseInterface.RobotTable;
+import warehouseInterface.Statistics;
 import JobInput.JobProcessor;
 import Networking.Puppet;
-import Networking.RobotLobby;
 import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.WarehouseMap;
@@ -20,15 +24,10 @@ import Objects.Sendable.CompleteReport;
 import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
-import Objects.Sendable.SingleTask;
-import routeExecution.RouteExecution;
-import warehouseInterface.GridMap;
-import warehouseInterface.JobTable;
-import warehouseInterface.RobotTable;
-import warehouseInterface.Statistics;
 
 /**
- * @author georgesabourin
+ * @author theogregory
+ * Merged with Server.java and RobotLobby.java to save difficulties with communicating amongst the other server sections.
  */
 public class RunMe extends Thread{
 	
@@ -49,9 +48,11 @@ public class RunMe extends Thread{
 //        Puppet tay = new Puppet("TayTay", "0016531AF6E5");
 //        AllPuppets.addPuppet(tay);
 		
-        setUpWarehouse();
+//        setUpWarehouse();
         
-		AllRobots.addRobot(new RobotInfo("test", new Point(1,1)));		
+        // Starts up new robot testing class. (*HAS NOT BEEN TESTED WITH ROBOTS*).
+        RobotMovementSuite testSuite = new RobotMovementSuite();
+        testSuite.start(); 
 	}
 	
 	/**
@@ -59,25 +60,27 @@ public class RunMe extends Thread{
 	 */
 	@Override
 	public void run(){
-		while(alive ){
+		while(alive){
 			try {
-				Thread.sleep(100);
+				// Sleeping to allow others access to AllRobots.
+				Thread.sleep(400);
 			} catch (InterruptedException e) {
-				out("Sleep failed");
+				out("RunMe run() sleep failed");
 			}
-			
+			// Checks puppets for data.
 			checkCommands();			
 		}
 	}
 	
 	/**
 	 * Checks through all the puppets, to see if they've sent any commands.
+	 * If they have, then it executes them accordingly.
 	 */
 	private void checkCommands(){
 		ArrayList<Puppet> puppets = AllPuppets.getPuppets();
+		
 		for(Puppet pup : puppets){
-			SendableObject comm = null;
- 			
+			SendableObject comm = null; 			
  		    while((comm = pup.popCommand()) != null)
  		    {
  		    	if(comm instanceof MoveReport){
@@ -87,33 +90,13 @@ public class RunMe extends Thread{
  		    		theExecutor.addCompleteReport(pup.getName(), comm);
  		    	}
  		    	else if(comm instanceof RobotInfo){
+ 		    		/* Will only be called when a robot has started up, and had it's
+ 		    		 * input given to it by the operator.
+ 		    		 */
  		    		AllRobots.addRobot((RobotInfo)comm);
  		    	}
  		    }
 		}
-		try {
-			Thread.sleep(400);
-		}
-		catch (InterruptedException e) {
-			out("Sleep failed in the lobby");
-		}
-	}
-
-	/**
-	 * Adds a robot to the puppets list.
-	 * @param pup
-	 */
-	public void addRobot(Puppet pup){
-		AllPuppets.addPuppet(pup);
-	}
-	
-	/**
-	 * Checks if a robot by the given name already exists.
-	 * @param name The name
-	 * @return Whether there or not.
-	 */
-	public boolean checkExists(String name){
-		return AllPuppets.checkExist(name);
 	}
 	
 	/**
