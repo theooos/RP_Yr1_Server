@@ -1,5 +1,16 @@
 public class Features {
 
+    public Map<Integer, Function<Collection<Job>, Integer>> functions;
+
+    public Features() {
+
+        functions = new HashMap<Integer, Function<Collection<Job>, Integer>>();
+        functions.put(NumOfTasks.ONETOTWO, j -> j.stream().filter(j.getNumOfTasks() >= 1).filter(j.getNumOfTasks() <= 2).count());
+        functions.put(NumOfTasks.THREETOFOUR, j -> j.stream().filter(j.getNumOfTasks() >= 3).filter(j.getNumOfTasks() <= 4).count());
+        functions.put(NumOfTasks.ONETOTWO, j -> j.stream().filter(j.getNumOfTasks() >= 5).count());
+
+    }
+
     public static class NumOfTasks {
         
         public static int ONETOTWO = 0;
