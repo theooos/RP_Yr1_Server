@@ -45,11 +45,10 @@ public class RunMe extends Thread{
 //        AllPuppets.addPuppet(johnCena);        
 //        Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
 //        AllPuppets.addPuppet(alfonso);
-//        Puppet tay = new Puppet("TayTay", "0016531AF6E5");
-//        AllPuppets.addPuppet(tay);
-        
+        Puppet tay = new Puppet("TayTay", "0016531AF6E5");
+        AllPuppets.addPuppet(tay);
 		
-//        setUpWarehouse();
+        setUpWarehouse();
         
         
         /* Starts up new robot testing class. (*HAS NOT BEEN TESTED WITH ROBOTS*).
@@ -71,6 +70,7 @@ public class RunMe extends Thread{
 	@Override
 	public void run(){
 		while(alive){
+			checkCommands();	
 			try {
 				// Sleeping to allow others access to AllRobots.
 				Thread.sleep(400);
@@ -78,7 +78,7 @@ public class RunMe extends Thread{
 				out("RunMe run() sleep failed");
 			}
 			// Checks puppets for data.
-			checkCommands();			
+			//checkCommands();			
 		}
 	}
 	

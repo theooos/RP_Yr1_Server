@@ -9,6 +9,7 @@ import lejos.pc.comm.NXTComm;
 import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
+import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
 import Objects.Sendable.SingleTask;
 
@@ -49,8 +50,11 @@ public class Puppet extends Thread {
 //			send(b);
 //			
 			Thread.sleep(8000);
-			SingleTask task1 = new SingleTask("FK", 4, new Point(3,5));
-			send(task1);
+			//SingleTask task1 = new SingleTask("FK", 4, new Point(3,5));
+			//send(task1);
+			
+			RobotInfo ri = new RobotInfo("TayTay");
+			send(ri);
 		}
 		catch (NXTCommException | InterruptedException e) {
 			out("Failed to connect with: " + name);
