@@ -512,7 +512,16 @@ public class RouteExecution extends Thread {
 	
 	private String getRobotName(int index)
 	{
-		
+		while(AllRobots.getAllRobots().isEmpty())
+		{
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Loop finished. " + AllRobots.getAllRobots().get(index).getName());
 		return AllRobots.getAllRobots().get(index).getName();
 	}
 	
