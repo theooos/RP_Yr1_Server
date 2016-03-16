@@ -21,6 +21,7 @@ import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.WarehouseMap;
 import Objects.Sendable.CompleteReport;
+import Objects.Sendable.Move;
 import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
@@ -39,7 +40,7 @@ public class RunMe extends Thread{
 		//// JobSelection (Fran & Brendan) -- Process the items
         JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
         JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
-        //JobProcessor.getAllItems()
+//        JobProcessor.getAllItems();
         
         // These are the Puppets to uncomment if you want to do anything with them.
 //        Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
@@ -50,6 +51,7 @@ public class RunMe extends Thread{
 //        AllPuppets.addPuppet(tay);
 		
         setUpWarehouse();
+        alfonso.send(new Move('f', new Point(2,1)));
         
         
         /* Starts up new robot testing class. (*HAS NOT BEEN TESTED WITH ROBOTS*).

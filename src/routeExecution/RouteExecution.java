@@ -50,7 +50,9 @@ public class RouteExecution extends Thread {
 		initVariables();
 		while(running)
 		{		
-			
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {}
 			for(int ir=0;ir<nrOfRobots;ir++){
 				//check if all the robots are doing jobs and assign them jobs if not
 				String name=this.getRobotName(ir);
@@ -521,7 +523,6 @@ public class RouteExecution extends Thread {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Loop finished. " + AllRobots.getAllRobots().get(index).getName());
 		return AllRobots.getAllRobots().get(index).getName();
 	}
 	

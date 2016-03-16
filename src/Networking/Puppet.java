@@ -49,7 +49,7 @@ public class Puppet extends Thread {
 //			Move b = new Move('b',new Point(2,3));
 //			send(b);
 //			
-			Thread.sleep(8000);
+			Thread.sleep(5000);
 			//SingleTask task1 = new SingleTask("FK", 4, new Point(3,5));
 			//send(task1);
 			
