@@ -3,6 +3,7 @@ package jobSelection;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import JobInput.JobProcessor;
@@ -12,16 +13,16 @@ import Objects.Sendable.SingleTask;
 
 public class Features {
 
-    public Map<Integer, Predicate<Job>> predicates;
+    public static Map<Integer, Predicate<Job>> predicates;
 
     public Features() {
 
-        predicates = new HashMap<Integer, Function<Collection<Job>, Long>>();
+        predicates = new HashMap<Integer, Predicate<Job>>();
         predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 && j.getNumTasks() <= 2);
-        predicates.put(NumOfTasks.THREETOFOUR,  -> j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
+        predicates.put(NumOfTasks.THREETOFOUR, j -> j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
         predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 5);
 
-        predicates.put(TotalItems.ONETOFOUR, j -> totalNumItems(j) >= 1 && totalNumItems(j) <= 4)
+        predicates.put(TotalItems.ONETOFOUR, j -> totalNumItems(j) >= 1 && totalNumItems(j) <= 4);
         predicates.put(TotalItems.FIVETOEIGHT, j -> totalNumItems(j) >= 5 && totalNumItems(j) <= 8);
         predicates.put(TotalItems.NINETOTWELVE, j -> totalNumItems(j) >= 9 && totalNumItems(j) <= 12);
         predicates.put(TotalItems.THIRTEENPLUS, j -> totalNumItems(j) >= 13);
@@ -37,8 +38,8 @@ public class Features {
         
         predicates.put(HighestQuantity.ONETOTWO, j -> highestQuantity(j) >= 1 && highestQuantity(j) <= 2);
         predicates.put(HighestQuantity.THREETOFOUR, j -> highestQuantity(j) >= 3 && highestQuantity(j) <= 4);
-        predicates.put(HighestQuantity.FIVETOSIX, l -> j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
-        predicates.put(HighestQuantity.SEVENPLUS, l -> j -> highestQuantity(j) >= 7);
+        predicates.put(HighestQuantity.FIVETOSIX, j -> j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
+        predicates.put(HighestQuantity.SEVENPLUS, j -> j -> highestQuantity(j) >= 7);
     }
 
     public static class NumOfTasks {
@@ -126,6 +127,22 @@ public class Features {
     	
     	return heaviest;
     	
+    }
+
+    public static List<Integer> getFeatures(Job job) {
+        
+        List<Integer> list = new ArrayList<Integer>();
+        Set<Entry<Integer, Predicate<Job>>> entrySet = predicates.entrySet();
+
+        for( Map.Entry<Integer, Predicate<Job>> e : entrySet) {
+            Integer f = e.getKey();
+            Predicate<Job> p = e.getValue(); 
+            if(p.test(job))
+                list.add(f);
+        }
+
+        return list;
+        
     }
 
     public static class HighestQuantity {
