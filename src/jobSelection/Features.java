@@ -1,8 +1,11 @@
 package jobSelection;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -18,7 +21,7 @@ public class Features {
     public Features() {
 
         predicates = new HashMap<Integer, Predicate<Job>>();
-        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 && j.getNumTasks() <= 2);
+        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 && j.getNumOfTasks() <= 2);
         predicates.put(NumOfTasks.THREETOFOUR, j -> j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
         predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 5);
 
@@ -33,13 +36,13 @@ public class Features {
         predicates.put(HighestRewardItem.SIXTEENPLUS, j -> highestReward(j) >= 16);
         
         predicates.put(HeaviestItem.ZEROTOONE, j -> heaviestItem(j) >= 0 && heaviestItem(j) <= 1);
-        predicates.put(HeaviestItem.TWOTOTHREE, j -> heaviestItem(j) >= 2 && j -> heaviestItem(j) <= 3);
+        predicates.put(HeaviestItem.TWOTOTHREE, j -> heaviestItem(j) >= 2 && heaviestItem(j) <= 3);
         predicates.put(HeaviestItem.FOURPLUS, j -> heaviestItem(j) >= 4);
         
         predicates.put(HighestQuantity.ONETOTWO, j -> highestQuantity(j) >= 1 && highestQuantity(j) <= 2);
         predicates.put(HighestQuantity.THREETOFOUR, j -> highestQuantity(j) >= 3 && highestQuantity(j) <= 4);
-        predicates.put(HighestQuantity.FIVETOSIX, j -> j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
-        predicates.put(HighestQuantity.SEVENPLUS, j -> j -> highestQuantity(j) >= 7);
+        predicates.put(HighestQuantity.FIVETOSIX, j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
+        predicates.put(HighestQuantity.SEVENPLUS, j -> highestQuantity(j) >= 7);
     }
 
     public static class NumOfTasks {
