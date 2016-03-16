@@ -2,6 +2,7 @@ package warehouseInterface;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 
 public class Statistics
@@ -12,6 +13,14 @@ public class Statistics
 	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		}
+		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
+		{
+			e.printStackTrace();
+		}
 
 		JLabel title = new JLabel("Warehouse Interface");
 		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 32));
