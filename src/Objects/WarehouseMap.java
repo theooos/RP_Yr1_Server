@@ -29,11 +29,19 @@ public class WarehouseMap {
      * @param gridHeight The warehouse height.
      * @param doFile The file containing the drop off locations.
      */
-    public WarehouseMap(int gridWidth, int gridHeight, String doFile) {
+    public WarehouseMap(String doFile) {
+
+        GridMap nicksMap = GridMap.createRealWarehouse();
         
-        this.gridWidth = gridWidth;
-        this.gridHeight = gridHeight;
+        this.gridWidth = nicksMap.getXSize();
+        this.gridHeight = nicksMap.getYSize();
         grid = new boolean[gridWidth][gridHeight];
+
+        for(int i = 0; i < gridWidth; i++) {
+            for(int j = 0; j < gridHeight; j++) {
+                grid[i][j] = nicksMap.isObstructed(i, j);
+            }
+        }
 
         // Read dropoff locations
         Optional<List<String>> dos = JobProcessor.readFile(doFile);
