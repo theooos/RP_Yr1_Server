@@ -14,7 +14,7 @@ import Objects.Sendable.SingleTask;
 public class Selection { 
 	
 	private final Collection<Job> joblist;
-	public static PriorityQueue<Job>  PriorityQueue;
+	public static PriorityQueue<Job>  priorityQueue;
 	
 	/**
 	 * Selection class
@@ -41,21 +41,20 @@ public class Selection {
 			@Override
 			public int compare(Job job1, Job job2) {
 	
+                Integer valueJob1 = (job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100) / 2;
+                Integer valueJob2 = (job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100) / 2;
 				
-				return ((Integer) ( (int)   (job1.rewardPerItem()*100))).compareTo( (Integer) ( (int) (job2.rewardPerItem()*100) ) );
+                return valueJob1.compareTo(valueJob2);
 		
 			}
 		});
 			
 		//add to queue
-		for(Job j : joblist) {
-			
-			if(j.getTotalWeight()<50){
+		for(Job j : joblist)
+			if(j.getTotalWeight()<50)
 				jobQueue.add(j);
-			}
 			
-		}
-		this.PriorityQueue = jobQueue;
+		this.priorityQueue = jobQueue;
 		return jobQueue;
 	};	
 	
