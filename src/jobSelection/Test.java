@@ -1,7 +1,7 @@
 package jobSelection;
 
-import JobInput.JobProcessor;
 import Objects.Job;
+import jobInput.JobProcessor;
 
 public class Test {
 

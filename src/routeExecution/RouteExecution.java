@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
-import JobInput.JobProcessor;
 import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.Direction;
@@ -15,6 +14,7 @@ import Objects.Sendable.Move;
 import Objects.Sendable.MoveReport;
 import Objects.Sendable.SendableObject;
 import Objects.Sendable.SingleTask;
+import jobInput.JobProcessor;
 import jobSelection.Selection;
 import routePlanning.pathFinding.PathFinding;
 import warehouseInterface.GridMap;
@@ -503,7 +503,7 @@ public class RouteExecution extends Thread {
 		int reward = 0;
 		for(SingleTask task : job.getTasks())
 			reward += JobProcessor.getItem(task.getItemID()).getReward();
-		JobTable.addJob(job.getjobid(), String.valueOf(reward), name);
+		JobTable.addJob(job.getJobID(), String.valueOf(reward), name);
 	}
 	
 	

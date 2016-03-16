@@ -6,59 +6,76 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import JohnSwift.RunMe;
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
+import main.RunServer;
 import routePlanning.orderPicks.OrderPicks;
 
 /**
- * Represents a job to be carried out.
+ * SHARED OBJECTS
+ * Represents a Job to be carried out
  */
 public class Job {
 
 	private List<SingleTask> tasks;
-    private boolean cancelled;
-    private boolean ordered;
-    private float cancellationProb;
-    private Map<String, Item> items;
-    private int jobid;
-    private int distanceToTravel;
+	private boolean cancelled;
+	private boolean ordered;
+	private float cancellationProb;
+	private Map<String, Item> items;
+	private int jobid;
+	private int distanceToTravel;
 
 	/**
-	 * Create an empty job.
+	 * Create an empty job
+	 * @param jobid The ID of the job
+	 * @param items The items to add to the job
 	 */
 	public Job(int jobid, Map<String, Item> items) {
 		this.tasks = new ArrayList<>();
-        this.cancelled = false;
-        this.ordered = false;
-        this.cancellationProb = 0.0f;
-        this.items = items;
-        this.jobid = jobid;
+		this.cancelled = false;
+		this.ordered = false;
+		this.cancellationProb = 0.0f;
+		this.items = items;
+		this.jobid = jobid;
 	}
 
 	/**
-	 * Create a job from a list of tasks.
+	 * Create a job with items
+	 * @param jobid The ID of the job
 	 * @param tasks The tasks in the job.
+	 * @param items The items for the job.
 	 */
 	public Job(int jobid, List<SingleTask> tasks, Map<String, Item> items) {
 		this.tasks = tasks;
-        this.cancelled = false;
-        this.ordered = false;
-        this.cancellationProb = 0.0f;
-        this.jobid = jobid;
+		this.cancelled = false;
+		this.ordered = false;
+		this.cancellationProb = 0.0f;
+		this.jobid = jobid;
 	}
-	
-	public int getjobid(){
-		
+
+	/**
+	 * Get the ID of the job
+	 * @return The ID of the job
+	 */
+	public int getJobID(){
 		return jobid;
 	}
 
 	/**
-	 * Add a task to the list of tsasks.
+	 * Add a task to the list of tasks.
 	 * @param t The task to be added.
 	 */
 	public void addTask(SingleTask t) {
 		tasks.add(t);
+	}
+
+	/**
+	 * Get the list of tasks for the current job
+	 * @return The list of tasks
+	 */
+	public List<SingleTask> getTasks()
+	{
+		return tasks;
 	}
 
 	/**
@@ -70,73 +87,68 @@ public class Job {
 		tasks.add(new SingleTask(itemID, qty, location));
 	}
 
-    /**
-     * Get the task at the given index.
-     * @param i The given index.
-     * @return The task at the given index if it exists.
-     */
-    public Optional<SingleTask> getTaskAtIndex(int i) {
-        if(i >= 0 && i < tasks.size())
-        	return Optional.of(tasks.get(i));
-        else
-            return Optional.empty();
-    }
-
-    /**
-     * Get the task with the given item ID.
-     * @param itemID The item ID.
-     * @return The task with the given item ID if it exists.
-     */
-    public Optional<SingleTask> getTask(String itemID) {
-	    for(SingleTask task : tasks)
-		    if(task.getItemID().equals(itemID))
-			    return Optional.of(task);
-        return Optional.empty();
-    }
-
-	public List<SingleTask> getTasks()
-	{
-		return tasks;
+	/**
+	 * Get the task at the given index.
+	 * @param i The given index.
+	 * @return The task at the given index if it exists.
+	 */
+	public Optional<SingleTask> getTaskAtIndex(int i) {
+		if(i >= 0 && i < tasks.size())
+			return Optional.of(tasks.get(i));
+		else
+			return Optional.empty();
 	}
 
-    /**
-     * Set the cancellation probability.
-     * @param p The cancellation probability.
-     */
-    public void setCancellationProb(float p) {
-        this.cancellationProb = p;
-    }
+	/**
+	 * Get the task with the given item ID.
+	 * @param itemID The item ID.
+	 * @return The task with the given item ID if it exists.
+	 */
+	public Optional<SingleTask> getTask(String itemID) {
+		for(SingleTask task : tasks)
+			if(task.getItemID().equals(itemID))
+				return Optional.of(task);
+		return Optional.empty();
+	}
 
-    /**
-     * Get the cancellation probability.
-     * @return The cancellation probability.
-     */
-    public float getCancellationProb() {
-        return cancellationProb;
-    }
+	/**
+	 * Set the cancellation probability.
+	 * @param p The cancellation probability.
+	 */
+	public void setCancellationProb(float p) {
+		this.cancellationProb = p;
+	}
 
-    /**
-     * Check if this job is cancelled.
-     * @return If this job is cancelled.
-     */
-    public boolean cancelled() {
-        return cancelled;
-    }
+	/**
+	 * Get the cancellation probability.
+	 * @return The cancellation probability.
+	 */
+	public float getCancellationProb() {
+		return cancellationProb;
+	}
 
-    /**
-     * Cancel this job.
-     */
-    public void cancel() {
-        cancelled = true;
-    }
+	/**
+	 * Check if this job is cancelled.
+	 * @return If this job is cancelled.
+	 */
+	public boolean cancelled() {
+		return cancelled;
+	}
 
-    /**
-     * Get the number of tasks.
-     * @return The number of tasks.
-     */
-    public int getNumOfTasks() {
-        return tasks.size();
-    }
+	/**
+	 * Cancel this job.
+	 */
+	public void cancel() {
+		cancelled = true;
+	}
+
+	/**
+	 * Get the number of tasks.
+	 * @return The number of tasks.
+	 */
+	public int getNumOfTasks() {
+		return tasks.size();
+	}
 
 	/**
 	 * Calculate the reward for this job per item.
@@ -159,16 +171,16 @@ public class Job {
 
 	}
 
-    public double getTotalReward() {
+	public double getTotalReward() {
 
-        double reward = 0f;
-        for(SingleTask task : tasks) {
-            Item item = items.get(task.getItemID());
-            reward += item.getReward() * task.getQuantity();
-        }
-        return reward;
+		double reward = 0f;
+		for(SingleTask task : tasks) {
+			Item item = items.get(task.getItemID());
+			reward += item.getReward() * task.getQuantity();
+		}
+		return reward;
 
-    }
+	}
 
 	/**
 	 * Calculate the reward for this job per weight.
@@ -188,43 +200,43 @@ public class Job {
 
 		return (reward / weight);
 	}
-	
+
 	/**
-     * calculate total weight of job
-     * @return totalweight the total weight of the task
-     */
-     public double getTotalWeight() {
-    	
-    	double totalweight = 0.0;
-    	
-    	for(SingleTask task : tasks)
-    	{
-    		Item item = items.get(task.getItemID());
-    		totalweight = totalweight + (item.getWeight() * task.getQuantity());
-    	}
-    	
-    	return totalweight;
-    }
+	 * calculate total weight of job
+	 * @return totalweight the total weight of the task
+	 */
+	public double getTotalWeight() {
 
-    public double rewardPerDistance() {
+		double totalweight = 0.0;
 
-        if(ordered)
-            return getTotalReward() / distanceToTravel;
-        else {
-            OrderPicks op = new OrderPicks(tasks, RunMe.grid.getDropoffPoints(), RunMe.grid); 
-            this.tasks = op.orderedItems;
-            distanceToTravel = op.getFinalDistance();
-            this.ordered = true;
-            return getTotalReward() / distanceToTravel;
-        }
+		for(SingleTask task : tasks)
+		{
+			Item item = items.get(task.getItemID());
+			totalweight = totalweight + (item.getWeight() * task.getQuantity());
+		}
 
-    }
-    
+		return totalweight;
+	}
+
+	public double rewardPerDistance() {
+
+		if(ordered)
+			return getTotalReward() / distanceToTravel;
+		else {
+			OrderPicks op = new OrderPicks(tasks, RunServer.map.getDropoffPoints(), RunServer.map); 
+			this.tasks = op.orderedItems;
+			distanceToTravel = op.getFinalDistance();
+			this.ordered = true;
+			return getTotalReward() / distanceToTravel;
+		}
+
+	}
 
 	// toString method for debugging purposes
 	@Override
 	public String toString() {
-		return "Job [tasks=" + tasks + "]";
-	}   
-
+		return "Job [tasks=" + tasks + ", cancelled=" + cancelled + ", ordered=" + ordered + ", cancellationProb="
+				+ cancellationProb + ", items=" + items + ", jobid=" + jobid + ", distanceToTravel=" + distanceToTravel
+				+ "]";
+	}   	
 }

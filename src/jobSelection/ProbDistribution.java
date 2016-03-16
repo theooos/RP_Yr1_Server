@@ -3,7 +3,7 @@ package jobSelection;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import JobInput.JobProcessor;
+import jobInput.JobProcessor;
 
 public class ProbDistribution {
 

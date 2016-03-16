@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import JobInput.JobProcessor;
 import Objects.Item;
 import Objects.Job;
 import Objects.Sendable.SingleTask;
+import jobInput.JobProcessor;
 
 public class Features {
 

@@ -19,7 +19,7 @@ public class Display
 		frame.setResizable(false);
 		frame.setSize(800, 600);
 
-		WarehouseMap grid = new WarehouseMap(12, 8, "res/drops.csv");
+		WarehouseMap grid = new WarehouseMap("res/drops.csv");
 		grid.setObstacles(new Point[] { new Point(1, 2), new Point(1, 3), new Point(1, 4), new Point(1, 5), new Point(1, 6), new Point(4, 2), new Point(4, 3), new Point(4, 4), new Point(4, 5), new Point(4, 6), new Point(7, 2), new Point(7, 3), new Point(7, 4), new Point(7, 5), new Point(7, 6), new Point(10, 2), new Point(10, 3), new Point(10, 4), new Point(10, 5), new Point(10, 6) });
 		
 		frame.add(JobTable.draw());

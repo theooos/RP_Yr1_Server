@@ -1,9 +1,9 @@
 package warehouseInterface;
 
-import JobInput.JobProcessor;
 import Objects.AllRobots;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SingleTask;
+import jobInput.JobProcessor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

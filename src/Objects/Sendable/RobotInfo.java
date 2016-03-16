@@ -8,6 +8,10 @@ import Objects.Job;
 import Objects.WarehouseMap;
 import routePlanning.dataStructures.TimePosReservations;
 
+/**
+ * SHARED OBJECTS
+ * Used to represent information about a single robot
+ */
 public class RobotInfo implements SendableObject {
 
 	private String name;
@@ -28,35 +32,35 @@ public class RobotInfo implements SendableObject {
 	public boolean functioning;
 	public Point nextRobotLocation;
 	public Direction nextDir;
-	
+
 	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
 	private Point currentNode;
 	private TimePosReservations timePosReservations;
-	
+
 	/**
 	 * After robot stops at goal and remains stationary(no jobs) it becomes an obstacle and has the node it resides at reserved until the next move
 	 */
 	private boolean stopped;
-	
+
 	///////////////////////////////////////////////////////////////////////////////////Route Planning-DEBUg///////////////////////////////////////////////////////////////////////////////////
 	private int robotID;
 	private WarehouseMap map;
 	private Vector<Direction> pathSequence;
 	private int pathSequenceProgress = 0;//Index of the next move
-	
+
 	public RobotInfo(int robotID, WarehouseMap map){
 		this.robotID = robotID;
 		this.map = map;
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	//By default, all robots start facing 'north' (which is west IRL)
 	public RobotInfo(String name) {
 		this.name = name;
 		this.position = new Point(1,1);
 		direction = Direction.NORTH;
 	}
-	
+
 	public RobotInfo(String name, Point position) {
 		this.name = name;
 		this.position = position;
@@ -77,27 +81,44 @@ public class RobotInfo implements SendableObject {
 		finishedDroppingItems=false;
 		hasATask=false;
 	}
-	
+
+	/**
+	 * Get the name of the roobt
+	 * @return Name of the robot
+	 */
 	public String getName() {
 		return name;
 	}
-	
+
+	/**
+	 * Get current position of the robot
+	 * @return Current location of the robot
+	 */
 	public Point getPosition() {
 		return position;
 	}
 
-	public void setPosition(Point position)
-	{
+	/**
+	 * Set position of the robot
+	 * @param position Point where the robot is currently located
+	 */
+	public void setPosition(Point position) {
 		this.position = position;
 	}
 
-	public Direction getDirection()
-	{
+	/**
+	 * Get the current direction of the robot
+	 * @return Direction the robot is facing
+	 */
+	public Direction getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Direction direction)
-	{
+	/**
+	 * Sets the direction of the robot
+	 * @param direction The direction the robot is currently facing
+	 */
+	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
 
@@ -114,7 +135,7 @@ public class RobotInfo implements SendableObject {
 	public String parameters() {
 		return ("RobotInfo," + name + "," + (int)position.getX() + "," + (int)position.getY() + "," + direction);
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * SetUp a stationary robot(no jobs allocated)
@@ -124,7 +145,7 @@ public class RobotInfo implements SendableObject {
 		this.currentNode = currentNode;
 		stopped = true;
 	}
-	
+
 	public void SetUpPath(Point currentNode, TimePosReservations timePosReservations){
 		this.currentNode = currentNode;
 		this.timePosReservations = timePosReservations;
@@ -139,7 +160,7 @@ public class RobotInfo implements SendableObject {
 			return false;//object created yet SetUp Method hasnt been called on this instance
 		return timePosReservations.isReserved(node, time);
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////////////Route Planning-DEBUg///////////////////////////////////////////////////////////////////////////////////
 	public void SetUpPath(Point currentNode, Vector<Direction> pathSequence, TimePosReservations timePosReservations){
 		this.currentNode = currentNode;
@@ -147,53 +168,77 @@ public class RobotInfo implements SendableObject {
 		this.timePosReservations = timePosReservations;
 		stopped = false;
 	}
-	
+
 	public Point goToNextNode(){
 		if (pathSequenceProgress == pathSequence.size()){
 			stopped = true;
 			return null;//End of path
 		}
-		
+
 		switch (pathSequence.get(pathSequenceProgress++)) {
 		case NORTH:
 			return moveUp();
 
 		case SOUTH:
 			return moveDown();	
-					
+
 		case EAST:
 			return moveRight();
-			
+
 		case WEST:
 			return moveLeft();
-			
+
 		default:
 			return null;//Should not happen
 		}
 	}
+
 	
+	/**
+	 * Move the roobt
+	 * @param destinationNode Destination
+	 * @return New location of the robot
+	 */
 	private Point move(Point destinationNode){
-		//currentNode.status = Node.GOALPATH;
 		return currentNode = destinationNode;
-		//currentNode.status = " " + robotID + " ";
 	}
-	
+
+	/**
+	 * Move the robot up
+	 * @return New location of the robot
+	 */
 	public Point moveUp() {
 		return move(map.getAboveNode(currentNode));
 	}
-	
+
+	/**
+	 * Move the robot down
+	 * @return New location of the robot
+	 */
 	public Point moveDown() {
 		return move(map.getBelowNode(currentNode));
 	}
-	
+
+	/**
+	 * Move the robot left
+	 * @return New location of the robot
+	 */
 	public Point moveLeft() {
 		return move(map.getLeftNode(currentNode));
 	}
-	
+
+	/**
+	 * Move the robot right
+	 * @return New location of the robot
+	 */
 	public Point moveRight() {
 		return move(map.getRightNode(currentNode));
 	}
-	
+
+	/**
+	 * Get the ID of the robot
+	 * @return ID of robot
+	 */
 	public int getID(){
 		return robotID;
 	}

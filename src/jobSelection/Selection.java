@@ -4,8 +4,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-import JobInput.JobProcessor;
 import Objects.Job;
+import jobInput.JobProcessor;
 
 public class Selection { 
 	

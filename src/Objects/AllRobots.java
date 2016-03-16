@@ -1,72 +1,105 @@
 package Objects;
 
 import java.util.ArrayList;
-
 import warehouseInterface.GridMap;
 import warehouseInterface.RobotTable;
 import Objects.Sendable.RobotInfo;
 
+/**
+ * SHARED OBJECTS
+ * Used to hold the robots connected
+ */
+
 public class AllRobots {
 
 	private static ArrayList<RobotInfo> robots = new ArrayList<RobotInfo>();
-	
-	public synchronized static ArrayList<RobotInfo> getAllRobots(){
+
+	/**
+	 * Get all the robots connected
+	 * @return A ArrayList of all robots
+	 */
+	public synchronized static ArrayList<RobotInfo> getAllRobots() {
 		return robots;
 	}
-	
-	public synchronized static RobotInfo getRobot(String name){
-		for(RobotInfo robot : robots){
+
+	/**
+	 * Get a specific robot for a certain name, or null if it doesn't exist
+	 * @param name The name of the robot to get
+	 * @return The RobotInfo for the named robot
+	 */
+	public synchronized static RobotInfo getRobot(String name) {
+		for(RobotInfo robot : robots) {
 			if(robot.getName().equals(name)) return robot;
 		}
 		return null;
 	}
 
-	public synchronized static void addRobot(RobotInfo newBot){
+	/**
+	 * Add a robot to the ist
+	 * @param newBot The RobotInfo of the new robot to add
+	 */
+	public synchronized static void addRobot(RobotInfo newBot) {
 		robots.add(newBot);
 		RobotTable.addRobot(newBot);
 		GridMap.refresh();
 	}
-	
-	public synchronized static boolean checkExists(String name){
-		for(RobotInfo robot : robots){
+
+	/**
+	 * Check a specified robot exists
+	 * @param name The name of the robot to check
+	 * @return A boolean value of whether the named robot exists
+	 */
+	public synchronized static boolean checkExists(String name) {
+		for(RobotInfo robot : robots) {
 			if(robot.getName().equals(name)) return true;
 		}
 		return false;
 	}
-	
-	public synchronized static void modifyRobot(String name, RobotInfo newInfo){
+
+	/**
+	 * Modify an existing robot
+	 * @param name The name of the robot to modify
+	 * @param newInfo The new RobotInfo object for the robot to modify
+	 */
+	public synchronized static void modifyRobot(String name, RobotInfo newInfo) {
 		ArrayList<RobotInfo> newList = new ArrayList<RobotInfo>();
 		boolean robotFound = false;
-		
-		for(RobotInfo robot : robots){
-			if(robot.getName().equals(name)){
+
+		for(RobotInfo robot : robots) {
+			if(robot.getName().equals(name)) {
 				newList.add(newInfo);
 				robotFound = true;
 			}
-			else{
+			else {
 				newList.add(robot);
 			}
 		}
-		
+
 		robots = newList;
+
 		if(!robotFound) throw new IllegalArgumentException("Robot " + name + " not found");
 	}
-	
+
+	/**
+	 * Remove an added robot
+	 * @param name The robot to remove
+	 */
 	public synchronized static void removeRobot(String name){
 		ArrayList<RobotInfo> newList = new ArrayList<RobotInfo>();
 		boolean robotFound = false;
-		
-		for(RobotInfo robot : robots){
-			if(robot.getName().equals(name)){
+
+		for(RobotInfo robot : robots) {
+			if(robot.getName().equals(name)) {
 				robotFound = true;
 				RobotTable.removeRobot(robot);
 			}
-			else{
+			else {
 				newList.add(robot);
 			}
 		}
-		
+
 		robots = newList;
+
 		if(!robotFound) throw new IllegalArgumentException("Robot " + name + " not found");
 	}
 }

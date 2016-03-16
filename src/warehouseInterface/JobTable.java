@@ -3,9 +3,9 @@ package warehouseInterface;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import JobInput.JobProcessor;
 import Objects.Job;
 import Objects.Sendable.SingleTask;
+import jobInput.JobProcessor;
 
 import java.awt.*;
 

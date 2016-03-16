@@ -1,4 +1,4 @@
-package JohnSwift;
+package main;
 
 import java.awt.GridLayout;
 import java.awt.Point;
