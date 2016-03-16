@@ -3,6 +3,7 @@ package routePlanning.orderPicks;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Vector;
 
@@ -22,19 +23,19 @@ public class OrderPicks {
 	
 	public ArrayList<Objects.Sendable.SingleTask> items; //the list of items in the job
 	public ArrayList<Objects.Sendable.SingleTask> orderedItems; //the ordered list of items
-	public ArrayList<Point2D> dropOffs;
+	public ArrayList<Point> dropOffs;
 	public Point dropOff;
 	private boolean running=true;
 	private boolean canceled=false;
 	private WarehouseMap map; 
 	private SimpleDistance dist;
 	
-	public OrderPicks(ArrayList<Objects.Sendable.SingleTask> items,ArrayList<Point2D> dropOffs,WarehouseMap map)
+	public OrderPicks(List<Objects.Sendable.SingleTask> items,List<Point> dropOffs,WarehouseMap map)
 	{
 		this.map=map;
 		this.dist=new SimpleDistance(map);
-		this.dropOffs=dropOffs;
-		this.items=items;
+		this.dropOffs=(ArrayList<Point>) dropOffs;
+		this.items=(ArrayList<SingleTask>) items;
 		orderedItems=new ArrayList<Objects.Sendable.SingleTask>();
 		planOrder();
 	}

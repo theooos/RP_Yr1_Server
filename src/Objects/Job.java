@@ -1,14 +1,15 @@
 package Objects;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import JohnSwift.RunMe;
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
+import routePlanning.orderPicks.OrderPicks;
 
 /**
  * Represents a job to be carried out.
@@ -21,6 +22,7 @@ public class Job {
     private float cancellationProb;
     private Map<String, Item> items;
     private int jobid;
+    private int distanceToTravel;
 
 	/**
 	 * Create an empty job.
@@ -209,7 +211,7 @@ public class Job {
         if(ordered)
             return getTotalReward() / distanceToTravel;
         else {
-            OrderPicks op = new OrderPicks(tasks, RunMe.map.getDropoffPoints(), RunMe.map); 
+            OrderPicks op = new OrderPicks(tasks, RunMe.grid.getDropoffPoints(), RunMe.grid); 
             this.tasks = op.orderedItems;
             distanceToTravel = op.getFinalDistance();
             this.ordered = true;

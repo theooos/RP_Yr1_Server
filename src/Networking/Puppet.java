@@ -53,7 +53,7 @@ public class Puppet extends Thread {
 			//SingleTask task1 = new SingleTask("FK", 4, new Point(3,5));
 			//send(task1);
 			
-			RobotInfo ri = new RobotInfo("TayTay");
+			RobotInfo ri = new RobotInfo(name);
 			send(ri);
 		}
 		catch (NXTCommException | InterruptedException e) {
