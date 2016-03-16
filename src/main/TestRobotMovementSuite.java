@@ -9,9 +9,9 @@ import javax.swing.JFrame;
 import Objects.AllPuppets;
 import Objects.Sendable.Move;
 
-public class RobotMovementSuite extends Thread {
+public class TestRobotMovementSuite extends Thread {
 
-	public RobotMovementSuite() {
+	public TestRobotMovementSuite() {
 		JFrame frame = new JFrame();
 		frame.setTitle("Robot Testing Suite");
 		frame.setSize(600,400);

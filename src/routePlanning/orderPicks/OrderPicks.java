@@ -92,7 +92,9 @@ public class OrderPicks {
 					minI=i;
 				}
 			}
-
+			
+			System.out.println("minI == " + minI);
+			System.out.println("Size of items == " + items.size());
 			orderedItems.add(items.get(minI));
 			items.remove(minI);
 			

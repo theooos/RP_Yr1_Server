@@ -27,27 +27,21 @@ import warehouseInterface.JobTable;
  */
 
 public class RouteExecution extends Thread {
-
-	
 	
 	private boolean running=true;
 	private int nrOfRobots=0;
 	private PathFinding pathfinder;
 	private PriorityQueue<Job> priorityQueue;
-	//private Selection twat = new Selection();
 	
 	public RouteExecution( int nrOfRobots,WarehouseMap map)
 	{
 		this.nrOfRobots=nrOfRobots;
 		this.pathfinder=new PathFinding(map);
 		this.priorityQueue = Selection.createQueue();
-		//this.priorityQueue = twat.createQueue((List<Job>) JobProcessor.getAllJobs().values());
-		
-		
 	}
 	
 	/**
-	 * this is the main method that sends commands and checks the status of the robots
+	 * Main method that sends commands and checks the status of the robots
 	 */
 	
 	
