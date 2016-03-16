@@ -1,9 +1,10 @@
 package Objects;
 
 import java.util.ArrayList;
+
+import Objects.Sendable.RobotInfo;
 import warehouseInterface.GridMap;
 import warehouseInterface.RobotTable;
-import Objects.Sendable.RobotInfo;
 
 /**
  * SHARED OBJECTS
@@ -35,7 +36,7 @@ public class AllRobots {
 	}
 
 	/**
-	 * Add a robot to the ist
+	 * Add a robot to the list
 	 * @param newBot The RobotInfo of the new robot to add
 	 */
 	public synchronized static void addRobot(RobotInfo newBot) {

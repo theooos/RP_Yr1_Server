@@ -9,7 +9,7 @@ public class StartUpItem implements SendableObject {
 	private String name;
 	private int x;
 	private int y;
-	private char direction; //N, E, S, W - if this has been changed to not be a char, I apologise
+	private char direction; //N, E, S, W
 	
 	public StartUpItem(String name, int x, int y, char direction) {
 		this.name = name;
