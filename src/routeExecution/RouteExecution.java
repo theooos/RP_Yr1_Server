@@ -1,10 +1,10 @@
 package routeExecution;
 import java.awt.Point;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
 import JobInput.JobProcessor;
-import jobSelection.Selection;
 import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.Direction;
@@ -12,8 +12,10 @@ import Objects.Job;
 import Objects.WarehouseMap;
 import Objects.Sendable.DropOffPoint;
 import Objects.Sendable.Move;
+import Objects.Sendable.MoveReport;
 import Objects.Sendable.SendableObject;
 import Objects.Sendable.SingleTask;
+import jobSelection.Selection;
 import routePlanning.pathFinding.PathFinding;
 import warehouseInterface.GridMap;
 import warehouseInterface.JobTable;
@@ -32,12 +34,16 @@ public class RouteExecution extends Thread {
 	private int nrOfRobots=0;
 	private PathFinding pathfinder;
 	private PriorityQueue<Job> priorityQueue;
+	//private Selection twat = new Selection();
 	
 	public RouteExecution( int nrOfRobots,WarehouseMap map)
 	{
 		this.nrOfRobots=nrOfRobots;
 		this.pathfinder=new PathFinding(map);
-		this.priorityQueue = Selection.priorityQueue;
+		this.priorityQueue = Selection.createQueue();
+		//this.priorityQueue = twat.createQueue((List<Job>) JobProcessor.getAllJobs().values());
+		
+		
 	}
 	
 	/**
@@ -492,6 +498,7 @@ public class RouteExecution extends Thread {
 	
 	private void assignJob(String name,Job job)
 	{
+		System.out.println("assigning job");
 		AllRobots.getRobot(name).currJob=job;
 		int reward = 0;
 		for(SingleTask task : job.getTasks())
@@ -502,6 +509,7 @@ public class RouteExecution extends Thread {
 	
 	private Job getJob()
 	{
+		System.out.println(priorityQueue);
 		return priorityQueue.remove();
 		
 	}
@@ -573,8 +581,9 @@ public class RouteExecution extends Thread {
 		return AllRobots.getRobot(name).getDirection();
 	}
 
-	public void addMoveReport(String name, SendableObject comm) {
-		AllRobots.getRobot(name).hasMoved=true;
+	public void addMoveReport(String name, MoveReport comm) {
+		System.out.println("i have a move: " + comm);
+		AllRobots.getRobot(name).hasMoved=comm.hasMoved();
 		
 	}
 

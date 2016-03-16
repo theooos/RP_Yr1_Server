@@ -67,6 +67,15 @@ public class RobotInfo implements SendableObject {
 		this.name = name;
 		this.position = position;
 		this.direction = direction;
+		functioning=true;
+		isDoingJob=false;
+		pickingUp=false;
+		droppingOff=false;
+		waitingForMoveReport=false;
+		hasMoved=false;
+		hasCompletedTask=false;
+		finishedDroppingItems=false;
+		hasATask=false;
 	}
 	
 	public String getName() {

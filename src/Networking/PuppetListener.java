@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import Objects.Direction;
-import Objects.Sendable.Move;
+import Objects.Sendable.CompleteReport;
+import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
-import Objects.Sendable.SingleTask;
 
 public class PuppetListener extends Thread {
 
@@ -55,14 +55,14 @@ public class PuppetListener extends Thread {
 		}
 		else {
 			SendableObject newObj = null;
-			if(type.equals("Move")){
-				newObj = new Move((Character)parameters[0], new Point((Integer)parameters[1],(Integer)parameters[2]));
-			}
-			else if(type.equals("SingleTask")){
-				newObj = new SingleTask((String) parameters[0], (Integer) parameters[1], new Point((Integer)parameters[2],(Integer)parameters[3]));
-			}
-			else if(type.equals("RobotInfo")){
+			if(type.equals("RobotInfo")){
 				newObj = new RobotInfo((String) parameters[0], new Point((int) parameters[1], (int) parameters[2]), Enum.valueOf(Direction.class, (String)parameters[3]));
+			}
+			else if(type.equals("MoveReport")){
+				newObj = new MoveReport((boolean) parameters[0]);
+			}
+			else if(type.equals("CompleteReport")){
+				newObj = new CompleteReport((boolean) parameters[0], (boolean) parameters[1]);
 			}
 			
 			if(newObj == null){

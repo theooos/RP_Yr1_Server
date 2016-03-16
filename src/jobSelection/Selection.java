@@ -1,8 +1,7 @@
 package jobSelection;
 
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 import JobInput.JobProcessor;
@@ -10,20 +9,18 @@ import Objects.Job;
 
 public class Selection { 
 	
-	private final Collection<Job> joblist;
-	public static PriorityQueue<Job>  priorityQueue;
-	
-	/**
-	 * Selection class
-	 * @param joblist the unordered list of jobs
-	 */
-	//pass the selection class a list of jobs (JobProcessor.getAllJobs.values())
-	public Selection(){
+	public static PriorityQueue<Job> priorityQueue = new PriorityQueue<Job>(100, new Comparator<Job>() {
 		
-		this.joblist = JobProcessor.getAllJobs().values();
+		@Override
+		public int compare(Job job1, Job job2) {
+
+            Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100) / 2);
+            Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100) / 2);
+			
+            return 1;
 	
-	}
-	
+		}
+	});
 	
 	
 	/**
@@ -31,28 +28,16 @@ public class Selection {
 	 * @param joblist
 	 * @return jobQueue the priority queue
 	 */
-	public PriorityQueue<Job> createQueue(List<Job> joblist){
-	
-		PriorityQueue<Job> jobQueue = new PriorityQueue<Job>(100, new Comparator<Job>() {
-	
-			@Override
-			public int compare(Job job1, Job job2) {
-	
-                Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100) / 2);
-                Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100) / 2);
-				
-                return valueJob1.compareTo(valueJob2);
+	public static PriorityQueue<Job> createQueue(){
 		
-			}
-		});
-			
+		Map<Integer, Job> jobMap = JobProcessor.getAllJobs();
+		
 		//add to queue
-		for(Job j : joblist)
+		for(Job j : jobMap.values())
 			if(j.getTotalWeight()<50)
-				jobQueue.add(j);
-			
-		this.priorityQueue = jobQueue;
-		return jobQueue;
+				priorityQueue.add(j);
+
+		return priorityQueue;
 	};	
 	
 

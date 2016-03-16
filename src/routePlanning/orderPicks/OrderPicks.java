@@ -92,7 +92,7 @@ public class OrderPicks {
 					minI=i;
 				}
 			}
-			
+
 			orderedItems.add(items.get(minI));
 			items.remove(minI);
 			

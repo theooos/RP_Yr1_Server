@@ -51,7 +51,7 @@ public class RunMe extends Thread{
 //        AllPuppets.addPuppet(tay);
 		
         setUpWarehouse();
-        alfonso.send(new Move('f', new Point(2,1)));
+       // alfonso.send(new Move('f', new Point(2,1)));
         
         
         /* Starts up new robot testing class. (*HAS NOT BEEN TESTED WITH ROBOTS*).
@@ -97,7 +97,7 @@ public class RunMe extends Thread{
  		    while((comm = pup.popCommand()) != null)
  		    {
  		    	if(comm instanceof MoveReport){
- 		    		theExecutor.addMoveReport(pup.getName(), comm);
+ 		    		theExecutor.addMoveReport(pup.getName(), (MoveReport)comm);
  		    	}
  		    	else if(comm instanceof CompleteReport){
  		    		theExecutor.addCompleteReport(pup.getName(), comm);
