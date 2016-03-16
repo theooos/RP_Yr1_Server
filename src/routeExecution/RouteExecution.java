@@ -4,7 +4,7 @@ import java.util.PriorityQueue;
 import java.util.Vector;
 
 import JobInput.JobProcessor;
-import JobSelection.Selection;
+import jobSelection.Selection;
 import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.Direction;
@@ -37,7 +37,7 @@ public class RouteExecution extends Thread {
 	{
 		this.nrOfRobots=nrOfRobots;
 		this.pathfinder=new PathFinding(map);
-		this.priorityQueue = Selection.PriorityQueue;
+		this.priorityQueue = Selection.priorityQueue;
 	}
 	
 	/**

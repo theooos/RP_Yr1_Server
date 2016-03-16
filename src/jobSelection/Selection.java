@@ -1,15 +1,12 @@
-package JobSelection;
+package jobSelection;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import JobInput.JobProcessor;
 import Objects.Job;
-import Objects.Sendable.SingleTask;
 
 public class Selection { 
 	
@@ -41,8 +38,8 @@ public class Selection {
 			@Override
 			public int compare(Job job1, Job job2) {
 	
-                Integer valueJob1 = (job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100) / 2;
-                Integer valueJob2 = (job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100) / 2;
+                Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100) / 2);
+                Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100) / 2);
 				
                 return valueJob1.compareTo(valueJob2);
 		

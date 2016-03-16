@@ -1,14 +1,15 @@
 package Objects;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import JohnSwift.RunMe;
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
+import routePlanning.orderPicks.OrderPicks;
 
 /**
  * Represents a job to be carried out.
@@ -17,9 +18,11 @@ public class Job {
 
 	private List<SingleTask> tasks;
     private boolean cancelled;
+    private boolean ordered;
     private float cancellationProb;
     private Map<String, Item> items;
     private int jobid;
+    private int distanceToTravel;
 
 	/**
 	 * Create an empty job.
@@ -27,6 +30,7 @@ public class Job {
 	public Job(int jobid, Map<String, Item> items) {
 		this.tasks = new ArrayList<>();
         this.cancelled = false;
+        this.ordered = false;
         this.cancellationProb = 0.0f;
         this.items = items;
         this.jobid = jobid;
@@ -39,6 +43,7 @@ public class Job {
 	public Job(int jobid, List<SingleTask> tasks, Map<String, Item> items) {
 		this.tasks = tasks;
         this.cancelled = false;
+        this.ordered = false;
         this.cancellationProb = 0.0f;
         this.jobid = jobid;
 	}
@@ -154,6 +159,17 @@ public class Job {
 
 	}
 
+    public double getTotalReward() {
+
+        double reward = 0f;
+        for(SingleTask task : tasks) {
+            Item item = items.get(task.getItemID());
+            reward += item.getReward() * task.getQuantity();
+        }
+        return reward;
+
+    }
+
 	/**
 	 * Calculate the reward for this job per weight.
 	 * @return The reward per weight.
@@ -188,6 +204,20 @@ public class Job {
     	}
     	
     	return totalweight;
+    }
+
+    public double rewardPerDistance() {
+
+        if(ordered)
+            return getTotalReward() / distanceToTravel;
+        else {
+            OrderPicks op = new OrderPicks(tasks, RunMe.grid.getDropoffPoints(), RunMe.grid); 
+            this.tasks = op.orderedItems;
+            distanceToTravel = op.getFinalDistance();
+            this.ordered = true;
+            return getTotalReward() / distanceToTravel;
+        }
+
     }
     
 

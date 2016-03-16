@@ -31,6 +31,7 @@ import Objects.Sendable.SendableObject;
  */
 public class RunMe extends Thread{
 	
+	public static WarehouseMap grid;
 	private RouteExecution theExecutor;
 	private boolean alive = true;
 	
@@ -43,10 +44,10 @@ public class RunMe extends Thread{
         // These are the Puppets to uncomment if you want to do anything with them.
 //        Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
 //        AllPuppets.addPuppet(johnCena);        
-//        Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-//        AllPuppets.addPuppet(alfonso);
-        Puppet tay = new Puppet("TayTay", "0016531AF6E5");
-        AllPuppets.addPuppet(tay);
+        Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+        AllPuppets.addPuppet(alfonso);
+//        Puppet tay = new Puppet("TayTay", "0016531AF6E5");
+//        AllPuppets.addPuppet(tay);
 		
         setUpWarehouse();
         
@@ -113,7 +114,7 @@ public class RunMe extends Thread{
 	 * Sets up Artur's warehouse.
 	 */
 	private void setUpWarehouse(){
-		WarehouseMap grid = new WarehouseMap(12, 8, "res/drops.csv");
+		grid = new WarehouseMap(12, 8, "res/drops.csv");
         
         // WarehouseInterface (Artur) -- Create and launch the interface
 		JFrame frame = new JFrame("Warehouse Interface");
