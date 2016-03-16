@@ -5,7 +5,9 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Objects.Direction;
 import Objects.Sendable.Move;
+import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
 import Objects.Sendable.SingleTask;
 
@@ -44,7 +46,6 @@ public class PuppetListener extends Thread {
 	}
 	
 	private synchronized void figureType(String type, Object[] parameters) {
-		type = "Console";
 		if(type.equals("Console")){
 			String message = "";
 			for(Object param : parameters){
@@ -61,7 +62,7 @@ public class PuppetListener extends Thread {
 				newObj = new SingleTask((String) parameters[0], (Integer) parameters[1], new Point((Integer)parameters[2],(Integer)parameters[3]));
 			}
 			else if(type.equals("RobotInfo")){
-				
+				newObj = new RobotInfo((String) parameters[0], new Point((int) parameters[1], (int) parameters[2]), Enum.valueOf(Direction.class, (String)parameters[3]));
 			}
 			
 			if(newObj == null){
@@ -83,6 +84,10 @@ public class PuppetListener extends Thread {
 	 */
 	synchronized private void addComm(SendableObject comm) {
 		commands.add(comm);
+		out("The available commands are:");
+		for(SendableObject command: commands){
+			out(command);
+		}
 	}
 	
 	/**

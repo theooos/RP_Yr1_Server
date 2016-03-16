@@ -2,6 +2,7 @@ package Objects;
 
 import java.util.ArrayList;
 
+import warehouseInterface.GridMap;
 import warehouseInterface.RobotTable;
 import Objects.Sendable.RobotInfo;
 
@@ -23,6 +24,7 @@ public class AllRobots {
 	public synchronized static void addRobot(RobotInfo newBot){
 		robots.add(newBot);
 		RobotTable.addRobot(newBot);
+		GridMap.refresh();
 	}
 	
 	public synchronized static boolean checkExists(String name){
