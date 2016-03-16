@@ -116,7 +116,9 @@ public class OrderPicks {
 				
 				
 			}
-			items=orderedItems;
+			
+			// Changed to stop the NullPointer issuec
+			items = (ArrayList<SingleTask>) orderedItems.clone();
 			
 			orderedItems.clear();
 		}
