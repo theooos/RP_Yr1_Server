@@ -2,6 +2,11 @@ package warehouseInterface;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import JobInput.JobProcessor;
+import Objects.Job;
+import Objects.Sendable.SingleTask;
+
 import java.awt.*;
 
 public class JobTable
@@ -54,6 +59,10 @@ public class JobTable
 
 	private static void viewJobInfo(int jobID)
 	{
-		JOptionPane.showMessageDialog(panel, "Nothing here...");
+		Job job = JobProcessor.getJob(jobID);
+		String tasks = "";
+		for(SingleTask task : job.getTasks())
+			tasks += "(" + task.getItemID() + ", " + task.getQuantity() + ") ";
+		JOptionPane.showMessageDialog(panel, "Job ID: " + jobID + "\nTasks: " + tasks + "\nCancellation probability: " + job.getCancellationProb() + "\nTotal weight: " + job.getTotalWeight());
 	}
 }

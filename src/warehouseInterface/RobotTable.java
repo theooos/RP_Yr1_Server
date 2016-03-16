@@ -31,7 +31,7 @@ public class RobotTable
 
 	private static void viewRobotInfo(RobotInfo robot)
 	{
-		JOptionPane.showMessageDialog(panel, "Name: " + robot.getName() + "\nPosition: (" + robot.getPosition().x + ", " + robot.getPosition().y + ")");
+		JOptionPane.showMessageDialog(panel, "Name: " + robot.getName() + "\nPosition: (" + robot.getPosition().x + ", " + robot.getPosition().y + ")\nDirection: " + robot.getDirection() + "\n");
 	}
 
 	public static void addRobot(RobotInfo robot)

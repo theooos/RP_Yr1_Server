@@ -1,7 +1,5 @@
 package warehouseInterface;
 
-import JobInput.JobProcessor;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -12,17 +10,17 @@ public class Display
 {
 	public static void main(String[] args)
 	{
-//		JFrame frame = new JFrame("Warehouse Interface");
-//		frame.setLayout(new GridLayout(2, 2));
-//		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//		frame.setResizable(false);
-//		frame.setSize(800, 600);
-//
-//		frame.add(JobTable.draw());
-//		frame.add(GridMap.createGrid());
-//		frame.add(RobotTable.draw());
-//		frame.add(Statistics.draw());
-//		frame.setVisible(true);
+		JFrame frame = new JFrame("Warehouse Interface");
+		frame.setLayout(new GridLayout(2, 2));
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setSize(800, 600);
+
+		//frame.add(JobTable.draw());
+		//frame.add(GridMap.createGrid());
+		//frame.add(RobotTable.draw());
+		frame.add(Statistics.draw());
+		frame.setVisible(true);
 
 //		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
 //		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
