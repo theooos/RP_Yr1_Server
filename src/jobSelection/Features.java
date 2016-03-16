@@ -1,9 +1,13 @@
 package jobSelection;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import JobInput.JobProcessor;
 import Objects.Item;
@@ -12,33 +16,33 @@ import Objects.Sendable.SingleTask;
 
 public class Features {
 
-    public Map<Integer, Function<Collection<Job>, Long>> functions;
+    public static Map<Integer, Predicate<Job>> predicates;
 
     public Features() {
 
-        functions = new HashMap<Integer, Function<Collection<Job>, Long>>();
-        functions.put(NumOfTasks.ONETOTWO, l -> l.stream().filter(j -> j.getNumOfTasks() >= 1).filter(j -> j.getNumOfTasks() <= 2).count());
-        functions.put(NumOfTasks.THREETOFOUR, l -> l.stream().filter(j -> j.getNumOfTasks() >= 3).filter(j -> j.getNumOfTasks() <= 4).count());
-        functions.put(NumOfTasks.ONETOTWO, l -> l.stream().filter(j -> j.getNumOfTasks() >= 5).count());
+        predicates = new HashMap<Integer, Predicate<Job>>();
+        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 && j.getNumOfTasks() <= 2);
+        predicates.put(NumOfTasks.THREETOFOUR, j -> j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
+        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 5);
 
-        functions.put(TotalItems.ONETOFOUR, l -> l.stream().filter(j -> totalNumItems(j) >= 1).filter(j -> totalNumItems(j) <= 4).count());
-        functions.put(TotalItems.FIVETOEIGHT, l -> l.stream().filter(j -> totalNumItems(j) >= 5).filter(j -> totalNumItems(j) <= 8).count());
-        functions.put(TotalItems.NINETOTWELVE, l -> l.stream().filter(j -> totalNumItems(j) >= 9).filter(j -> totalNumItems(j) <= 12).count());
-        functions.put(TotalItems.THIRTEENPLUS, l -> l.stream().filter(j -> totalNumItems(j) >= 13).count());
+        predicates.put(TotalItems.ONETOFOUR, j -> totalNumItems(j) >= 1 && totalNumItems(j) <= 4);
+        predicates.put(TotalItems.FIVETOEIGHT, j -> totalNumItems(j) >= 5 && totalNumItems(j) <= 8);
+        predicates.put(TotalItems.NINETOTWELVE, j -> totalNumItems(j) >= 9 && totalNumItems(j) <= 12);
+        predicates.put(TotalItems.THIRTEENPLUS, j -> totalNumItems(j) >= 13);
        
-        functions.put(HighestRewardItem.ZEROTOFIVE, l -> l.stream().filter(j -> highestReward(j) >= 0).filter(j -> highestReward(j) <= 5).count());
-        functions.put(HighestRewardItem.SIXTOTEN, l -> l.stream().filter(j -> highestReward(j) >= 6).filter(j -> highestReward(j) <= 10).count());
-        functions.put(HighestRewardItem.ELEVENTOFIFTEEN, l -> l.stream().filter(j -> highestReward(j) >= 11).filter(j -> highestReward(j) <= 15).count());
-        functions.put(HighestRewardItem.SIXTEENPLUS, l -> l.stream().filter(j -> highestReward(j) >= 16).count());
+        predicates.put(HighestRewardItem.ZEROTOFIVE, j -> highestReward(j) >= 0 && highestReward(j) <= 5);
+        predicates.put(HighestRewardItem.SIXTOTEN, j -> highestReward(j) >= 6 && highestReward(j) <= 10);
+        predicates.put(HighestRewardItem.ELEVENTOFIFTEEN, j -> highestReward(j) >= 11 && highestReward(j) <= 15);
+        predicates.put(HighestRewardItem.SIXTEENPLUS, j -> highestReward(j) >= 16);
         
-        functions.put(HeaviestItem.ZEROTOONE, l -> l.stream().filter(j -> heaviestItem(j) >= 0).filter(j -> heaviestItem(j) <= 1).count());
-        functions.put(HeaviestItem.TWOTOTHREE, l -> l.stream().filter(j -> heaviestItem(j) >= 2).filter(j -> heaviestItem(j) <= 3).count());
-        functions.put(HeaviestItem.FOURPLUS,l -> l.stream().filter(j -> heaviestItem(j) >= 4).count());
+        predicates.put(HeaviestItem.ZEROTOONE, j -> heaviestItem(j) >= 0 && heaviestItem(j) <= 1);
+        predicates.put(HeaviestItem.TWOTOTHREE, j -> heaviestItem(j) >= 2 && heaviestItem(j) <= 3);
+        predicates.put(HeaviestItem.FOURPLUS, j -> heaviestItem(j) >= 4);
         
-        functions.put(HighestQuantity.ONETOTWO, l -> l.stream().filter(j -> highestQuantity(j) >= 1).filter(j -> highestQuantity(j) <= 2).count());
-        functions.put(HighestQuantity.THREETOFOUR, l -> l.stream().filter(j -> highestQuantity(j) >= 3).filter(j -> highestQuantity(j) <= 4).count());
-        functions.put(HighestQuantity.FIVETOSIX, l -> l.stream().filter(j -> highestQuantity(j) >= 5).filter(j -> highestQuantity(j) <= 6).count());
-        functions.put(HighestQuantity.SEVENPLUS, l -> l.stream().filter(j -> highestQuantity(j) >= 7).count());
+        predicates.put(HighestQuantity.ONETOTWO, j -> highestQuantity(j) >= 1 && highestQuantity(j) <= 2);
+        predicates.put(HighestQuantity.THREETOFOUR, j -> highestQuantity(j) >= 3 && highestQuantity(j) <= 4);
+        predicates.put(HighestQuantity.FIVETOSIX, j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
+        predicates.put(HighestQuantity.SEVENPLUS, j -> highestQuantity(j) >= 7);
     }
 
     public static class NumOfTasks {
@@ -126,6 +130,22 @@ public class Features {
     	
     	return heaviest;
     	
+    }
+
+    public static List<Integer> getFeatures(Job job) {
+        
+        List<Integer> list = new ArrayList<Integer>();
+        Set<Entry<Integer, Predicate<Job>>> entrySet = predicates.entrySet();
+
+        for( Map.Entry<Integer, Predicate<Job>> e : entrySet) {
+            Integer f = e.getKey();
+            Predicate<Job> p = e.getValue(); 
+            if(p.test(job))
+                list.add(f);
+        }
+
+        return list;
+        
     }
 
     public static class HighestQuantity {
