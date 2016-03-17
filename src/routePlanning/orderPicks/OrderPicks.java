@@ -93,8 +93,8 @@ public class OrderPicks {
 				}
 			}
 			
-			System.out.println("minI == " + minI);
-			System.out.println("Size of items == " + items.size());
+			//System.out.println("minI == " + minI);
+			//System.out.println("Size of items == " + items.size());
 			orderedItems.add(items.get(minI));
 			items.remove(minI);
 			
@@ -124,6 +124,7 @@ public class OrderPicks {
 		}
 		
 		orderedItems.addAll(orderedItemsForMiny);
+		//System.out.println("job ordered");
 		dropOff=dropOffForMiny;
 		running=false;
 	}
@@ -156,9 +157,9 @@ public class OrderPicks {
 		{
 			if(canceled) return;
 			minD=dist;
-			minj=orderedItems.size();
+			minj=orderedItems.size()-1;
 		}
-		orderedItems.remove(orderedItems.size()-1);
+		orderedItems.remove(orderedItems.size()-1);	
 		orderedItems.add(minj, items.get(index));		
 	}
 	
@@ -228,6 +229,7 @@ public class OrderPicks {
 	public int getDistance(Point loc1, Point loc2)
 	{
 		Integer distance=dist.GetDistnace(loc1, loc2);
+		if(distance==null) return 1000;
 		return distance.intValue();
 	}
 	
