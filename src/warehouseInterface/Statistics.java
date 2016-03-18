@@ -13,17 +13,9 @@ public class Statistics
 	{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		try
-		{
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
-		{
-			e.printStackTrace();
-		}
 
 		JLabel title = new JLabel("Warehouse Interface");
-		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 32));
+		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 28));
 		title.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
 		tableModel = new DefaultTableModel(new String[] { "Revenue made", "Jobs done", "Jobs cancelled" }, 1);
