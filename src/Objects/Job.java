@@ -147,7 +147,12 @@ public class Job {
 	 * @return The number of tasks.
 	 */
 	public int getNumOfTasks() {
-		return tasks.size();
+        int count = 0;
+        for(int i = 0; i < tasks.size(); i++) {
+            if(!tasks.get(i).getItemID().equals("dropoff"))
+                count++;
+        }
+		return count; 
 	}
 
 	/**
@@ -161,10 +166,12 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-			Item item = items.get(task.getItemID());
-			//Item item = JobProcessor.getItem(task.getItemID());
-			numOfItems += task.getQuantity();
-			reward += item.getReward() * task.getQuantity();
+            if(!task.getItemID().equals("dropoff")) {
+                Item item = items.get(task.getItemID());
+                //Item item = JobProcessor.getItem(task.getItemID());
+                numOfItems += task.getQuantity();
+                reward += item.getReward() * task.getQuantity();
+            }
 		}
 
 		return (reward / (double) numOfItems);
@@ -175,8 +182,10 @@ public class Job {
 
 		double reward = 0f;
 		for(SingleTask task : tasks) {
-			Item item = items.get(task.getItemID());
-			reward += item.getReward() * task.getQuantity();
+            if(!task.getItemID().equals("dropoff")) {
+                Item item = items.get(task.getItemID());
+                reward += item.getReward() * task.getQuantity();
+            }
 		}
 		return reward;
 
@@ -193,9 +202,11 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-			Item item = items.get(task.getItemID());
-			reward += item.getReward() * task.getQuantity();
-			weight += item.getWeight() * task.getQuantity();
+            if(!tasks.getItemID.equals("dropoff")) {
+                Item item = items.get(task.getItemID());
+                reward += item.getReward() * task.getQuantity();
+                weight += item.getWeight() * task.getQuantity();
+            }
 		}
 
 		return (reward / weight);
@@ -211,8 +222,10 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-			Item item = items.get(task.getItemID());
-			totalweight = totalweight + (item.getWeight() * task.getQuantity());
+            if(!tasks.getItemID.equals("dropoff")) {
+                Item item = items.get(task.getItemID());
+                totalweight = totalweight + (item.getWeight() * task.getQuantity());
+            }
 		}
 
 		return totalweight;
