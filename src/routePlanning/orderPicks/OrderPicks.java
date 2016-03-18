@@ -124,7 +124,6 @@ public class OrderPicks {
 		}
 		
 		orderedItems.addAll(orderedItemsForMiny);
-		System.out.println("job ordered");
 		dropOff=dropOffForMiny;
 		
 		//add the dropoff point as a singleTask object at the end of the job
