@@ -94,30 +94,37 @@ public class Features {
     
     public static class TotalReward {
 
-        public static int ZEROTOFORTY = 3;
-        public static int FORTYTOEIGHTY = 4;
-        public static int EIGHTYTOONEHUNDREDANDTWENTY = 5;
-        public static int ONEHUNDREDANDTWENTYTOONEHUNDREDANDSIXTY = 6;
-        public static int ONEHUNDREDANDSIXTYPLUS = 7;
+        public static int ZEROTOFORTY = 0;
+        public static int FORTYTOEIGHTY = 1;
+        public static int EIGHTYTOONEHUNDREDANDTWENTY = 2;
+        public static int ONEHUNDREDANDTWENTYTOONEHUNDREDANDSIXTY = 3;
+        public static int ONEHUNDREDANDSIXTYPLUS = 4;
 
     }
     
     public static class TotalWeight {
 
-        public static int ZEROTOTEN = 8;
-        public static int TENTOTWENTY = 9;
-        public static int TWENTYTOTHIRTY = 10;
-        public static int THIRTYTOFORTY = 11;
-        public static int FORTYPLUS = 12;
+        public static int ZEROTOTEN = 5;
+        public static int TENTOTWENTY = 6;
+        public static int TWENTYTOTHIRTY = 7;
+        public static int THIRTYTOFORTY = 8;
+        public static int FORTYPLUS = 9;
 
     }
     
     public static class HighestQuantity {
 
-        public static int ONETOTWO = 13;
-        public static int THREETOFOUR = 14;
-        public static int FIVETOSIX = 15;
-        public static int SEVENPLUS = 16;
+        public static int ONETOTWO = 10;
+        public static int THREETOFOUR = 11;
+        public static int FIVETOSIX = 12;
+        public static int SEVENPLUS = 13;
+
+    }
+    
+    public static class Cancelled {
+        
+        public static int YES = 14;
+        public static int NO = 15;
 
     }
     
@@ -266,10 +273,5 @@ public class Features {
 
     }
 
-    public static class Cancelled {
-        
-        public static int YES = 18;
-        public static int NO = 19;
-
-    }
+    
 }
