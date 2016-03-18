@@ -21,18 +21,13 @@ public class AllPuppets {
 	 */
 	public static synchronized void send(String name, SendableObject obj) {
 		for(Puppet pup : puppets) {
-			System.out.println("NAME OF ROBOT: " + pup.getName());
-			///////////// FIX ME LATER, THIS IS HARDCODED!!!!!!!!!!!!!
-			/*
-			if(pup.getName().equals(name)) {
+			if(pup.name().equals(name)) {
 				pup.send(obj);
 				return;
 			}
-			*/
-			pup.send(obj);
 		}
 		// Print out if can't find the puppet
-		//System.out.println("Could not find puppet " + name + " and send it: " + obj.parameters());
+		System.out.println("Could not find puppet " + name + " and send it: " + obj.parameters());
 	}
 
 	/**
@@ -50,7 +45,7 @@ public class AllPuppets {
 	 */
 	public static synchronized Puppet getPuppet(String name) {
 		for(Puppet pup : puppets) {
-			if(pup.getName().equals(name)) {
+			if(pup.name().equals(name)) {
 				return pup;
 			}
 		}
@@ -72,7 +67,7 @@ public class AllPuppets {
 	 */
 	public static synchronized boolean checkExist(String name) {
 		for(Puppet pup : puppets) {
-			if(pup.getName().equals(name)) {
+			if(pup.name().equals(name)) {
 				return true;
 			}
 		}
