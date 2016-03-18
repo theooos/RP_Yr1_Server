@@ -149,7 +149,7 @@ public class Job {
 	public int getNumOfTasks() {
         int count = 0;
         for(int i = 0; i < tasks.size(); i++) {
-            if(!tasks.get(i).getItemID().equals("dropoff"))
+            if(!tasks.get(i).getItemID().equals("dropOff"))
                 count++;
         }
 		return count; 
@@ -166,7 +166,7 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-            if(!task.getItemID().equals("dropoff")) {
+            if(!task.getItemID().equals("dropOff")) {
                 Item item = items.get(task.getItemID());
                 //Item item = JobProcessor.getItem(task.getItemID());
                 numOfItems += task.getQuantity();
@@ -182,7 +182,7 @@ public class Job {
 
 		double reward = 0f;
 		for(SingleTask task : tasks) {
-            if(!task.getItemID().equals("dropoff")) {
+            if(!task.getItemID().equals("dropOff")) {
                 Item item = items.get(task.getItemID());
                 reward += item.getReward() * task.getQuantity();
             }
@@ -202,7 +202,7 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-            if(!tasks.getItemID.equals("dropoff")) {
+            if(!task.getItemID().equals("dropOff")) {
                 Item item = items.get(task.getItemID());
                 reward += item.getReward() * task.getQuantity();
                 weight += item.getWeight() * task.getQuantity();
@@ -222,7 +222,7 @@ public class Job {
 
 		for(SingleTask task : tasks)
 		{
-            if(!tasks.getItemID.equals("dropoff")) {
+            if(!task.getItemID().equals("dropOff")) {
                 Item item = items.get(task.getItemID());
                 totalweight = totalweight + (item.getWeight() * task.getQuantity());
             }
