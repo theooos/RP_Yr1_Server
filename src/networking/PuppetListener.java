@@ -86,10 +86,6 @@ public class PuppetListener extends Thread {
 	 */
 	synchronized private void addComm(SendableObject comm) {
 		commands.add(comm);
-		out("The available commands are:");
-		for(SendableObject command: commands){
-			out(command);
-		}
 	}
 	
 	/**

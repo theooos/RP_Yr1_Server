@@ -33,7 +33,6 @@ public class WarehouseMap {
 	 * @param doFile The file containing the drop off locations.
 	 */
 	public WarehouseMap(String doFile) {
-
 		//GridMap nicksMap = GridMap.createRealWarehouse();
 
 		//// Import the map created by Nick and set the obstacles

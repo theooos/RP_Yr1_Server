@@ -13,6 +13,10 @@ import java.util.Optional;
 
 import Objects.Item;
 import Objects.Job;
+import Objects.WarehouseMap;
+import Objects.Sendable.SingleTask;
+import main.RunServer;
+import routePlanning.orderPicks.OrderPicks;
 
 /**
  * Class that carries out all the necessary processing and stores the data.
@@ -110,14 +114,20 @@ public class JobProcessor {
 
 			// Create a new job.
 			Job newJob = new Job(Integer.parseInt(jobArr[0]), items);;
-
+			
+			
 			// Add each the item and the quantity of the item to the job.
 			for(int i = 1; i < jobArr.length; i+=2) {
 				newJob.addTask(jobArr[i], Integer.parseInt(jobArr[i+1]), items.get(jobArr[i]).getLocation());
 			}
-
-			// Add a job to the list.
+			//System.out.println(newJob.getTasks());
+			//System.out.println()
+			//OrderPicks op = new OrderPicks(newJob.getTasks(), RunServer.map.getDropoffPoints(), RunServer.map);
+			
+			
 			jobs.put(Integer.parseInt(jobArr[0]), newJob);
+			// Add a job to the list.
+			//jobs.put(Integer.parseInt(jobArr[0]), new Job(Integer.parseInt(jobArr[0]), op.orderedItems, items));
 		}
 
 		for(String cancelStr : cancellationsContents.get()) {
@@ -126,6 +136,7 @@ public class JobProcessor {
 				jobs.get(Integer.parseInt(cancelArr[0])).cancel();
 		}
 
+	
 	}
 
 	/**

@@ -25,6 +25,7 @@ public class Job {
 	private Map<String, Item> items;
 	private int jobid;
 	private int distanceToTravel;
+	public Point dropOff;
 
 	/**
 	 * Create an empty job
@@ -42,7 +43,7 @@ public class Job {
 
 	/**
 	 * Create a job with items
-	 * @param jobid The ID of the job
+	 * @param jobid The ID of the jo	private List<SingleTask> tasks;keyb
 	 * @param tasks The tasks in the job.
 	 * @param items The items for the job.
 	 */
@@ -78,6 +79,8 @@ public class Job {
 	{
 		return tasks;
 	}
+	
+	
 
 	/**
 	 * Add an item to the list of job items.
@@ -150,7 +153,6 @@ public class Job {
 	public int getNumOfTasks() {
         int count = 0;
         for(int i = 0; i < tasks.size(); i++) {
-            if(!tasks.get(i).getItemID().equals("dropOff"))
                 count++;
         }
 		return count; 
@@ -238,12 +240,17 @@ public class Job {
 			return getTotalReward() / distanceToTravel;
 		else {
 			OrderPicks op = new OrderPicks(tasks, RunServer.map.getDropoffPoints(), RunServer.map); 
-			this.tasks = op.orderedItems;
+			this.dropOff=op.dropOff;
+			this.tasks = new ArrayList<SingleTask>();
+			for(SingleTask task : op.orderedItems){
+				this.tasks.add(task);
+			}
+			//System.out.println(tasks);
 			distanceToTravel = op.getFinalDistance();
 			this.ordered = true;
 			return getTotalReward() / distanceToTravel;
 		}
-
+		
 	}
 
 	// toString method for debugging purposes

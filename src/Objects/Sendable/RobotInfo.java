@@ -24,7 +24,9 @@ public class RobotInfo implements SendableObject {
 	public Vector<Direction> directions;
 	public int currDirectionsIndex;
 	public boolean droppingOff;
+	public boolean goingToDropOff;
 	public boolean waitingForMoveReport;
+	//public boolean waitingForCompleteReport;
 	public boolean hasMoved;
 	public boolean hasCompletedTask;
 	public boolean finishedDroppingItems;
@@ -80,6 +82,8 @@ public class RobotInfo implements SendableObject {
 		hasCompletedTask=false;
 		finishedDroppingItems=false;
 		hasATask=false;
+		goingToDropOff=false;
+		//waitingForCompleteReport=false;
 	}
 
 	/**

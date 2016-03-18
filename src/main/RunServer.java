@@ -29,20 +29,19 @@ import networking.Puppet;
  */
 public class RunServer extends Thread {
 
-	public static WarehouseMap map;
+	public static WarehouseMap map = new WarehouseMap("res/drops.csv");
 	private RouteExecution routeExec;
 	private boolean alive = true;
 
 	public RunServer() {
-		
 		//// JobSelection (Fran & Brendan) -- Process the items
 		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
 		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 
 		//// Testing puppets, uncomment for experimentation
 		      
-		//        Puppet tay = new Puppet("TayTay", "0016531AF6E5");
-		//        AllPuppets.addPuppet(tay);
+	//	Puppet tay = new Puppet("TayTay", "0016531AF6E5");
+		//AllPuppets.addPuppet(tay);
 		
 		//// Creating Puppet
 		//Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
@@ -99,13 +98,11 @@ public class RunServer extends Thread {
 			while((comm = pup.popCommand()) != null)
 			{
 				if(comm instanceof MoveReport){
-					// HARD CODING STUFF AGAIN...
-					routeExec.addMoveReport("John Cena", (MoveReport)comm);
-					//routeExec.addMoveReport(pup.getName(), (MoveReport)comm);
+					routeExec.addMoveReport(pup.name(), (MoveReport)comm);
 					System.out.println("GOT REPORT: " + ((MoveReport) comm).toString());
 				}
 				else if(comm instanceof CompleteReport){
-					routeExec.addCompleteReport(pup.getName(), comm);
+					routeExec.addCompleteReport(pup.name(), comm);
 				}
 				else if(comm instanceof RobotInfo){
 					/* Will only be called when a robot has started up, and had it's
@@ -121,7 +118,6 @@ public class RunServer extends Thread {
 	 * Sets up Artur's warehouse.
 	 */
 	private void setUpWarehouse(){
-		map = new WarehouseMap("res/drops.csv");
 
 		JFrame frame = new JFrame("Warehouse Interface - 1.1");
 		frame.setLayout(new GridLayout(2, 2));
@@ -136,7 +132,6 @@ public class RunServer extends Thread {
 		frame.setVisible(true);
 
 		// This shouldn't be hardcoded, change later
-		map.setObstacles(new Point[] { new Point(1, 2), new Point(1, 3), new Point(1, 4), new Point(1, 5), new Point(1, 6), new Point(4, 2), new Point(4, 3), new Point(4, 4), new Point(4, 5), new Point(4, 6), new Point(7, 2), new Point(7, 3), new Point(7, 4), new Point(7, 5), new Point(7, 6), new Point(10, 2), new Point(10, 3), new Point(10, 4), new Point(10, 5), new Point(10, 6) });
 
 		//// Start RoutePlanning & RouteExecution (Szymon & Maria)
 		routeExec = new RouteExecution(1, map);

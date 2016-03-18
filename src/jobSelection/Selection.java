@@ -6,6 +6,8 @@ import java.util.PriorityQueue;
 
 import Objects.Job;
 import jobInput.JobProcessor;
+import main.RunServer;
+import routePlanning.orderPicks.OrderPicks;
 
 public class Selection { 
 	
@@ -17,7 +19,16 @@ public class Selection {
 	        Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100)*(1-job1.getCancellationProb()) / 2);
             Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100)*(1-job2.getCancellationProb()) / 2);
 	
-			return valueJob1.compareTo(valueJob2);
+           // Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100) / 2);
+          // Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100) / 2);
+			
+          // Integer valueJob1 = (int) (job1.getTotalReward() * 100  / 2);
+          // Integer valueJob2 = (int) (job2.getTotalReward() * 100 / 2);
+           
+           // Integer valueJob1 = (int) (job1.rewardPerItem() * 100) / 2;
+           // Integer valueJob2 = (int) (job2.rewardPerItem() * 100) / 2;
+           
+            return valueJob1.compareTo(valueJob2);
 		}
 	});
 	
@@ -30,12 +41,16 @@ public class Selection {
 	public static PriorityQueue<Job> createQueue(){
 		
 		Map<Integer, Job> jobMap = JobProcessor.getAllJobs();
-		
+		//OrderPicks op = new OrderPicks(tasks, RunServer.map.getDropoffPoints(), RunServer.map); 
 		//add to queue
 		for(Job j : jobMap.values())
-			if(j.getTotalWeight()<50)
+			if(j.getTotalWeight()<50 && !j.cancelled()){
+				//System.out.println("job being added to queue: "+ j);
 				priorityQueue.add(j);
-
+				
+			}
+		
+		//System.out.println(priorityQueue);
 		return priorityQueue;
 	};	
 	

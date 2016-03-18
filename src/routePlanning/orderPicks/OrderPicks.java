@@ -53,7 +53,7 @@ public class OrderPicks {
 	}
 	
 	/**
-	 * cancels methods that are trying to order the jobs
+	 * cancels methods thop.orderedItems();at are trying to order the jobs
 	 */
 	public void cancel()
 	{
@@ -126,11 +126,14 @@ public class OrderPicks {
 		orderedItems.addAll(orderedItemsForMiny);
 		dropOff=dropOffForMiny;
 		
+		/*
 		//add the dropoff point as a singleTask object at the end of the job
 		
 		SingleTask drop=new SingleTask("dropOff", 0, dropOffForMiny);
 		orderedItems.add(drop);
-		
+		//System.out.println(orderedItems);
+		 
+		 */
 		running=false;
 	}
 	
