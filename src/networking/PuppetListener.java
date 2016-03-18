@@ -16,9 +16,11 @@ public class PuppetListener extends Thread {
 	private DataInputStream fromRobot;
 	ArrayList<SendableObject> commands = new ArrayList<SendableObject>();
 	private boolean alive = true;
+	private String name;
 	
-	public PuppetListener(DataInputStream fromRobot){
+	public PuppetListener(DataInputStream fromRobot, String name){
 		this.fromRobot = fromRobot;
+		this.name = name;
 	}
 
 	/**
@@ -29,7 +31,7 @@ public class PuppetListener extends Thread {
 		while(alive){
 			try {
 				String fullComm = fromRobot.readUTF();
-				out("Full comm: " + fullComm);
+				out("[RECEIVED] " + name + " | " + fullComm);
 				Object[] splitComm = Splitter.split(fullComm);
 				String type = (String) splitComm[0];
 				Object[] objParams = new Object[splitComm.length-1];
