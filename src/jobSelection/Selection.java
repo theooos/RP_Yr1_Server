@@ -14,8 +14,8 @@ public class Selection {
 		@Override
 		public int compare(Job job1, Job job2) {
 
-	        Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100) / 2);
-            Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100) / 2);
+	        Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 100)*(1-job1.getCancellationProb()) / 2);
+            Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 100)*(1-job2.getCancellationProb()) / 2);
 	
 			return valueJob1.compareTo(valueJob2);
 		}
