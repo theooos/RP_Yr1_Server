@@ -2,8 +2,8 @@ package jobSelection;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import Objects.Job;
 
@@ -11,14 +11,15 @@ public class Probability {
 
     public double[] probs;
     public double[][] conProbs;
-    private Collection<Job> trainingSet;
+    private List<Job> trainingSet;
 
     public Probability(Collection<Job> trainingSet) {
 
         probs = new double[Features.predicates.size()];
         conProbs = new double[Features.predicates.size()][Features.predicates.size()];
 
-        this.trainingSet = trainingSet;
+        this.trainingSet = new ArrayList<Job>(trainingSet);
+        
         populateProbs();
 
     }
@@ -50,7 +51,7 @@ public class Probability {
         List<Integer> featuresOfJob = new ArrayList<Integer>();
 
         for(int i = 0; i < Features.predicates.size(); i++) {
-            if(Features.predicates.get(i).test(j))
+            if(i != Features.Cancelled.NO && i != Features.Cancelled.YES && Features.predicates.get(i).test(j))
                 featuresOfJob.add(i);
         }
 
@@ -73,17 +74,24 @@ public class Probability {
     	 
     	prob = pGivenFeatures * probs[Features.Cancelled.YES];
     	
-    	int count = 0;
-    	for(Iterator<Job> i = trainingSet.iterator(); i.hasNext();) {
-    		boolean allFeatures = true;
-    		for(int f = 0; f < features.size(); f++) {
-    			if(!Features.predicates.get(f).test(i.next())) {
-    				allFeatures = false;
-    				break;
-    			}
-    		}
-    		if(allFeatures) count++;
-    	}
+        int count = 0;
+        for(int i = 0; i < trainingSet.size(); i++) {
+        
+        	Job theJob = trainingSet.get(i);
+        	boolean all = true;
+        	
+        	for(int f = 0; f < features.size(); f++) {
+        		Predicate<Job> curPred = Features.predicates.get(features.get(f));
+        		if(!curPred.test(theJob))
+        			all = false;
+     
+        	}
+        	
+        	if(all)
+        		count += 1;
+        	
+        }
+    	
     	
     	double probOfAllFeatures = (double)count / (double)trainingSet.size();
     	

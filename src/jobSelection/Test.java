@@ -12,11 +12,10 @@ public class Test {
 
         Probability p = new Probability(JobProcessor.getAllJobs().values());
 
-        Job j = JobProcessor.getJob(10300);
-
+        
+        Job j = JobProcessor.getJob(10700);
         System.out.println(p.getFeatures(j));
         System.out.println(p.probabilityCancelled(j));
-        System.out.println(1 - p.probabilityCancelled(j));
     }
 
 }
