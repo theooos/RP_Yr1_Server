@@ -19,10 +19,13 @@ public class Test {
 
         PriorityQueue<Job> q = Selection.createQueue();
         Job firstJob = q.remove();
+        System.out.println(firstJob.getJobID());
         System.out.println(firstJob.getTotalReward());
         firstJob = q.remove();
+        System.out.println(firstJob.getJobID());
         System.out.println(firstJob.getTotalReward());
         firstJob = q.remove();
+        System.out.println(firstJob.getJobID());
         System.out.println(firstJob.getTotalReward());
         
         

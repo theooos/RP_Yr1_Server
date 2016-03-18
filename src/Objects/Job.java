@@ -8,6 +8,7 @@ import java.util.Optional;
 
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
+import main.RunServer;
 import main.Test;
 import routePlanning.orderPicks.OrderPicks;
 
@@ -236,7 +237,7 @@ public class Job {
 		if(ordered)
 			return getTotalReward() / distanceToTravel;
 		else {
-			OrderPicks op = new OrderPicks(tasks, Test.map.getDropoffPoints(), Test.map); 
+			OrderPicks op = new OrderPicks(tasks, RunServer.map.getDropoffPoints(), RunServer.map); 
 			this.tasks = op.orderedItems;
 			distanceToTravel = op.getFinalDistance();
 			this.ordered = true;
