@@ -21,13 +21,18 @@ public class AllPuppets {
 	 */
 	public static synchronized void send(String name, SendableObject obj) {
 		for(Puppet pup : puppets) {
+			System.out.println("NAME OF ROBOT: " + pup.getName());
+			///////////// FIX ME LATER, THIS IS HARDCODED!!!!!!!!!!!!!
+			/*
 			if(pup.getName().equals(name)) {
 				pup.send(obj);
 				return;
 			}
+			*/
+			pup.send(obj);
 		}
 		// Print out if can't find the puppet
-		System.out.println("Could not find puppet " + name + " and send it: " + obj.parameters());
+		//System.out.println("Could not find puppet " + name + " and send it: " + obj.parameters());
 	}
 
 	/**

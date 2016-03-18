@@ -489,16 +489,18 @@ public class RouteExecution extends Thread {
 	{
 		System.out.println("assigning job");
 		AllRobots.getRobot(name).currJob=job;
+		AllRobots.getRobot(name).isDoingJob=true;
 		int reward = 0;
 		for(SingleTask task : job.getTasks())
-			reward += JobProcessor.getItem(task.getItemID()).getReward();
+			if(!task.getItemID().equals("dropOff"))
+				reward += JobProcessor.getItem(task.getItemID()).getReward();
 		JobTable.addJob(job.getJobID(), String.valueOf(reward), name);
 	}
 
 
 	private Job getJob()
 	{
-		System.out.println(priorityQueue);
+		//System.out.println(priorityQueue);
 		return priorityQueue.remove();
 
 	}
