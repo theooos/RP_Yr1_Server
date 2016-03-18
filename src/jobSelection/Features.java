@@ -18,7 +18,7 @@ public class Features {
 
     public static Map<Integer, Predicate<Job>> predicates;
 
-    public Features() {
+    static {
 
         predicates = new HashMap<Integer, Predicate<Job>>();
         
@@ -35,11 +35,16 @@ public class Features {
         predicates.put(TotalReward.ONEHUNDREDANDSIXTYPLUS,  j -> totalReward(j) >= 160);
         
         /*
+        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 && j.getNumOfTasks() <= 2);
+        predicates.put(NumOfTasks.THREETOFOUR, j -> j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
+        predicates.put(NumOfTasks.FIVEPLUS, j -> j.getNumOfTasks() >= 5);
+
+        /DEFINITE
         predicates.put(TotalItems.ONETOFOUR, j -> totalNumItems(j) >= 1 && totalNumItems(j) <= 4);
         predicates.put(TotalItems.FIVETOEIGHT, j -> totalNumItems(j) >= 5 && totalNumItems(j) <= 8);
         predicates.put(TotalItems.NINETOTWELVE, j -> totalNumItems(j) >= 9 && totalNumItems(j) <= 12);
         predicates.put(TotalItems.THIRTEENPLUS, j -> totalNumItems(j) >= 13);
-        */
+	*/
         
         predicates.put(TotalWeight.ZEROTOTEN,  j -> totalWeight(j) >= 0 && totalWeight(j) < 10);
         predicates.put(TotalWeight.TENTOTWENTY,  j -> totalWeight(j) >= 10 && totalWeight(j) < 20);
@@ -47,26 +52,28 @@ public class Features {
         predicates.put(TotalWeight.THIRTYTOFORTY,  j -> totalWeight(j) >= 30  && totalWeight(j) < 40);
         predicates.put(TotalWeight.FORTYPLUS,  j -> totalWeight(j) >= 40);
         
-       
         /*
         predicates.put(HighestRewardItem.ZEROTOFIVE, j -> highestReward(j) >= 0 && highestReward(j) <= 5);
         predicates.put(HighestRewardItem.SIXTOTEN, j -> highestReward(j) >= 6 && highestReward(j) <= 10);
         predicates.put(HighestRewardItem.ELEVENTOFIFTEEN, j -> highestReward(j) >= 11 && highestReward(j) <= 15);
         predicates.put(HighestRewardItem.SIXTEENPLUS, j -> highestReward(j) >= 16);
-        */
         
-        /*
         predicates.put(HeaviestItem.ZEROTOONE, j -> heaviestItem(j) >= 0 && heaviestItem(j) <= 1);
         predicates.put(HeaviestItem.TWOTOTHREE, j -> heaviestItem(j) >= 2 && heaviestItem(j) <= 3);
         predicates.put(HeaviestItem.FOURPLUS, j -> heaviestItem(j) >= 4);
         */
         
+        // DEFINITE
         predicates.put(HighestQuantity.ONETOTWO, j -> highestQuantity(j) >= 1 && highestQuantity(j) <= 2);
         predicates.put(HighestQuantity.THREETOFOUR, j -> highestQuantity(j) >= 3 && highestQuantity(j) <= 4);
         predicates.put(HighestQuantity.FIVETOSIX, j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
         predicates.put(HighestQuantity.SEVENPLUS, j -> highestQuantity(j) >= 7);
+
+        predicates.put(Cancelled.YES, Job::cancelled);
+        predicates.put(Cancelled.NO, j -> !j.cancelled());
     }
 
+/*
     public static class NumOfTasks {
         
         public static int ONETOTWO = 0;
@@ -75,7 +82,6 @@ public class Features {
 
     }
 
-    /*
     public static class TotalItems {
 
         public static int ONETOFOUR = 3;
@@ -150,7 +156,7 @@ public class Features {
     }
     
     /*
-    public int totalNumItems(Job job){
+    public static int totalNumItems(Job job){
     	
     	int quantity = 0;
     	
@@ -168,22 +174,21 @@ public class Features {
     public static class HighestRewardItem {
         
         public static int ZEROTOFIVE = 7;
-        public static int SIXTOTEN = 8;
-        public static int ELEVENTOFIFTEEN = 9;
-        public static int SIXTEENPLUS = 10;
+        public static int FIVETOTEN = 8;
+        public static int TENTOFIFTEEN = 9;
+        public static int FIFTEENPLUS = 10;
 
     }
     
-    public double highestReward(Job job){
+    public static double highestReward(Job job){
     	
     	double reward = 0;
     	
     	for(SingleTask task : job.getTasks())
     	{
     		
-    		 if(!task.getItemID().equals("dropOff"))
-    		 {
-    			 
+
+    		 if(!task.getItemID().equals("dropOff") && JobProcessor.getItem(task.getItemID()).getReward() > reward){
     			 if(JobProcessor.getItem(task.getItemID()).getReward() > reward){
     				 reward = JobProcessor.getItem(task.getItemID()).getReward();
     			 }	
@@ -197,13 +202,13 @@ public class Features {
 
     public static class HeaviestItem {
 
-        public static int ZEROTOONE = 11;
-        public static int TWOTOTHREE = 12;
-        public static int FOURPLUS = 13;
+        public static int ZEROTOPOINTFIVE = 11;
+        public static int POINTFIVETOTHREE = 12;
+        public static int THREEPLUS = 13;
 
     }
     
-    public double heaviestItem(Job job){
+    public static double heaviestItem(Job job){
     	
     	double heaviest = 0;
     	
@@ -242,7 +247,7 @@ public class Features {
 
   
     
-    public double highestQuantity(Job job){
+    public static double highestQuantity(Job job){
     	
     	double quantity = 0;
     	
@@ -258,6 +263,13 @@ public class Features {
     	}
     	
     	return quantity;
+
+    }
+
+    public static class Cancelled {
+        
+        public static int YES = 18;
+        public static int NO = 19;
 
     }
 }
