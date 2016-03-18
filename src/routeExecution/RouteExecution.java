@@ -129,9 +129,11 @@ public class RouteExecution extends Thread {
 			}
 
 			//commands have been sent now to wait for movereports
-			boolean notYetDone=false;
+			
+			boolean notYetDone=true;
 			while(notYetDone&&running)
 			{
+				
 				for(int ir=0;ir<nrOfRobots;ir++)
 				{
 					String name=this.getRobotName(ir);
