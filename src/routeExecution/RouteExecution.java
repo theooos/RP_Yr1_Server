@@ -131,9 +131,9 @@ public class RouteExecution extends Thread {
 			//commands have been sent now to wait for movereports
 			
 			boolean notYetDone=true;
-			while(notYetDone&&running)
+			while(notYetDone)
 			{
-				
+				notYetDone=true;
 				for(int ir=0;ir<nrOfRobots;ir++)
 				{
 					String name=this.getRobotName(ir);
@@ -144,7 +144,9 @@ public class RouteExecution extends Thread {
 						if(hasMoved(name)){
 							AllRobots.getRobot(name).waitingForMoveReport=false;
 							this.robotHasMoved(AllRobots.getRobot(name).nextRobotLocation, name,AllRobots.getRobot(name).nextDir);
-							AllRobots.getRobot(name).currDirectionsIndex++;
+							
+							if(AllRobots.getRobot(name).currDirectionsIndex!=AllRobots.getRobot(name).directions.size())
+								AllRobots.getRobot(name).currDirectionsIndex++;
 							AllRobots.getRobot(name).hasMoved=false;
 						}
 					}
@@ -161,6 +163,7 @@ public class RouteExecution extends Thread {
 					if(this.isPickingUpItem(name)){
 						if(this.hasPickedUpItem(name))
 						{
+							AllRobots.getRobot(name).currTaskIndex++;
 							this.setHasATask(name, false);
 						}
 					}
