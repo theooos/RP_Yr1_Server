@@ -133,7 +133,7 @@ public class RouteExecution extends Thread {
 			boolean notYetDone=true;
 			while(notYetDone&&running)
 			{
-				
+				notYetDone=true;
 				for(int ir=0;ir<nrOfRobots;ir++)
 				{
 					String name=this.getRobotName(ir);
