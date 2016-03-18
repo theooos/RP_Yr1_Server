@@ -99,7 +99,10 @@ public class RunServer extends Thread {
 			while((comm = pup.popCommand()) != null)
 			{
 				if(comm instanceof MoveReport){
-					routeExec.addMoveReport(pup.getName(), (MoveReport)comm);
+					// HARD CODING STUFF AGAIN...
+					routeExec.addMoveReport("John Cena", (MoveReport)comm);
+					//routeExec.addMoveReport(pup.getName(), (MoveReport)comm);
+					System.out.println("GOT REPORT: " + ((MoveReport) comm).toString());
 				}
 				else if(comm instanceof CompleteReport){
 					routeExec.addCompleteReport(pup.getName(), comm);

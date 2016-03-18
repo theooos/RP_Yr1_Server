@@ -147,6 +147,7 @@ public class RouteExecution extends Thread {
 						if(hasMoved(name)){
 							AllRobots.getRobot(name).waitingForMoveReport=false;
 							this.robotHasMoved(AllRobots.getRobot(name).nextRobotLocation, name,AllRobots.getRobot(name).nextDir);
+							AllRobots.getRobot(name).currDirectionsIndex++;
 							AllRobots.getRobot(name).hasMoved=false;
 						}
 					}
