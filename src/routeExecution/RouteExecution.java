@@ -105,28 +105,25 @@ public class RouteExecution extends Thread {
 
 					}else
 					{ //execute next move
-						
-						if(!AllRobots.getRobot(name).waitingForMoveReport)
+						Direction facingDir=this.getRobotFacingDirection(name);
+						Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+						Move nextmove=this.getMove(facingDir, moveDir,name);
+						if(nextmove==null)System.out.println("error generating the move object");
+						else
 						{
-							Direction facingDir=this.getRobotFacingDirection(name);
-							Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
-							Move nextmove=this.getMove(facingDir, moveDir,name);
-							if(nextmove==null)System.out.println("error generating the move object");
-							else
-							{
-								//send the move to the server
-								AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
-	
-	
-	
-								AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
-								// use Theo's new class for sending objects to robots when he finally makes it
-								AllPuppets.send(name,nextmove);
-	
-								AllRobots.getRobot(name).waitingForMoveReport=true;					
-	
-							}
+							//send the move to the server
+							AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
+
+
+
+							AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+							// use Theo's new class for sending objects to robots when he finally makes it
+							AllPuppets.send(name,nextmove);
+
+							AllRobots.getRobot(name).waitingForMoveReport=true;					
+
 						}
+
 					}
 				}
 			}
@@ -136,7 +133,7 @@ public class RouteExecution extends Thread {
 			boolean notYetDone=true;
 			while(notYetDone&&running)
 			{
-				notYetDone=true;
+				
 				for(int ir=0;ir<nrOfRobots;ir++)
 				{
 					String name=this.getRobotName(ir);

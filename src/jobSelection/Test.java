@@ -9,11 +9,14 @@ public class Test {
 
     	JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
         JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
-        
-        ProbDistribution prob = ProbDistribution.calculateProbDistr(JobProcessor.getAllJobs().values(), Job::cancelled);
-        ProbDistribution prob2 = ProbDistribution.calculateProbDistr(JobProcessor.getAllJobs().values(), j -> (j.getNumOfTasks() >= 1 && j.getNumOfTasks() <= 2));
-        System.out.println(prob);
-        
+
+        Probability p = new Probability(JobProcessor.getAllJobs().values());
+
+        Job j = JobProcessor.getJob(10300);
+
+        System.out.println(p.getFeatures(j));
+        System.out.println(p.probabilityCancelled(j));
+        System.out.println(1 - p.probabilityCancelled(j));
     }
 
 }
