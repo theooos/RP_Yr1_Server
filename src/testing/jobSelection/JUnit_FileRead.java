@@ -31,6 +31,7 @@ public class JUnit_FileRead {
 	 */
 	@Test
 	public void test() {
+		System.out.println(JobProcessor.getJob(10000));
 		// Testing the jobs
 		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(0).get().getItemID().equals("ba"));
 		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(0).get().getQuantity() == 2);

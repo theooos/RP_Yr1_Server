@@ -1,4 +1,4 @@
-package testing.map;
+package testing.warehouseMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -72,31 +72,31 @@ public class JUnit_map {
 				}
 			}
 		}
-		
+
 		// Test the drop-off point is correct, should currently be 4,7
 		assertEquals(dropOff, new Point(4,7));
 
 		// Test positioning
 		Point test = new Point(5,5);
-		
+
 		assertTrue(map.getLeftNode(test).equals(new Point(4, 5)));
 		assertTrue(map.getRightNode(test).equals(new Point(6, 5)));
 		assertTrue(map.getAboveNode(test).equals(new Point(5, 4)));
 		assertTrue(map.getBelowNode(test).equals(new Point(5, 6)));
-		
+
 		// Test freeing a position
 		assertTrue(map.isObstacle(free)); // Should be obstacle there
 		map.freePosition(free); // Free up position
 		assertFalse(map.isObstacle(free)); // Should no longer be an obstacle
-		
+
 		// Test adding an obstacle (same one as removed)
 		map.addObstacle(free);
 		assertTrue(map.isObstacle(free));
-		
+
 		// Testing distance to the wall --- Should be 0 as it's an obstacle
 		assertTrue(map.distanceToWall(free, Direction.NORTH) == 0);
 		assertTrue(map.distanceToWall(test, Direction.NORTH) == 5); // Should hopefully be 5 if there are no obstacles in the way
-		
+
 	}
 
 }
