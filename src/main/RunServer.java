@@ -101,6 +101,7 @@ public class RunServer extends Thread {
 				}
 				else if(comm instanceof CompleteReport){
 					routeExec.addCompleteReport(pup.name(), comm);
+					JobTable.updateStatus(AllRobots.getRobot(pup.name()).currJob.getJobID(), "Completed");
 				}
 				else if(comm instanceof RobotInfo){
 					/* Will only be called when a robot has started up, and had it's
@@ -123,7 +124,7 @@ public class RunServer extends Thread {
 		frame.setResizable(false);
 		frame.setSize(800, 600);
 
-		frame.add(JobTable.draw());
+		frame.add(JobTable.draw(routeExec));
 		frame.add(GridMap.createGrid(map));
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());

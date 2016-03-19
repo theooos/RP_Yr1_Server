@@ -6,7 +6,9 @@ import Objects.Sendable.RobotInfo;
 import Objects.WarehouseMap;
 
 import javax.swing.*;
+
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -14,6 +16,7 @@ public class GridMap
 {
 	private static JPanel panel;
 	private static final int GRID_WIDTH = 12, GRID_HEIGHT = 8;
+	private static final Color TAYTAY = new Color(237, 41, 57), CENA = new Color(76, 102, 164), ALFONSO = new Color(76, 187, 23);
 
 	public static JPanel createGrid(WarehouseMap grid)
 	{
@@ -28,6 +31,9 @@ public class GridMap
 				g2d.setStroke(new BasicStroke(10));
 				g2d.drawRect(0, 0, width, height); // pretty black border :)
 				g2d.setStroke(new BasicStroke(1));
+				g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+				g2d.drawString("\u21E2N", width - 45, 25);
+				g2d.rotate(Math.toRadians(180), width / 2 - 4, height / 2);
 				for(int i = 0; i < GRID_WIDTH; i++)
 					for(int j = 0; j < GRID_HEIGHT; j++)
 					{
@@ -35,9 +41,16 @@ public class GridMap
 						if(!grid.isObstacle(i, j))
 						{
 							g2d.setColor(Color.BLACK);
-							g2d.fillOval(x - 3, y - 3, 6, 6);
 							if(j < GRID_HEIGHT - 1 && !grid.isObstacle(i, j + 1)) g2d.drawLine(x, y, x, y1);
 							if(i < GRID_WIDTH - 1 && !grid.isObstacle(i + 1, j)) g2d.drawLine(x, y, x1, y);
+							if(grid.getDropoffPoints().contains(new Point(i, j)))
+							{
+								g2d.setColor(Color.LIGHT_GRAY);
+								g2d.fillRoundRect(x - 4, y - 4, 8, 8, 3, 3);
+								g2d.setColor(Color.BLACK);
+							}
+							else
+								g2d.fillOval(x - 3, y - 3, 6, 6);
 						}
 						else
 						{
@@ -50,21 +63,35 @@ public class GridMap
 				g2d.setStroke(new BasicStroke(3));
 				for(RobotInfo robot : AllRobots.getAllRobots())
 				{
-					if(robot.getDirection() == Direction.NORTH || robot.getDirection() == Direction.SOUTH)
+					switch(robot.getName())
 					{
-						g2d.drawRect((robot.getPosition().x + 1) * xScale - 8, (robot.getPosition().y + 1) * yScale - 15, 16, 30);
-						if(robot.getDirection() == Direction.NORTH)
-							g2d.drawLine((robot.getPosition().x + 1) * xScale, (robot.getPosition().y + 1) * yScale - 15, (robot.getPosition().x + 1) * xScale, (robot.getPosition().y + 1) * yScale - 25);
+						case "Tay Tay":
+							g2d.setColor(TAYTAY);
+							break;
+						case "John Cena":
+							g2d.setColor(CENA);
+							break;
+						case "Alfonso":
+							g2d.setColor(ALFONSO);
+							break;
+						default:
+							g2d.setColor(Color.BLACK);
+					}
+					if(robot.getDirection() == Direction.EAST || robot.getDirection() == Direction.WEST)
+					{
+						g2d.drawRect((GRID_WIDTH - robot.getPosition().x) * xScale - 7, (robot.getPosition().y + 1) * yScale - 14, 14, 28);
+						if(robot.getDirection() == Direction.EAST)
+							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 22);
 						else
-							g2d.drawLine((robot.getPosition().x + 1) * xScale, (robot.getPosition().y + 1) * yScale + 15, (robot.getPosition().x + 1) * xScale, (robot.getPosition().y + 1) * yScale + 25);
+							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 22);
 					}
 					else
 					{
-						g2d.drawRect((robot.getPosition().x + 1) * xScale - 15, (robot.getPosition().y + 1) * yScale - 8, 30, 16);
-						if(robot.getDirection() == Direction.EAST)
-							g2d.drawLine((robot.getPosition().x + 1) * xScale + 15, (robot.getPosition().y + 1) * yScale, (robot.getPosition().x + 1) * xScale + 25, (robot.getPosition().y + 1) * yScale);
+						g2d.drawRect((GRID_WIDTH - robot.getPosition().x) * xScale - 14, (robot.getPosition().y + 1) * yScale - 7, 28, 14);
+						if(robot.getDirection() == Direction.NORTH)
+							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale + 14, (robot.getPosition().y + 1) * yScale, (GRID_WIDTH - robot.getPosition().x) * xScale + 22, (robot.getPosition().y + 1) * yScale);
 						else
-							g2d.drawLine((robot.getPosition().x + 1) * xScale - 15, (robot.getPosition().y + 1) * yScale, (robot.getPosition().x + 1) * xScale - 25, (robot.getPosition().y + 1) * yScale);
+							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale - 14, (robot.getPosition().y + 1) * yScale, (GRID_WIDTH - robot.getPosition().x) * xScale - 22, (robot.getPosition().y + 1) * yScale);
 					}
 				}
 			}

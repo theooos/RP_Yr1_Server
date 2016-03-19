@@ -3,7 +3,11 @@ package warehouseInterface;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import routeExecution.RouteExecution;
+import Objects.AllRobots;
+import Objects.Direction;
 import Objects.WarehouseMap;
+import Objects.Sendable.RobotInfo;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -28,12 +32,16 @@ public class Display
 		}
 
 		WarehouseMap grid = new WarehouseMap("res/drops.csv");
-		grid.setObstacles(new Point[] { new Point(1, 2), new Point(1, 3), new Point(1, 4), new Point(1, 5), new Point(1, 6), new Point(4, 2), new Point(4, 3), new Point(4, 4), new Point(4, 5), new Point(4, 6), new Point(7, 2), new Point(7, 3), new Point(7, 4), new Point(7, 5), new Point(7, 6), new Point(10, 2), new Point(10, 3), new Point(10, 4), new Point(10, 5), new Point(10, 6) });
 		
-		frame.add(JobTable.draw());
+		frame.add(JobTable.draw(new RouteExecution(1, grid)));
 		frame.add(GridMap.createGrid(grid));
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
+		
+		AllRobots.addRobot(new RobotInfo("Tay Tay", new Point(5, 7)));
+		AllRobots.addRobot(new RobotInfo("Alfonso", new Point(5, 0), Direction.SOUTH));
+		AllRobots.addRobot(new RobotInfo("John Cena", new Point(0, 4), Direction.WEST));
+		AllRobots.addRobot(new RobotInfo("Donaldihno", new Point(11, 4), Direction.EAST));
 		frame.setVisible(true);
 
 //		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
