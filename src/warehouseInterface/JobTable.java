@@ -8,6 +8,7 @@ import Objects.Sendable.SingleTask;
 import jobInput.JobProcessor;
 
 import java.awt.*;
+import java.util.Random;
 
 public class JobTable
 {
@@ -21,8 +22,8 @@ public class JobTable
 		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
 		activeJobs = Display.createTable(tableModel);
 
-		//Button addJob = new JButton("Add a job");
-		//addJob.addActionListener(e -> new AddJob());
+		JButton addJob = new JButton("Add a job");
+		addJob.addActionListener(e -> Statistics.increaseRevenue(0.57));
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
@@ -40,7 +41,7 @@ public class JobTable
 		activeJobs.getColumnModel().getColumn(2).setPreferredWidth(100);
 
 		panel.add(new JScrollPane(activeJobs), BorderLayout.CENTER);
-		//panel.add(addJob, BorderLayout.SOUTH);
+		panel.add(addJob, BorderLayout.SOUTH);
 		return panel;
 	}
 

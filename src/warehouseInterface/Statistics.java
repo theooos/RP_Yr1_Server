@@ -4,10 +4,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Statistics
 {
 	private static DefaultTableModel tableModel;
+	private static double revenue;
+	private static int jobsDone, jobsCancelled;
 
 	public static JPanel draw()
 	{
@@ -15,8 +18,8 @@ public class Statistics
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
 		JLabel title = new JLabel("Warehouse Interface");
-		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 28));
-		title.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
+		title.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 
 		tableModel = new DefaultTableModel(new String[] { "Revenue made", "Jobs done", "Jobs cancelled" }, 1);
 		JTable table = new JTable(tableModel) {
@@ -35,7 +38,7 @@ public class Statistics
 
 		panel.add(title);
 		panel.add(new JScrollPane(table));
-		panel.add(Box.createRigidArea(new Dimension(0, 20)));
+		panel.add(Box.createRigidArea(new Dimension(0, 30)));
 		panel.add(new JLabel(new ImageIcon("res/1.1 Logo.png")));
 		panel.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
 		return panel;
@@ -43,16 +46,19 @@ public class Statistics
 
 	public static void increaseRevenue(double amount)
 	{
-
+		revenue += amount;
+		tableModel.setValueAt(String.format("%.2f", revenue), 0, 0);
 	}
 
 	public static void jobDone()
 	{
-
+		jobsDone++;
+		tableModel.setValueAt(jobsDone, 0, 1);
 	}
 
 	public static void jobCancelled()
 	{
-
+		jobsCancelled++;
+		tableModel.setValueAt(jobsCancelled, 0, 2);
 	}
 }
