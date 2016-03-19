@@ -3,7 +3,10 @@ package warehouseInterface;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import Objects.AllRobots;
+import Objects.Direction;
 import Objects.WarehouseMap;
+import Objects.Sendable.RobotInfo;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -33,6 +36,11 @@ public class Display
 		frame.add(GridMap.createGrid(grid));
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
+		
+		AllRobots.addRobot(new RobotInfo("Tay Tay", new Point(5, 7)));
+		AllRobots.addRobot(new RobotInfo("Alfonso", new Point(5, 0), Direction.SOUTH));
+		AllRobots.addRobot(new RobotInfo("John Cena", new Point(0, 4), Direction.WEST));
+		AllRobots.addRobot(new RobotInfo("Donaldihno", new Point(11, 4), Direction.EAST));
 		frame.setVisible(true);
 
 //		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
