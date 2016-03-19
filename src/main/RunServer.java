@@ -44,11 +44,11 @@ public class RunServer extends Thread {
 		//AllPuppets.addPuppet(tay);
 		
 		//// Creating Puppet
-		//Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-		//AllPuppets.addPuppet(alfonso);
+		Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+		AllPuppets.addPuppet(alfonso);
 		
-		Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
-		AllPuppets.addPuppet(johnCena);  
+		//Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
+		//AllPuppets.addPuppet(johnCena);  
 		
 		//// Setting up the WarehouseInterface (Artur)
 		setUpWarehouse();

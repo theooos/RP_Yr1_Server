@@ -112,32 +112,36 @@ public class RouteExecution extends Thread {
 						if(this.getJob().dropOff.equals(this.getRobotLocation(name)))
 						{
 							//reached drop off
-							AllRobots.getRobot(name).droppingOff=true;
-							
-							AllPuppets.send(name,new DropOffPoint((int)this.getJob().dropOff.getX(),(int)this.getJob().dropOff.getY()));
-						}else{
-							Direction facingDir=this.getRobotFacingDirection(name);
-							Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
-							
-							Move nextmove=this.getMove(facingDir, moveDir,name);
-							if(nextmove==null)System.out.println("error generating the move object");
-							else
+							if(!AllRobots.getRobot(name).droppingOff)
 							{
-								//send the move to the server
-								AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
-	
-	
-	
-								AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+								AllRobots.getRobot(name).droppingOff=true;
 								
-								AllPuppets.send(name,nextmove);
-	
-								AllRobots.getRobot(name).waitingForMoveReport=true;					
-								done=false;
-								System.out.println("sent next move: "+ nextmove.toString());
-								
+								AllPuppets.send(name,new DropOffPoint((int)this.getJob().dropOff.getX(),(int)this.getJob().dropOff.getY()));
 							}
-							
+						}else{
+							if(this.getTaskMoveIndex(name)<this.getCurrentTask(name).size()){
+								Direction facingDir=this.getRobotFacingDirection(name);
+								Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+								
+								Move nextmove=this.getMove(facingDir, moveDir,name);
+								if(nextmove==null)System.out.println("error generating the move object");
+								else
+								{
+									//send the move to the server
+									AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
+		
+		
+		
+									AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+									
+									AllPuppets.send(name,nextmove);
+		
+									AllRobots.getRobot(name).waitingForMoveReport=true;					
+									done=false;
+									System.out.println("sent next move: "+ nextmove.toString());
+									
+								}
+							}
 							
 						}
 					}else{
@@ -246,10 +250,12 @@ public class RouteExecution extends Thread {
 						{
 							AllRobots.getRobot(name).pickingUp=false;
 							
+							AllRobots.getRobot(name).currTaskIndex++;
+							/*
 							if(AllRobots.getRobot(name).currTaskIndex+1<AllRobots.getRobot(name).currJob.getNumOfTasks())
 							{
-								AllRobots.getRobot(name).currTaskIndex++;
-							}
+								
+							}*/
 							this.setHasATask(name, false);
 							System.out.println("robot completed task");
 						}
