@@ -1,27 +1,25 @@
 package main;
 
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import routeExecution.RouteExecution;
-import warehouseInterface.GridMap;
-import warehouseInterface.JobTable;
-import warehouseInterface.RobotTable;
-import warehouseInterface.Statistics;
 import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.WarehouseMap;
 import Objects.Sendable.CompleteReport;
-import Objects.Sendable.Move;
 import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
 import jobInput.JobProcessor;
 import networking.Puppet;
+import routeExecution.RouteExecution;
+import warehouseInterface.GridMap;
+import warehouseInterface.JobTable;
+import warehouseInterface.RobotTable;
+import warehouseInterface.Statistics;
 
 /**
  * The main class to run all the server side code
