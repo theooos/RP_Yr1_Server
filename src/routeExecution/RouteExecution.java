@@ -20,6 +20,7 @@ import jobSelection.Selection;
 import routePlanning.pathFinding.PathFinding;
 import warehouseInterface.GridMap;
 import warehouseInterface.JobTable;
+import warehouseInterface.Statistics;
 
 
 /*
@@ -33,6 +34,7 @@ public class RouteExecution extends Thread {
 	private int nrOfRobots=0;
 	private PathFinding pathfinder;
 	private PriorityQueue<Job> priorityQueue;
+	private int time=0;
 
 	public RouteExecution( int nrOfRobots,WarehouseMap map)
 	{
@@ -212,7 +214,7 @@ public class RouteExecution extends Thread {
 
 			//commands have been sent now to wait for movereports
 			
-			
+			boolean timepassed=false;
 			while(!done)
 			{
 				done=true;
@@ -231,14 +233,15 @@ public class RouteExecution extends Thread {
 								//if(AllRobots.getRobot(name).currDirectionsIndex<AllRobots.getRobot(name).directions.size())
 								AllRobots.getRobot(name).currDirectionsIndex++;
 								AllRobots.getRobot(name).hasMoved=false;
-								System.out.println("robot has moved");
+								//System.out.println("robot has moved");
+								timepassed=true;
 							}else done=false;
 						}
 					}
 				}
 				
 			}
-
+			if(timepassed)time++;
 
 			// check if any of the robots have picked up their items			
 			for(int ir=0;ir<nrOfRobots;ir++)
@@ -290,6 +293,7 @@ public class RouteExecution extends Thread {
 						if(this.finishedDropingItems(name))
 						{
 							//job complete!!
+							this.increaseReward();
 							System.out.println("job complete");
 							this.initVariables(name);
 							//notify whoever needs to be notified about the fact that the job is complete
@@ -442,6 +446,11 @@ public class RouteExecution extends Thread {
 
 	}
 
+	private void increaseReward()
+	{
+		Statistics.increaseRevenue(this.getJob().totalReward);
+	}
+	
 	private SingleTask getTask(String name)
 	{
 		int index=AllRobots.getRobot(name).currTaskIndex;
@@ -560,9 +569,8 @@ public class RouteExecution extends Thread {
 		return AllRobots.getRobot(name).currTaskIndex;
 	}
 
-	private int GetTime(){
-		return 0;
-		//TODO
+	public int GetTime(){
+		return this.time;
 	}
 
 	private Vector<Direction> getNextTask(String name)

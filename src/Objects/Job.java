@@ -26,6 +26,7 @@ public class Job {
 	private int jobid;
 	private int distanceToTravel;
 	public Point dropOff;
+	public double totalReward;
 
 	/**
 	 * Create an empty job
