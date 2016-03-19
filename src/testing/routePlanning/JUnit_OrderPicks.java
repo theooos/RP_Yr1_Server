@@ -60,11 +60,6 @@ public class JUnit_OrderPicks {
 	@Test
 	public void test() {
 		
-		// Drop-off point should currently be 4,7
-		assertEquals(dropOff, new Point(4,7));
-		
-		order = new OrderPicks(taskList, dropPoints, map);
-		
 		System.out.println(order.orderedItems);
 		
 	}
