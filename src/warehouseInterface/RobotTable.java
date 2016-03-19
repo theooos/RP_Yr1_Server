@@ -53,7 +53,7 @@ public class RobotTable
 	{
 		for(int i = 0; i < tableModel.getRowCount(); i++)
 		{
-			if(tableModel.getValueAt(i, 0).equals(robot))
+			if(String.valueOf(tableModel.getValueAt(i, 0)).equals(robot))
 			{
 				tableModel.setValueAt(status, i, 1);
 				break;

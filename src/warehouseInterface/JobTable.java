@@ -3,6 +3,7 @@ package warehouseInterface;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import routeExecution.RouteExecution;
 import Objects.Job;
 import Objects.Sendable.SingleTask;
 import jobInput.JobProcessor;
@@ -16,20 +17,20 @@ public class JobTable
 	private static DefaultTableModel tableModel;
 	private static JPanel panel;
 
-	public static JPanel draw()
+	public static JPanel draw(RouteExecution routeExec)
 	{
 		panel = new JPanel(new BorderLayout());
 		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
 		activeJobs = Display.createTable(tableModel);
 
 		//JButton addJob = new JButton("Add a job");
-		//addJob.addActionListener(e -> Statistics.increaseRevenue(0.57));
+		//addJob.addActionListener(e -> new AddJob());
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
 		viewInfo.addActionListener(e -> viewJobInfo((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0)));
 		JMenuItem cancelJob = new JMenuItem("Cancel this job");
-		cancelJob.addActionListener(e -> cancelJob((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0), (String) activeJobs.getValueAt(activeJobs.getSelectedRow(), 2)));
+		cancelJob.addActionListener(e -> cancelJob((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0), (String) activeJobs.getValueAt(activeJobs.getSelectedRow(), 2), routeExec));
 		popupMenu.add(viewInfo);
 		popupMenu.add(cancelJob);
 		activeJobs.setComponentPopupMenu(popupMenu);
@@ -51,10 +52,12 @@ public class JobTable
 		RobotTable.updateStatus(robot, "Received job offer (ID " + job + ")");
 	}
 
-	private static void cancelJob(int jobID, String robot)
+	private static void cancelJob(int jobID, String robot, RouteExecution routeExec)
 	{
 		tableModel.removeRow(activeJobs.getSelectedRow());
 		RobotTable.updateStatus(robot, "Ready");
+		JobProcessor.getJob(jobID).cancel();
+		routeExec.initVariables(robot);
 		JOptionPane.showMessageDialog(panel, "Job " + jobID + " cancelled.");
 	}
 
@@ -63,7 +66,20 @@ public class JobTable
 		Job job = JobProcessor.getJob(jobID);
 		String tasks = "";
 		for(SingleTask task : job.getTasks())
-			tasks += "(" + task.getItemID() + ", " + task.getQuantity() + ") ";
+			if(!task.getItemID().equals("dropOff"))
+				tasks += "(" + task.getItemID() + ", " + task.getQuantity() + ") ";
 		JOptionPane.showMessageDialog(panel, "Job ID: " + jobID + "\nTasks: " + tasks + "\nCancellation probability: " + job.getCancellationProb() + "\nTotal weight: " + job.getTotalWeight());
+	}
+	
+	public static void updateStatus(int jobID, String status)
+	{
+		for(int i = 0; i < tableModel.getRowCount(); i++)
+		{
+			if((int)(tableModel.getValueAt(i, 0)) == jobID)
+			{
+				tableModel.setValueAt(status, i, 3);
+				break;
+			}
+		}
 	}
 }

@@ -3,6 +3,7 @@ package warehouseInterface;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import routeExecution.RouteExecution;
 import Objects.AllRobots;
 import Objects.Direction;
 import Objects.WarehouseMap;
@@ -32,7 +33,7 @@ public class Display
 
 		WarehouseMap grid = new WarehouseMap("res/drops.csv");
 		
-		frame.add(JobTable.draw());
+		frame.add(JobTable.draw(new RouteExecution(1, grid)));
 		frame.add(GridMap.createGrid(grid));
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
