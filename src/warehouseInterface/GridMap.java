@@ -80,7 +80,7 @@ public class GridMap
 					if(robot.getDirection() == Direction.NORTH || robot.getDirection() == Direction.SOUTH)
 					{
 						g2d.drawRect((GRID_WIDTH - robot.getPosition().x) * xScale - 7, (robot.getPosition().y + 1) * yScale - 14, 14, 28);
-						if(robot.getDirection() == Direction.NORTH)
+						if(robot.getDirection() == Direction.SOUTH)
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 22);
 						else
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 22);
