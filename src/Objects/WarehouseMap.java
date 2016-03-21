@@ -28,12 +28,12 @@ public class WarehouseMap {
      * @param gridHeight The warehouse height.
      * @param doFile The file containing the drop off locations.
      */
-    public WarehouseMap(int gridWidth, int gridHeight, String doFile) {
+    public WarehouseMap(int gridWidth, int gridHeight) {//, String doFile) {
         
-        this.gridWidth = gridWidth;
+       this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         grid = new boolean[gridWidth][gridHeight];
-
+ /*
         // Read dropoff locations
         Optional<List<String>> dos = JobProcessor.readFile(doFile);
         
@@ -47,7 +47,7 @@ public class WarehouseMap {
             String[] doArr = doPoints.replaceAll("\\s","").split(",");
             Point p = new Point(Integer.parseInt(doArr[0]), Integer.parseInt(doArr[1]));
             dropoffs.add(p);
-        }
+        }*/
         
         ///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
         //Set up & populate map

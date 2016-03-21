@@ -1,5 +1,4 @@
 package routePlanning.tests;
-import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,120 +6,192 @@ import java.awt.Point;
 import java.util.Vector;
 
 import Objects.Direction;
+import Objects.GlobalClock;
 import Objects.WarehouseMap;
 import Objects.Sendable.RobotInfo;
+import routePlanning.dataStructures.Reservation;
+import routePlanning.dataStructures.RobotsReservations;
 import routePlanning.pathFinding.PathFinding;
 import routePlanning.pathFinding.SimpleDistance;
 
-/**
- * Contains my own tests and as a result guidance for usage of route planning classes & methods
- * @author Szymon
- *
- */
-public class Test {
+import java.util.Random;
 
-	private WarehouseMap map = new WarehouseMap(10, 10);
+/** Contains my own tests and as a result guidance for usage of route planning
+ * classes & methods
+ * 
+ * @author Szymon */
+public class Test {
+	private int mapWidth = 3;
+	private int mapHeight = 3;
+	private int noOfRobots = 6;
+	private WarehouseMap map = new WarehouseMap(mapWidth, mapHeight);
 	private List<Point> obstacles;
 	private RobotInfo stationaryRobot;
 	private Point stationaryRobotPoint;
+	private Vector<RobotInfo> testRobots = new Vector<RobotInfo>(0);
+	private PathFinding pathFinding;
+	private Vector<Direction> pathSequence;
+	private Random randomGenerator = new Random();
+	
+	private int timeToMakeNewPaths = 10;
 
-	public boolean DrawMap(Point robot1Location, Point robot2Location) {
-		if(robot1Location == null || robot2Location == null)
-			return true;//path complete
+	public boolean newPathTimer() {
+		if(timeToMakeNewPaths > 0){
+			timeToMakeNewPaths--;
+			return false;
+		}
+		else {
+			timeToMakeNewPaths = 3;
+			return true;
+		}
+	}
+	
+	public void DrawMap() {
+		RobotInfo currentRobot;
+		String[][] displayMap = new String[mapWidth][mapHeight];
 		
-		for (int j = 0; j < 10; j++){
-			for (int i = 0; i < 10; i++){
-				if(i == robot1Location.x && j == robot1Location.y){
-					System.out.print("  R1  ");
-					continue;
-				}
-				else if (i == robot2Location.x && j == robot2Location.y){
-					System.out.print("  R2  ");
-					continue;
-				}
-				else if (i == stationaryRobotPoint.x && j == stationaryRobotPoint.y){
-					System.out.print("  R3  ");
-					continue;
-				}
-				boolean isObstacle = map.isObstacle(i, j);
-				if(isObstacle){
-					System.out.print("      ");
-					continue;
-				}
-				System.out.print(isObstacle + " ");
+		for(int x = 0; x < mapWidth; x++){
+			for(int y = 0; y < mapHeight; y++){
+				displayMap[x][y] = map.isObstacle(x, y) ? "      " : "  -   ";
+			}
+		}
+		
+		int tempX;
+		int tempY;
+		for (int z = 0; z < testRobots.size(); z++) {
+			currentRobot = testRobots.get(z);
+			tempX = (int) currentRobot.getPosition().getX();
+			tempY = (int) currentRobot.getPosition().getY();
+			System.out.println("R" + currentRobot.getID() + "  " + tempX + ", " + tempY);
+			displayMap[tempX][tempY] = "  R" + currentRobot.getID();
+			displayMap[tempX][tempY] += currentRobot.getID() > 9 ? " " : "  ";
+			currentRobot.goToNextNode();
+		}
+		
+		for(int y = 0; y < mapHeight; y++){
+			for(int x = 0; x < mapWidth; x++){
+				System.out.print(displayMap[x][y]);
 			}
 			System.out.println();
 			System.out.println();
 		}
+	}
+
+	public void assignRandomPaths() {
+		Point startNode = null;
+		Point endNode = null;
 		
-		return false;
+		for (int z = 0; z < testRobots.size(); z++) {
+			RobotInfo currentRobot = testRobots.get(z);
+			
+			startNode = new Point((int) currentRobot.getPosition().getX(),(int) currentRobot.getPosition().getY());
+
+			do{
+				endNode = new Point(randomGenerator.nextInt(mapWidth), randomGenerator.nextInt(mapHeight));
+			}while(map.isObstacle(endNode));//Do not give paths with destination inside walls
+			
+			pathSequence = pathFinding.GetPath(startNode, endNode, currentRobot);
+			
+			if(pathSequence == null){//E.g. tried to get path from currentNode to currentNode
+									//OR  tried to get path to reserved node in which a robot stands stationary for long and doesnt move out of the way
+				continue;
+			}
+			
+			currentRobot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
+		}
 	}
 	
 	public static void main(String[] args) {
 		Test test = new Test();
-		
-		test.obstacles = new ArrayList<Point>();
+
+		/*test.obstacles = new ArrayList<Point>();
 		test.obstacles.add(new Point(6, 4));
 		test.obstacles.add(new Point(5, 4));
 		test.obstacles.add(new Point(4, 4));
 		test.obstacles.add(new Point(3, 4));
-		
+
 		test.obstacles.add(new Point(7, 4));
 		test.obstacles.add(new Point(7, 5));
 		test.obstacles.add(new Point(7, 6));
 		test.obstacles.add(new Point(7, 7));
-		
+
 		test.obstacles.add(new Point(6, 7));
 		test.obstacles.add(new Point(5, 7));
 		test.obstacles.add(new Point(4, 7));
 		test.obstacles.add(new Point(3, 7));
-		
-		test.map.setObstacles(test.obstacles);
 
-		int time = 0;
-		
-		RobotInfo robot0 = new RobotInfo(0, test.map);
+		test.map.setObstacles(test.obstacles);*/
+
+		/*RobotInfo robot0 = new RobotInfo(0, test.map);
 		RobotInfo robot1 = new RobotInfo(1, test.map);
 		test.stationaryRobot = new RobotInfo(2, test.map);
-		
-		PathFinding pathFinding = new PathFinding(test.map);
-		pathFinding.addRobot(robot0);
-		pathFinding.addRobot(robot1);
-		pathFinding.addRobot(test.stationaryRobot);
-		Vector<Direction> pathSequence;// = pathFinding.GetPath(startNode, endNode, time, robot);
-		
-		test.stationaryRobot.SetUpStationary(new Point(4, 6));
-		test.stationaryRobotPoint = new Point(4, 6);
-		
+		test.testRobots.add(robot0);
+		test.testRobots.add(robot1);
+		test.testRobots.add(test.stationaryRobot);
+*/
+		test.pathFinding = new PathFinding(test.map);
+		/*test.pathFinding.addRobot(robot0);
+		test.pathFinding.addRobot(robot1);
+		test.pathFinding.addRobot(test.stationaryRobot);
+
+		test.stationaryRobot.SetUpStationary(new Point(0, 0));
 		Point startNode = new Point(1, 0);
-		Point endNode = new Point(6, 5);
-		
-		//Simple distance example
+		Point endNode = new Point(1, 2);*/
+
+		/*//Simple distance example
 		SimpleDistance simpleDistance = new SimpleDistance(test.map);
 		System.out.println("SimpleDistance No of steps: " + simpleDistance.GetDistnace(startNode, endNode));
+
+		test.pathSequence = test.pathFinding.GetPath(startNode, endNode, robot0);
+		robot0.SetUpPath(startNode, test.pathSequence, test.pathFinding.getTimePosReservations());
 		
-		pathSequence = pathFinding.GetPath(startNode, endNode, time, robot0);
-		robot0.SetUpPath(startNode, pathSequence, pathFinding.getTimePosReservations());
+		startNode = new Point(0, 1);
+		endNode = new Point(1, 2);
+
+		test.pathSequence = test.pathFinding.GetPath(startNode, endNode, robot1);
+		robot1.SetUpPath(startNode, test.pathSequence, test.pathFinding.getTimePosReservations());
+		*/
 		
-		startNode = new Point(1, 1);
-		endNode = new Point(6, 6);
+		int startX = 0;
+		int startY = 0;
+		Point startNode = new Point(startX, startY);
+		Point endNode = new Point(2, 2);
+		RobotInfo tempRobot;
+		int robotID = 0;
+		for(int i = 0; i < test.noOfRobots; i++){
+			startNode = new Point(startX++, startY);
+			if(startX > test.mapWidth - 1){
+				startX = 0;
+				startY++;
+			}
+			
+			tempRobot = new RobotInfo(robotID++, test.map, startNode);
+			test.testRobots.add(tempRobot);
+			test.pathFinding.addRobot(tempRobot);
+		}
 		
-		pathSequence = pathFinding.GetPath(startNode, endNode, time, robot1);
-		robot1.SetUpPath(startNode, pathSequence, pathFinding.getTimePosReservations());
+		//Cannot assign paths to robots straight after creating each one
+		for(int i = 0; i < test.noOfRobots; i++){
+			tempRobot = test.testRobots.get(i);
+			test.pathSequence = test.pathFinding.GetPath(tempRobot.getPosition(), endNode, tempRobot);
+			tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());
+		}
 		
-		while(true){
+		while (true) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			if(test.DrawMap(robot0.goToNextNode(), robot1.goToNextNode())){
-				break;//Path Complete
+			////////////////////////////////////////////IMPORTANT/////////////////////////////////////////////////////////////////////////
+			//IF ROBOT HAS NO RESERVED NEXT NODE THEN DO NOT MOVE HIM< HE MAY BE WAITING FOR OTHER ROBOTS TO PASS
+			if(test.newPathTimer()){
+				test.assignRandomPaths();
 			}
-			
-			time++;
+			test.DrawMap();
+
+			GlobalClock.increaseTime();//All Robots moved >> increase the time by 1
 			System.out.println("////////////////////////////////////////////////////////////////////////////////////////");
 		}
 	}
