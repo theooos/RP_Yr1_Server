@@ -23,6 +23,10 @@ public class ProbDistribution {
             probabilities[i] *= multiplier;
         }
     }
+    
+    public float[] getProbs() {
+    	return probabilities;
+    }
 
     private float sumOfProbs() {
         float sum = 0.0f;

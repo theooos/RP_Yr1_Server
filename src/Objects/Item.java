@@ -8,6 +8,7 @@ import java.awt.*;
  */
 public class Item {
 
+	private final String itemID;
 	private final Point location;
 	private final double reward;
 	private final double weight;
@@ -18,10 +19,19 @@ public class Item {
 	 * @param reward The reward for this item.
 	 * @param weight The weight for this item.
 	 */
-	public Item(Point location, double reward, double weight) {
+	public Item(String itemID, Point location, double reward, double weight) {
+		this.itemID = itemID;
 		this.location = location;
 		this.reward = reward;
 		this.weight = weight;
+	}
+	
+	/**
+	 * Get the item ID.
+	 * @return The item ID.
+	 */
+	public String getItemID() {
+		return itemID;
 	}
 
 	/**
