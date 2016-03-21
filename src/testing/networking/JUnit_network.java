@@ -1,5 +1,7 @@
 package testing.networking;
 
+import static org.junit.Assert.*;
+
 import java.awt.Point;
 
 import org.junit.After;
@@ -15,7 +17,7 @@ import networking.PuppetListener;
 public class JUnit_network {
 
 	Boolean alive;
-	SingleTask dummyReturn;
+	public static SingleTask dummyReturn;
 
 	@Before
 	public void setUp() throws Exception {
@@ -42,22 +44,44 @@ public class JUnit_network {
 		
 		// Robot name
 		String R_tay = "TayTay";
+		String R_a = "Alfonso";
 		
 		// Send the object
-		AllPuppets.send(R_tay, dummyTask);
 		
-		
-		// Waits for the object to be returned
-		while(dummyReturn.equals(null)) {
+		/*
+		while(!AllRobots.checkExists(R_a)) {
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+		}
+		*/
+		AllPuppets.send(R_tay, dummyTask);
+		System.out.println("TASK SENT");
+		
+		
+		// Waits for the object to be returned
+		while(dummyReturn == null) {
+			try {
+				Thread.sleep(100);
+				System.out.println("WAITING FOR OBJECT");
+				//AllPuppets.send(R_tay, dummyTask);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} // Sleeps only the thread, where as delay delays the whole code
-			System.out.println(dummyReturn.toString());
 		}
 		
+		System.out.println("FINISHED");
+		//System.out.println(dummyReturn.toString());
+		
+		assertTrue(dummyTask.toString().equals(dummyReturn.toString()));
+		assertTrue(dummyTask.equals(dummyReturn));
+		System.out.println(dummyTask.toString());
+		System.out.println(dummyReturn.toString());
+		System.out.println("WHOSE TAYLOR SWIFT ANYWAY?");
 
 	}
 

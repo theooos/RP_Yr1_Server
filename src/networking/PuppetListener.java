@@ -65,19 +65,13 @@ public class PuppetListener extends Thread {
 			else if(type.equals("SingleTask")){
 				newObj = new SingleTask((String) parameters[0], (int) parameters[1] , new Point((int) parameters[2], (int) parameters[3]));
 			}
-			///////
-			else if(type.equals("MoveReport")){
-				newObj = new MoveReport((boolean) parameters[0]);
-			}
-			else if(type.equals("CompleteReport")){
-				newObj = new CompleteReport((boolean) parameters[0], (boolean) parameters[1]);
-			}
-			
+			///////	
 			if(newObj == null){
 				out("Error creating new object. Didn't know how to deal with: " + type);
 			}
 			else {
 				addComm(newObj);
+				System.out.println("ADDED " + newObj.toString());
 			}
 		}
 	}

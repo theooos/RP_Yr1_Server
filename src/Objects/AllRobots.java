@@ -42,7 +42,7 @@ public class AllRobots {
 	public synchronized static void addRobot(RobotInfo newBot) {
 		robots.add(newBot);
 		RobotTable.addRobot(newBot);
-		GridMap.refresh();
+		//GridMap.refresh();
 	}
 
 	/**

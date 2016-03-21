@@ -36,7 +36,7 @@ public class RobotTable
 
 	public static void addRobot(RobotInfo robot)
 	{
-		tableModel.addRow(new Object[] { robot.getName(), "Ready" });
+		//tableModel.addRow(new Object[] { robot.getName(), "Ready" });
 	}
 
 	public static void removeRobot(RobotInfo robot)

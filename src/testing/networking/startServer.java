@@ -20,12 +20,12 @@ public class startServer extends Thread {
 		//// Puppets
 		Puppet tay = new Puppet("TayTay", "0016531AF6E5");
 		AllPuppets.addPuppet(tay);
-		//	Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
-		//	AllPuppets.addPuppet(johnCena);  
+			//Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
+			//AllPuppets.addPuppet(johnCena);  
 
 		//// Creating Puppet
-		//Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-		//AllPuppets.addPuppet(alfonso);
+//		Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+//		AllPuppets.addPuppet(alfonso);
 
 		alive = true;
 	}
@@ -37,21 +37,23 @@ public class startServer extends Thread {
 			SendableObject comm = null; 			
 			while((comm = pup.popCommand()) != null)
 			{
+				System.out.println("LOOPING");
 				if(comm instanceof SingleTask){
 					//routeExec.addMoveReport(pup.name(), (MoveReport)comm);
 					//System.out.println("GOT REPORT: " + ((MoveReport) comm).toString());
+					JUnit_network.dummyReturn = (SingleTask) comm;
 					System.out.println("GOT SINGLETASK! SENDING TO JUNIT CLASS");
 					JUnit_network.getItemBack(comm);
-				}
-				else if(comm instanceof CompleteReport){
-					//routeExec.addCompleteReport(pup.name(), comm);
-					JobTable.updateStatus(AllRobots.getRobot(pup.name()).currJob.getJobID(), "Completed");
+				
+					
+					//J
 				}
 				else if(comm instanceof RobotInfo){
 					/* Will only be called when a robot has started up, and had it's
 					 * input given to it by the operator.
 					 */
 					AllRobots.addRobot((RobotInfo)comm);
+					out("robot added");
 				}
 			}
 		}

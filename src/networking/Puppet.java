@@ -34,10 +34,10 @@ public class Puppet extends Thread {
 			listener = new PuppetListener(fromRobot, name);
 			listener.start();
 			
-			Thread.sleep(5000);
+			RobotInfo info = new RobotInfo(name);
+			send(info);
 			
-			RobotInfo ri = new RobotInfo(name);
-			send(ri);
+			Thread.sleep(5000);
 		}
 		catch (NXTCommException | InterruptedException e) {
 			out("Failed to connect with: " + name);
