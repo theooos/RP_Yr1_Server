@@ -135,7 +135,7 @@ public class PathFinding {
 			if(current.equals(goalNode)){
 				Vector<Direction> tempPathDirections = ReconstructPath(goalNode, robot, time);
 				if(!RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()) && (tempPathDirections.size() < bestPathDirections.size() || bestPathDirections.size() == 0)){
-					System.out.println("isReservedForStopping : " + goalNode + " time " + timePosReservations.getLastReservedTime() + " " + RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()));
+					//System.out.println("isReservedForStopping : " + goalNode + " time " + timePosReservations.getLastReservedTime() + " " + RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()));
 					bestPathDirections = tempPathDirections;
 					bestTimePosReservations = timePosReservations;//Best = current
 				}
@@ -163,8 +163,7 @@ public class PathFinding {
 					neighbourNode = map.getRightNode(current);
 					break;
 				}
-				//if(neighbourNode != null)
-				//System.out.println("R"+ robot.getID() + " Is reserved " + neighbourNode + " " + RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1));
+				
 				//null - Tried to find neighbour out of bounds vvv
 				if(neighbourNode == null 
 					|| explored.contains(neighbourNode) 
@@ -339,13 +338,13 @@ public class PathFinding {
 				}
 				timePosReservations.setGreatestReservedTime(time + d);//Dont need to add 1 since at the end of the loop d is one more than the condition
 				timePosReservations.setFirstReservedTime(time + 1);
-				System.out.println("R" + robot.getID() + " has reserved last node " + nodePath.get(d - 1) + " at time " + (time + d));
+				//System.out.println("R" + robot.getID() + " has reserved last node " + nodePath.get(d - 1) + " at time " + (time + d));
 				assert(goalNode.equals(nodePath.get(d - 1)));
-				System.out.println("isReservedForStopping : " + nodePath.get(d - 1) + " time " + (time + d) + " " + RobotsReservations.isReservedForStopping(nodePath.get(d - 1), time + d));
+				//System.out.println("isReservedForStopping : " + nodePath.get(d - 1) + " time " + (time + d) + " " + RobotsReservations.isReservedForStopping(nodePath.get(d - 1), time + d));
 				return directions;
 			}
 		}
-		System.out.println("Goal not found in path trace \nPath trace: " + pathTrace + "\n goal node: " + goalNode + "\nrobot(that wants to get there): " + robot.getID());
+		//System.out.println("Goal not found in path trace \nPath trace: " + pathTrace + "\n goal node: " + goalNode + "\nrobot(that wants to get there): " + robot.getID());
 		return null;
 	}
 }

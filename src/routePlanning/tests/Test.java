@@ -60,12 +60,30 @@ public class Test {
 		int tempY;
 		for (int z = 0; z < testRobots.size(); z++) {
 			currentRobot = testRobots.get(z);
+			currentRobot.goToNextNode();
 			tempX = (int) currentRobot.getPosition().getX();
 			tempY = (int) currentRobot.getPosition().getY();
-			System.out.println("R" + currentRobot.getID() + "  " + tempX + ", " + tempY);
+			//System.out.println("R" + currentRobot.getID() + "  " + tempX + ", " + tempY);
 			displayMap[tempX][tempY] = "  R" + currentRobot.getID();
 			displayMap[tempX][tempY] += currentRobot.getID() > 9 ? " " : "  ";
-			currentRobot.goToNextNode();
+			
+			if(currentRobot.getID() == 10)
+				System.out.println("R10 pos " + currentRobot.getPosition());
+			for (int z2 = 0; z2 < testRobots.size(); z2++) {
+				if(!currentRobot.equals(testRobots.get(z2))){
+					if(currentRobot.getPosition().equals(testRobots.get(z2).getPosition()) == true){
+						for(int y = 0; y < mapHeight; y++){
+							for(int x = 0; x < mapWidth; x++){
+								System.out.print(displayMap[x][y]);
+							}
+							System.out.println();
+							System.out.println();
+						}
+						System.out.println("R" + currentRobot.getID() + " went into R" + testRobots.get(z2).getID());
+						//assert(currentRobot.getPosition().equals(testRobots.get(z2).getPosition()) == false);
+					}
+				}
+			}
 		}
 		
 		for(int y = 0; y < mapHeight; y++){
@@ -230,26 +248,61 @@ public class Test {
 		
 		//Cannot assign paths to robots straight after creating each one
 		
+		/*
+		 * Stationary robot
+		 */
+		startX = 9;
+		startY = 9;
+		
+		startNode = new Point(startX, startY);
+		tempRobot = new RobotInfo(robotID++, test.map, startNode);
+		
+		test.testRobots.add(tempRobot);
+		test.pathFinding.addRobot(tempRobot);
+		tempRobot.SetUpStationary(startNode);
 		
 		while (true) {
 			try {
-				Thread.sleep(200);
+				Thread.sleep(600);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			////////////////////////////////////////////IMPORTANT/////////////////////////////////////////////////////////////////////////
 			//IF ROBOT HAS NO RESERVED NEXT NODE THEN DO NOT MOVE HIM< HE MAY BE WAITING FOR OTHER ROBOTS TO PASS
+			//CURRENTLY THERE IS A BUG IF A ROBOT IS SENT TO AN OCCUPIED LOCATION
 			if(test.newPathTimer()){
 				//test.assignRandomPaths();
 			}
 			
-			if(test.testRobots.get(test.testRobots.size() - 1).getPosition().getX() == test.mapWidth - 1){
+			if(test.testRobots.get(9).getPosition().getX() == test.mapWidth - 1){
 				test.assignPathsToStart();
 			}
 			
-			if(test.testRobots.get(test.testRobots.size() / 2).getPosition().getX() == 0){
+			if(test.testRobots.get(5).getPosition().getX() == 0){
 				test.assignPathsToEnd();
+			}
+			
+			if(GlobalClock.getCurrentTime() == 5 || GlobalClock.getCurrentTime() == 30){
+				goalX = 3;
+				goalY = 3;
+				
+				tempRobot = test.testRobots.get(10);
+				
+				goalNode = new Point(goalX, goalY);
+				test.pathSequence = test.pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
+				tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());
+			}
+			
+			if(GlobalClock.getCurrentTime() == 20){
+				goalX = 9;
+				goalY = 9;
+				
+				tempRobot = test.testRobots.get(10);
+				
+				goalNode = new Point(goalX, goalY);
+				test.pathSequence = test.pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
+				tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());
 			}
 			
 			test.DrawMap();
