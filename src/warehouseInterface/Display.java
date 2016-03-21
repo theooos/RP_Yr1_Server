@@ -27,6 +27,9 @@ public class Display
 {
 	public static void main(String[] args)
 	{
+		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
+		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		
 		JFrame frame = new JFrame("Warehouse Interface");
 		frame.setLayout(new GridLayout(2, 2));
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -48,20 +51,11 @@ public class Display
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
 		
-		AllRobots.addRobot(new RobotInfo("Tay Tay", new Point(5, 7)));
+		AllRobots.addRobot(new RobotInfo("TayTay", new Point(5, 7)));
 		//AllRobots.addRobot(new RobotInfo("Alfonso", new Point(5, 0), Direction.SOUTH));
 		//AllRobots.addRobot(new RobotInfo("John Cena", new Point(0, 4), Direction.WEST));
 		//AllRobots.addRobot(new RobotInfo("Donaldihno", new Point(11, 4), Direction.EAST));
-		ArrayList<SingleTask> lol = new ArrayList<SingleTask>();
-		lol.add(new SingleTask("aa", 2, new Point(5, 0)));
-		lol.add(new SingleTask("bb", 2, new Point(7, 0)));
-		AllRobots.getRobot("Tay Tay").currJob = new Job(12345, lol);
-		AllRobots.getRobot("Tay Tay").isDoingJob = true;
-		//AllRobots.getRobot("Tay Tay").currTaskIndex = 1;
 		frame.setVisible(true);
-
-//		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
-//		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 	}
 
 	public static JTable createTable(DefaultTableModel tableModel)

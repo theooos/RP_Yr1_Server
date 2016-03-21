@@ -92,9 +92,9 @@ public class RouteExecution extends Thread {
 						}else{
 							
 							Vector<Direction> task=this.getNextTask(name);
-							System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
-							System.out.println("index1: "+this.getCurrentTaskIndex(name));
-							System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
+							//System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
+							//System.out.println("index1: "+this.getCurrentTaskIndex(name));
+							//System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
 							if(task!=null){
 								this.assignTask( task,name);
 							}
@@ -160,6 +160,7 @@ public class RouteExecution extends Thread {
 								System.out.println("reached Item");
 								AllRobots.getRobot(name).pickingUp=true;
 								AllPuppets.send(name,getTask(name));
+								
 								
 								/*
 								if(this.getCurrentTaskIndex(name)==AllRobots.getRobot(name).currJob.getNumOfTasks()-1)
@@ -302,9 +303,6 @@ public class RouteExecution extends Thread {
 							System.out.println("job complete");
 							JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Completed");
 							this.initVariables(name);
-							//notify whoever needs to be notified about the fact that the job is complete
-
-
 						}
 					}
 				}
@@ -590,11 +588,19 @@ public class RouteExecution extends Thread {
 			return new Vector<Direction>();
 		}else{
 			SingleTask nextTask=AllRobots.getRobot(name).currJob.getTaskAtIndex(getCurrentTaskIndex(name)).get();
+			if(nextTask!=null){
 			Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),nextTask.getLocation(), GetTime()+1, AllRobots.getRobot(name));
-			//System.out.println("got a task");
-
+			System.out.println("got a task");
+			
 			return path;
-		}
+		
+			}else{ 
+				System.out.println("task null");
+				return null;
+				
+				
+			}
+		}	
 	}
 
 	private Vector<Direction> getCurrentTask(String name)
@@ -703,8 +709,9 @@ public class RouteExecution extends Thread {
 	public void addCompleteReport(String name, CompleteReport comm) {
 		if(comm.wasCancelled())
 		{
-			//TODO job cancelled
-			this.initVariables(name);
+			JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Cancelled");
+			JobProcessor.getJob(AllRobots.getRobot(name).currJob.getJobID()).cancel();
+			initVariables(name);
 			return;
 		}
 		if(comm.getIsPickup()){

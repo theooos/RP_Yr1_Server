@@ -8,12 +8,14 @@ import javax.swing.WindowConstants;
 
 import Objects.AllPuppets;
 import Objects.AllRobots;
+import Objects.Job;
 import Objects.WarehouseMap;
 import Objects.Sendable.CompleteReport;
 import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
 import jobInput.JobProcessor;
+import jobSelection.Probability;
 import networking.Puppet;
 import routeExecution.RouteExecution;
 import warehouseInterface.GridMap;
@@ -36,6 +38,10 @@ public class RunServer extends Thread {
 		//// JobSelection (Fran & Brendan) -- Process the items
 		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
 		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		Probability p = new Probability(JobProcessor.getAllJobs().values(), JobProcessor.getAllItems().values());	
+		for(Job j : JobProcessor.getAllJobs().values()) {
+			 j.setCancellationProb(p.probabilityCancelled(j));
+	    }
 
 		//// Testing puppets, uncomment for experimentation
 
@@ -123,6 +129,10 @@ public class RunServer extends Thread {
 	 */
 	private void setUpWarehouse() {
 
+	//// Start RoutePlanning & RouteExecution (Szymon & Maria)
+		routeExec = new RouteExecution(1, map);
+		routeExec.start();
+		
 		JFrame frame = new JFrame("Warehouse Interface - 1.1");
 		frame.setLayout(new GridLayout(2, 2));
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -134,12 +144,6 @@ public class RunServer extends Thread {
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
 		frame.setVisible(true);
-
-		// This shouldn't be hardcoded, change later
-
-		//// Start RoutePlanning & RouteExecution (Szymon & Maria)
-		routeExec = new RouteExecution(1, map);
-		routeExec.start();
 	}
 
 	/**

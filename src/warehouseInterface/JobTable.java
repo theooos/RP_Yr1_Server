@@ -33,8 +33,8 @@ public class JobTable
 		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
 		activeJobs = Display.createTable(tableModel);
 
-		//JButton addJob = new JButton("Add a job");
-		//addJob.addActionListener(e -> new AddJob());
+		JButton cancelJobManually = new JButton("Cancel a job");
+		cancelJobManually.addActionListener(e -> cancelJobManually());
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");
@@ -52,8 +52,36 @@ public class JobTable
 		activeJobs.getColumnModel().getColumn(2).setPreferredWidth(100);
 
 		panel.add(new JScrollPane(activeJobs), BorderLayout.CENTER);
-		//panel.add(addJob, BorderLayout.SOUTH);
+		panel.add(cancelJobManually, BorderLayout.SOUTH);
 		return panel;
+	}
+
+	private static void cancelJobManually()
+	{
+		String jobID = (String) JOptionPane.showInputDialog("Type in the ID of the job which you wish to cancel:");
+		if(jobID != null)
+		{
+			if(jobID.matches("\\d+"))
+			{
+				if(JobProcessor.getJob(Integer.parseInt(jobID)) != null)
+				{
+					int parse = Integer.parseInt(jobID);
+					JobProcessor.getJob(parse).cancel();
+					Statistics.jobCancelled();
+					JOptionPane.showMessageDialog(panel, "Job (ID " + parse + ") cancelled.");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(panel, "Job with given ID doesn't exist!");
+					cancelJobManually();
+				}
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(panel, "ID must be an integer!");
+				cancelJobManually();
+			}
+		}
 	}
 
 	/**
@@ -75,7 +103,6 @@ public class JobTable
 	 */
 	private static void cancelJob(int jobID, String robot, RouteExecution routeExec)
 	{
-		//tableModel.removeRow(activeJobs.getSelectedRow());
 		updateStatus(jobID, "Cancelled");
 		RobotTable.updateStatus(robot, "Ready");
 		JobProcessor.getJob(jobID).cancel();

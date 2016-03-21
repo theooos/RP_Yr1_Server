@@ -76,7 +76,7 @@ public class GridMap
 				{
 					switch(robot.getName())
 					{
-						case "Tay Tay":
+						case "TayTay":
 							g2d.setColor(TAYTAY);
 							break;
 						case "John Cena":
