@@ -8,6 +8,7 @@ import java.util.Optional;
 
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
+import jobInput.JobProcessor;
 import main.RunServer;
 import main.Test;
 import routePlanning.orderPicks.OrderPicks;
@@ -33,12 +34,11 @@ public class Job {
 	 * @param jobid The ID of the job
 	 * @param items The items to add to the job
 	 */
-	public Job(int jobid, Map<String, Item> items) {
+	public Job(int jobid) {
 		this.tasks = new ArrayList<>();
 		this.cancelled = false;
 		this.ordered = false;
 		this.cancellationProb = 0.0f;
-		this.items = items;
 		this.jobid = jobid;
 	}
 
@@ -48,7 +48,7 @@ public class Job {
 	 * @param tasks The tasks in the job.
 	 * @param items The items for the job.
 	 */
-	public Job(int jobid, List<SingleTask> tasks, Map<String, Item> items) {
+	public Job(int jobid, List<SingleTask> tasks) {
 		this.tasks = tasks;
 		this.cancelled = false;
 		this.ordered = false;
@@ -171,8 +171,8 @@ public class Job {
 		for(SingleTask task : tasks)
 		{
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
-                //Item item = JobProcessor.getItem(task.getItemID());
+                //Item item = items.get(task.getItemID());
+                Item item = JobProcessor.getItem(task.getItemID());
                 numOfItems += task.getQuantity();
                 reward += item.getReward() * task.getQuantity();
             }
@@ -184,10 +184,11 @@ public class Job {
 
 	public double getTotalReward() {
 
-		double reward = 0f;
+		double reward = 0.0;
 		for(SingleTask task : tasks) {
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
+                //Item item = items.get(task.getItemID());
+                Item item = JobProcessor.getItem(task.getItemID());
                 reward += item.getReward() * task.getQuantity();
             }
 		}
@@ -207,7 +208,8 @@ public class Job {
 		for(SingleTask task : tasks)
 		{
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
+               
+                Item item = JobProcessor.getItem(task.getItemID());
                 reward += item.getReward() * task.getQuantity();
                 weight += item.getWeight() * task.getQuantity();
             }
@@ -227,7 +229,8 @@ public class Job {
 		for(SingleTask task : tasks)
 		{
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
+                
+                Item item = JobProcessor.getItem(task.getItemID());
                 totalweight = totalweight + (item.getWeight() * task.getQuantity());
             }
 		}
@@ -258,7 +261,7 @@ public class Job {
 	@Override
 	public String toString() {
 		return "Job [tasks=" + tasks + ", cancelled=" + cancelled + ", ordered=" + ordered + ", cancellationProb="
-				+ cancellationProb + ", items=" + items + ", jobid=" + jobid + ", distanceToTravel=" + distanceToTravel
+				+ cancellationProb + ", jobid=" + jobid + ", distanceToTravel=" + distanceToTravel
 				+ "]";
 	}   	
 }

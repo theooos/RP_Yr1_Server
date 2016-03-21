@@ -31,8 +31,8 @@ public class GridMap
 				g2d.setStroke(new BasicStroke(10));
 				g2d.drawRect(0, 0, width, height); // pretty black border :)
 				g2d.setStroke(new BasicStroke(1));
-				g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-				g2d.drawString("\u21E2N", width - 45, 25);
+				//g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+				//g2d.drawString("\u21E2N", width - 45, 25);
 				g2d.rotate(Math.toRadians(180), width / 2 - 4, height / 2);
 				for(int i = 0; i < GRID_WIDTH; i++)
 					for(int j = 0; j < GRID_HEIGHT; j++)
@@ -77,10 +77,10 @@ public class GridMap
 						default:
 							g2d.setColor(Color.BLACK);
 					}
-					if(robot.getDirection() == Direction.EAST || robot.getDirection() == Direction.WEST)
+					if(robot.getDirection() == Direction.NORTH || robot.getDirection() == Direction.SOUTH)
 					{
 						g2d.drawRect((GRID_WIDTH - robot.getPosition().x) * xScale - 7, (robot.getPosition().y + 1) * yScale - 14, 14, 28);
-						if(robot.getDirection() == Direction.EAST)
+						if(robot.getDirection() == Direction.NORTH)
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 22);
 						else
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 22);
@@ -88,7 +88,7 @@ public class GridMap
 					else
 					{
 						g2d.drawRect((GRID_WIDTH - robot.getPosition().x) * xScale - 14, (robot.getPosition().y + 1) * yScale - 7, 28, 14);
-						if(robot.getDirection() == Direction.NORTH)
+						if(robot.getDirection() == Direction.WEST)
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale + 14, (robot.getPosition().y + 1) * yScale, (GRID_WIDTH - robot.getPosition().x) * xScale + 22, (robot.getPosition().y + 1) * yScale);
 						else
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale - 14, (robot.getPosition().y + 1) * yScale, (GRID_WIDTH - robot.getPosition().x) * xScale - 22, (robot.getPosition().y + 1) * yScale);

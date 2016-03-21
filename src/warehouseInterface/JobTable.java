@@ -48,8 +48,7 @@ public class JobTable
 
 	public static void addJob(int job, String reward, String robot)
 	{
-		tableModel.addRow(new Object[] { job, reward, robot, "Waiting for job confirmation"});
-		RobotTable.updateStatus(robot, "Received job offer (ID " + job + ")");
+		tableModel.addRow(new Object[] { job, reward, robot, "Running task"});
 	}
 
 	private static void cancelJob(int jobID, String robot, RouteExecution routeExec)

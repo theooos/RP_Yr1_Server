@@ -126,7 +126,7 @@ public class PathFinding {
 				
 				//null - Tried to find neighbour out of bounds vvv
 				if(neighbourNode == null || explored.contains(neighbourNode) 
-					|| map.isObstacle(neighbourNode) || RobotsReservations.IsReserved(neighbourNode, currentGCost + 1)){
+					|| map.isObstacle(neighbourNode) || RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1)){
 					continue;
 				}
 				

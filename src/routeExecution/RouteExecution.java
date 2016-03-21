@@ -73,7 +73,7 @@ public class RouteExecution extends Thread {
 				}
 			}
 			for(int ir=0;ir<nrOfRobots;ir++){
-				//check if all the robots have a task they are doing or not and assign tasks to them
+				//check if all the robots have a task tJobTable.updateStatus(AllRobots.getRobot(pup.name()).currJob.getJobID(), "Completed");hey are doing or not and assign tasks to them
 				String name=this.getRobotName(ir);
 				if(isFunctioning(name))
 				{
@@ -86,6 +86,7 @@ public class RouteExecution extends Thread {
 							Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),this.getJob().dropOff, GetTime()+1, AllRobots.getRobot(name));
 							System.out.println("assigning task to drop off:"+path);
 							this.assignTask( path,name);
+							JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Moving to drop-off point");
 							
 						}else{
 							
@@ -161,7 +162,7 @@ public class RouteExecution extends Thread {
 								
 								/*
 								if(this.getCurrentTaskIndex(name)==AllRobots.getRobot(name).currJob.getNumOfTasks()-1)
-								{
+								{JobTable.updateStatus(AllRobots.getRobot(pup.name()).currJob.getJobID(), "Completed");
 									AllRobots.getRobot(name).droppingOff=true;
 									
 									AllPuppets.send(name,new DropOffPoint((int)getTask(name).getLocation().getX(),(int)getTask(name).getLocation().getY()));
@@ -298,6 +299,7 @@ public class RouteExecution extends Thread {
 							//job complete!!
 							this.increaseReward();
 							System.out.println("job complete");
+							JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Completed");
 							this.initVariables(name);
 							//notify whoever needs to be notified about the fact that the job is complete
 
@@ -329,23 +331,23 @@ public class RouteExecution extends Thread {
 			switch(facingDir)
 			{
 			case NORTH:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
 				mv=new Objects.Sendable.Move('f', newLoc );
 				break;
 
 			case SOUTH:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
 				mv=new Objects.Sendable.Move('b', newLoc );
 				break;
 
 			case EAST:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
 				mv=new Objects.Sendable.Move('l', newLoc );
 				break;
 
 
 			case WEST:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
 				mv=new Objects.Sendable.Move('r', newLoc );
 				break;
 
@@ -358,23 +360,23 @@ public class RouteExecution extends Thread {
 			switch(facingDir)
 			{
 			case NORTH:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
 				mv=new Objects.Sendable.Move('b', newLoc );
 				break;
 
 			case SOUTH:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
 				mv=new Objects.Sendable.Move('f', newLoc );
 				break;
 
 			case EAST:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
 				mv=new Objects.Sendable.Move('r', newLoc );
 				break;
 
 
 			case WEST:
-				newLoc=new Point((int)loc.getX(),(int)loc.getY()+1 );
+				newLoc=new Point((int)loc.getX(),(int)loc.getY()-1 );
 				mv=new Objects.Sendable.Move('l', newLoc );
 				break;
 
@@ -565,8 +567,8 @@ public class RouteExecution extends Thread {
 		//System.out.println(AllRobots.getRobot(name).directions);
 		//System.out.println(Arrays.toString(task.toArray()));
 		AllRobots.getRobot(name).directions=(Vector<Direction>) task.clone();
-		SingleTask singleTask = AllRobots.getRobot(name).currJob.getTaskAtIndex(AllRobots.getRobot(name).currTaskIndex).get();
-		JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Picking up item (" + singleTask.getItemID() + ", " + singleTask.getQuantity() + ") at " + singleTask.getLocation().x + ", " + singleTask.getLocation().y);
+		//SingleTask singleTask = AllRobots.getRobot(name).currJob.getTaskAtIndex(AllRobots.getRobot(name).currTaskIndex).get();
+		//JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Picking up (" + singleTask.getItemID() + ", " + singleTask.getQuantity() + ") at " + singleTask.getLocation().x + ", " + singleTask.getLocation().y);
 	}
 
 	private int getCurrentTaskIndex(String name)
@@ -618,9 +620,10 @@ public class RouteExecution extends Thread {
 		int count = 0;
 		for(SingleTask task : job.getTasks())
 			if(!task.getItemID().equals("dropOff")){
-				reward += JobProcessor.getItem(task.getItemID()).getReward();// * task.getQuantity();
+				reward += JobProcessor.getItem(task.getItemID()).getReward() * task.getQuantity();
 				count++;
-				System.out.println("the number of tasks is " + (job.getNumOfTasks() - 1));
+				System.out.println(job);
+				System.out.println("the number of tasks is " + (job.getNumOfTasks() ));
 				//System.out.println("this is count: " + count);
 				System.out.println("this is reward: " + reward);
 			}
