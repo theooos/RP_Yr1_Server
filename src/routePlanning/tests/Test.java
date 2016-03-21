@@ -21,9 +21,9 @@ import java.util.Random;
  * 
  * @author Szymon */
 public class Test {
-	private int mapWidth = 3;
-	private int mapHeight = 3;
-	private int noOfRobots = 6;
+	private int mapWidth = 10;
+	private int mapHeight =10;
+	private int noOfRobots = 10;
 	private WarehouseMap map = new WarehouseMap(mapWidth, mapHeight);
 	private List<Point> obstacles;
 	private RobotInfo stationaryRobot;
@@ -101,6 +101,54 @@ public class Test {
 		}
 	}
 	
+	public void assignPathsToStart(){
+		int goalX = 0;
+		int goalY = 0;
+		
+		Point goalNode;
+		RobotInfo tempRobot;
+		
+		for(int i = 0; i < noOfRobots; i++){
+			tempRobot = testRobots.get(i);
+			if(tempRobot.getID() < 5){
+				goalX = (int) tempRobot.getPosition().getX();
+				goalY = 0;
+			}
+			else{
+				goalX = 0;
+				goalY = (int) tempRobot.getPosition().getY();
+			}
+			
+			goalNode = new Point(goalX, goalY);
+			pathSequence = pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
+			tempRobot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
+		}
+	}
+	
+	public void assignPathsToEnd(){
+		int goalX = 0;
+		int goalY = 0;
+		
+		Point goalNode;
+		RobotInfo tempRobot;
+		
+		for(int i = 0; i < noOfRobots; i++){
+			tempRobot = testRobots.get(i);
+			if(tempRobot.getID() < 5){
+				goalX = (int) tempRobot.getPosition().getX();
+				goalY = 9;
+			}
+			else{
+				goalX = 9;
+				goalY = (int) tempRobot.getPosition().getY();
+			}
+			
+			goalNode = new Point(goalX, goalY);
+			pathSequence = pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
+			tempRobot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
+		}
+	}
+	
 	public static void main(String[] args) {
 		Test test = new Test();
 
@@ -154,28 +202,34 @@ public class Test {
 		
 		int startX = 0;
 		int startY = 0;
+		
+		int goalX = 0;
+		int goalY = 0;
+		
 		Point startNode = new Point(startX, startY);
-		Point endNode = new Point(2, 2);
-		RobotInfo tempRobot;
+		Point goalNode = new Point(2, 2);
+		RobotInfo tempRobot = null;
 		int robotID = 0;
 		for(int i = 0; i < test.noOfRobots; i++){
-			startNode = new Point(startX++, startY);
-			if(startX > test.mapWidth - 1){
+			
+			if(startX++ > test.mapWidth - 1){
+				startX = 0;
+			}
+			
+			if(tempRobot != null && tempRobot.getID() >= 4){
 				startX = 0;
 				startY++;
 			}
 			
+			startNode = new Point(startX, startY);
 			tempRobot = new RobotInfo(robotID++, test.map, startNode);
+			
 			test.testRobots.add(tempRobot);
 			test.pathFinding.addRobot(tempRobot);
 		}
 		
 		//Cannot assign paths to robots straight after creating each one
-		for(int i = 0; i < test.noOfRobots; i++){
-			tempRobot = test.testRobots.get(i);
-			test.pathSequence = test.pathFinding.GetPath(tempRobot.getPosition(), endNode, tempRobot);
-			tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());
-		}
+		
 		
 		while (true) {
 			try {
@@ -187,8 +241,17 @@ public class Test {
 			////////////////////////////////////////////IMPORTANT/////////////////////////////////////////////////////////////////////////
 			//IF ROBOT HAS NO RESERVED NEXT NODE THEN DO NOT MOVE HIM< HE MAY BE WAITING FOR OTHER ROBOTS TO PASS
 			if(test.newPathTimer()){
-				test.assignRandomPaths();
+				//test.assignRandomPaths();
 			}
+			
+			if(test.testRobots.get(test.testRobots.size() - 1).getPosition().getX() == test.mapWidth - 1){
+				test.assignPathsToStart();
+			}
+			
+			if(test.testRobots.get(test.testRobots.size() / 2).getPosition().getX() == 0){
+				test.assignPathsToEnd();
+			}
+			
 			test.DrawMap();
 
 			GlobalClock.increaseTime();//All Robots moved >> increase the time by 1
