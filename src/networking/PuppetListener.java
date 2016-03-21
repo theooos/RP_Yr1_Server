@@ -64,7 +64,7 @@ public class PuppetListener extends Thread {
 				newObj = new MoveReport((boolean) parameters[0]);
 			}
 			else if(type.equals("CompleteReport")){
-				newObj = new CompleteReport((boolean) parameters[0], (boolean) parameters[1]);
+				newObj = new CompleteReport((boolean) parameters[0], (boolean) parameters[1], (boolean) parameters[2]);
 			}
 			
 			if(newObj == null){
