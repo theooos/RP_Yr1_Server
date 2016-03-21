@@ -10,6 +10,7 @@ import Objects.Sendable.CompleteReport;
 import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
+import Objects.Sendable.SingleTask;
 
 public class PuppetListener extends Thread {
 
@@ -60,6 +61,11 @@ public class PuppetListener extends Thread {
 			if(type.equals("RobotInfo")){
 				newObj = new RobotInfo((String) parameters[0], new Point((int) parameters[1], (int) parameters[2]), Enum.valueOf(Direction.class, (String)parameters[3]));
 			}
+			// CHANGED FROM THEO@S DEFAULT CODE
+			else if(type.equals("SingleTask")){
+				newObj = new SingleTask((String) parameters[0], (int) parameters[1] , new Point((int) parameters[2], (int) parameters[3]));
+			}
+			///////
 			else if(type.equals("MoveReport")){
 				newObj = new MoveReport((boolean) parameters[0]);
 			}
