@@ -11,6 +11,7 @@ import Objects.Direction;
 import Objects.Item;
 import Objects.Job;
 import Objects.WarehouseMap;
+import Objects.Sendable.CompleteReport;
 import Objects.Sendable.DropOffPoint;
 import Objects.Sendable.Move;
 import Objects.Sendable.MoveReport;
@@ -454,6 +455,7 @@ public class RouteExecution extends Thread {
 	private void increaseReward()
 	{
 		Statistics.increaseRevenue(this.getJob().totalReward);
+		Statistics.jobDone();
 	}
 	
 	private SingleTask getTask(String name)
@@ -711,12 +713,11 @@ public class RouteExecution extends Thread {
 
 	}
 
-	public void addCompleteReport(String name, SendableObject comm) {
-		if(this.isPickingUpItem(name)){
-			AllRobots.getRobot(name).hasCompletedTask=true;
-		}
-		if(this.dropingItems(name)){
-			AllRobots.getRobot(name).finishedDroppingItems=true;
+	public void addCompleteReport(String name, CompleteReport comm) {
+		if(comm.getIsPickup()){
+			AllRobots.getRobot(name).hasCompletedTask=comm.wasCompleted();
+		}else{
+			AllRobots.getRobot(name).finishedDroppingItems=comm.wasCompleted();
 			
 		}
 	}
