@@ -172,7 +172,7 @@ public class JobProcessor {
 				if(itemArr[0].equals(locationArr[2])){
 
 					// Create a new item
-					Item newItem = new Item(
+					Item newItem = new Item(itemArr[0],
 							new Point(
 									Integer.parseInt(locationArr[0]),
 									Integer.parseInt(locationArr[1])),

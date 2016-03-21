@@ -9,6 +9,7 @@ import java.util.Optional;
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
 import jobInput.JobProcessor;
+import jobSelection.ProbDistribution;
 import main.RunServer;
 import main.Test;
 import routePlanning.orderPicks.OrderPicks;
@@ -22,7 +23,7 @@ public class Job {
 	private List<SingleTask> tasks;
 	private boolean cancelled;
 	private boolean ordered;
-	private float cancellationProb;
+	private ProbDistribution cancellationProb;
 	private Map<String, Item> items;
 	private int jobid;
 	private int distanceToTravel;
@@ -38,7 +39,7 @@ public class Job {
 		this.tasks = new ArrayList<>();
 		this.cancelled = false;
 		this.ordered = false;
-		this.cancellationProb = 0.0f;
+		this.cancellationProb = new ProbDistribution(new float[]{0.0f, 1.0f});
 		this.jobid = jobid;
 	}
 
@@ -52,7 +53,7 @@ public class Job {
 		this.tasks = tasks;
 		this.cancelled = false;
 		this.ordered = false;
-		this.cancellationProb = 0.0f;
+		this.cancellationProb = new ProbDistribution(new float[]{0.0f, 1.0f});
 		this.jobid = jobid;
 	}
 
@@ -118,17 +119,17 @@ public class Job {
 
 	/**
 	 * Set the cancellation probability.
-	 * @param p The cancellation probability.
+	 * @param probDistribution The cancellation probability.
 	 */
-	public void setCancellationProb(float p) {
-		this.cancellationProb = p;
+	public void setCancellationProb(ProbDistribution probDistribution) {
+		this.cancellationProb = probDistribution;
 	}
 
 	/**
 	 * Get the cancellation probability.
 	 * @return The cancellation probability.
 	 */
-	public float getCancellationProb() {
+	public ProbDistribution getCancellationProb() {
 		return cancellationProb;
 	}
 
