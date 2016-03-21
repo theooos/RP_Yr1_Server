@@ -709,8 +709,9 @@ public class RouteExecution extends Thread {
 	public void addCompleteReport(String name, CompleteReport comm) {
 		if(comm.wasCancelled())
 		{
-			//TODO job cancelled
-			this.initVariables(name);
+			JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Cancelled");
+			JobProcessor.getJob(AllRobots.getRobot(name).currJob.getJobID()).cancel();
+			initVariables(name);
 			return;
 		}
 		if(comm.getIsPickup()){

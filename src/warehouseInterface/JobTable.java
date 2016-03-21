@@ -75,11 +75,9 @@ public class JobTable
 	 */
 	private static void cancelJob(int jobID, String robot, RouteExecution routeExec)
 	{
-		//tableModel.removeRow(activeJobs.getSelectedRow());
 		updateStatus(jobID, "Cancelled");
 		RobotTable.updateStatus(robot, "Ready");
 		JobProcessor.getJob(jobID).cancel();
-		System.out.println(routeExec);
 		routeExec.initVariables(robot);
 		JOptionPane.showMessageDialog(panel, "Job " + jobID + " cancelled.");
 	}
