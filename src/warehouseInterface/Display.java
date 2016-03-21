@@ -18,6 +18,11 @@ import java.util.ArrayList;
 
 import jobInput.JobProcessor;
 
+/**
+ * A class for testing all classes of the interface
+ * @author Artur
+ *
+ */
 public class Display
 {
 	public static void main(String[] args)

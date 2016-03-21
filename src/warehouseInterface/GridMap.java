@@ -13,12 +13,22 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * Displays the map of the warehouse, including all robots, drop-off points and items currently being collected by the robots.
+ * @author Artur
+ *
+ */
 public class GridMap
 {
 	private static JPanel panel;
 	private static final int GRID_WIDTH = 12, GRID_HEIGHT = 8;
 	private static final Color TAYTAY = new Color(255, 215, 0), CENA = new Color(76, 102, 164), ALFONSO = new Color(76, 187, 23);
 
+	/**
+	 * Creates the panel that renders the warehouse map
+	 * @param grid The description object of the warehouse grid
+	 * @return A panel with the rendered warehouse map
+	 */
 	public static JPanel createGrid(WarehouseMap grid)
 	{
 		panel = new JPanel() {
@@ -105,6 +115,9 @@ public class GridMap
 		return panel;
 	}
 
+	/**
+	 * Refreshes the warehouse map
+	 */
 	public static void refresh()
 	{
 		panel.repaint();
