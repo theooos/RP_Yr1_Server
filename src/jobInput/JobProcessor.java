@@ -53,7 +53,7 @@ public class JobProcessor {
 	}
 
 	/**
-	 * Get all the items.
+	 * Get all the itemsthis.items = items;.
 	 * @return All the items.
 	 */
 	public static Map<String, Item> getAllItems() {
@@ -113,7 +113,7 @@ public class JobProcessor {
 			String[] jobArr = jobStr.split(",");
 
 			// Create a new job.
-			Job newJob = new Job(Integer.parseInt(jobArr[0]), items);;
+			Job newJob = new Job(Integer.parseInt(jobArr[0]));;
 			
 			
 			// Add each the item and the quantity of the item to the job.
@@ -172,7 +172,7 @@ public class JobProcessor {
 				if(itemArr[0].equals(locationArr[2])){
 
 					// Create a new item
-					Item newItem = new Item(
+					Item newItem = new Item(itemArr[0],
 							new Point(
 									Integer.parseInt(locationArr[0]),
 									Integer.parseInt(locationArr[1])),

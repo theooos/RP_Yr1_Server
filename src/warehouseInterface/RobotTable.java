@@ -8,11 +8,20 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+/**
+ * A table for displaying robots currently connected with the warehouse
+ * @author Artur
+ *
+ */
 public class RobotTable
 {
 	private static DefaultTableModel tableModel;
 	private static JPanel panel;
 
+	/**
+	 * Draw the robot table in a panel 
+	 * @return A panel with the robot table drawn
+	 */
 	public static JPanel draw()
 	{
 		panel = new JPanel(new BorderLayout());
@@ -29,16 +38,28 @@ public class RobotTable
 		return panel;
 	}
 
+	/**
+	 * Display various information about a particular robot
+	 * @param robot The robot selected in the table
+	 */
 	private static void viewRobotInfo(RobotInfo robot)
 	{
 		JOptionPane.showMessageDialog(panel, "Name: " + robot.getName() + "\nPosition: (" + robot.getPosition().x + ", " + robot.getPosition().y + ")\nDirection: " + robot.getDirection() + "\n");
 	}
 
+	/**
+	 * Adds a robot to the table
+	 * @param robot A robot to add to the table
+	 */
 	public static void addRobot(RobotInfo robot)
 	{
 		//tableModel.addRow(new Object[] { robot.getName(), "Ready" });
 	}
 
+	/**
+	 * Remove a particular robot from the table
+	 * @param robot The robot to remove from the table
+	 */
 	public static void removeRobot(RobotInfo robot)
 	{
 		for(int i = 0; i < tableModel.getRowCount(); i++)
@@ -49,6 +70,11 @@ public class RobotTable
 			}
 	}
 
+	/**
+	 * Update the current status of a particular robot
+	 * @param robot The robot concerned
+	 * @param status The new status for the robot
+	 */
 	public static void updateStatus(String robot, String status)
 	{
 		for(int i = 0; i < tableModel.getRowCount(); i++)

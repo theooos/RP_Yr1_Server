@@ -16,262 +16,254 @@ import jobInput.JobProcessor;
 
 public class Features {
 
-    public static Map<Integer, Predicate<Job>> predicates;
+	public static Map<Integer, Predicate<Job>> predicates;
 
-    static {
+	static {
 
-        predicates = new HashMap<Integer, Predicate<Job>>();
-        
-        /*
-        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 && j.getNumOfTasks() <= 2);
-        predicates.put(NumOfTasks.THREETOFOUR, j -> j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
-        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 5);
-		*/
+		predicates = new HashMap<Integer, Predicate<Job>>();
 
-        predicates.put(TotalReward.ZEROTOFORTY,  j -> totalReward(j) >= 0 && totalReward(j) < 40);
-        predicates.put(TotalReward.FORTYTOEIGHTY,  j -> totalReward(j) >= 40 && totalReward(j) < 80);
-        predicates.put(TotalReward.EIGHTYTOONEHUNDREDANDTWENTY,  j -> totalReward(j) >= 80 && totalReward(j) < 120);
-        predicates.put(TotalReward.ONEHUNDREDANDTWENTYTOONEHUNDREDANDSIXTY,  j -> totalReward(j) >= 120 && totalReward(j) < 160);
-        predicates.put(TotalReward.ONEHUNDREDANDSIXTYPLUS,  j -> totalReward(j) >= 160);
-        
-        /*
-        predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 && j.getNumOfTasks() <= 2);
-        predicates.put(NumOfTasks.THREETOFOUR, j -> j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
-        predicates.put(NumOfTasks.FIVEPLUS, j -> j.getNumOfTasks() >= 5);
+		/*
+		 * predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 &&
+		 * j.getNumOfTasks() <= 2); predicates.put(NumOfTasks.THREETOFOUR, j ->
+		 * j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
+		 * predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 5);
+		 */
 
-        /DEFINITE
-        predicates.put(TotalItems.ONETOFOUR, j -> totalNumItems(j) >= 1 && totalNumItems(j) <= 4);
-        predicates.put(TotalItems.FIVETOEIGHT, j -> totalNumItems(j) >= 5 && totalNumItems(j) <= 8);
-        predicates.put(TotalItems.NINETOTWELVE, j -> totalNumItems(j) >= 9 && totalNumItems(j) <= 12);
-        predicates.put(TotalItems.THIRTEENPLUS, j -> totalNumItems(j) >= 13);
-	*/
-        
-        predicates.put(TotalWeight.ZEROTOTEN,  j -> totalWeight(j) >= 0 && totalWeight(j) < 10);
-        predicates.put(TotalWeight.TENTOTWENTY,  j -> totalWeight(j) >= 10 && totalWeight(j) < 20);
-        predicates.put(TotalWeight.TWENTYTOTHIRTY,  j -> totalWeight(j) >= 20 && totalWeight(j) < 30);
-        predicates.put(TotalWeight.THIRTYTOFORTY,  j -> totalWeight(j) >= 30  && totalWeight(j) < 40);
-        predicates.put(TotalWeight.FORTYPLUS,  j -> totalWeight(j) >= 40);
-        
-        /*
-        predicates.put(HighestRewardItem.ZEROTOFIVE, j -> highestReward(j) >= 0 && highestReward(j) <= 5);
-        predicates.put(HighestRewardItem.SIXTOTEN, j -> highestReward(j) >= 6 && highestReward(j) <= 10);
-        predicates.put(HighestRewardItem.ELEVENTOFIFTEEN, j -> highestReward(j) >= 11 && highestReward(j) <= 15);
-        predicates.put(HighestRewardItem.SIXTEENPLUS, j -> highestReward(j) >= 16);
-        
-        predicates.put(HeaviestItem.ZEROTOONE, j -> heaviestItem(j) >= 0 && heaviestItem(j) <= 1);
-        predicates.put(HeaviestItem.TWOTOTHREE, j -> heaviestItem(j) >= 2 && heaviestItem(j) <= 3);
-        predicates.put(HeaviestItem.FOURPLUS, j -> heaviestItem(j) >= 4);
-        */
-        
-        // DEFINITE
-        predicates.put(HighestQuantity.ONETOTWO, j -> highestQuantity(j) >= 1 && highestQuantity(j) <= 2);
-        predicates.put(HighestQuantity.THREETOFOUR, j -> highestQuantity(j) >= 3 && highestQuantity(j) <= 4);
-        predicates.put(HighestQuantity.FIVETOSIX, j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
-        predicates.put(HighestQuantity.SEVENPLUS, j -> highestQuantity(j) >= 7);
+		predicates.put(TotalReward.ZEROTOFORTY, j -> totalReward(j) >= 0 && totalReward(j) < 40);
+		predicates.put(TotalReward.FORTYTOEIGHTY, j -> totalReward(j) >= 40 && totalReward(j) < 80);
+		predicates.put(TotalReward.EIGHTYTOONEHUNDREDANDTWENTY, j -> totalReward(j) >= 80 && totalReward(j) < 120);
+		predicates.put(TotalReward.ONEHUNDREDANDTWENTYTOONEHUNDREDANDSIXTY,
+				j -> totalReward(j) >= 120 && totalReward(j) < 160);
+		predicates.put(TotalReward.ONEHUNDREDANDSIXTYPLUS, j -> totalReward(j) >= 160);
 
-        predicates.put(Cancelled.YES, Job::cancelled);
-        predicates.put(Cancelled.NO, j -> !j.cancelled());
-    }
+		/*
+		 * predicates.put(NumOfTasks.ONETOTWO, j -> j.getNumOfTasks() >= 1 &&
+		 * j.getNumOfTasks() <= 2); predicates.put(NumOfTasks.THREETOFOUR, j ->
+		 * j.getNumOfTasks() >= 3 && j.getNumOfTasks() <= 4);
+		 * predicates.put(NumOfTasks.FIVEPLUS, j -> j.getNumOfTasks() >= 5);
+		 * 
+		 * /DEFINITE predicates.put(TotalItems.ONETOFOUR, j -> totalNumItems(j)
+		 * >= 1 && totalNumItems(j) <= 4);
+		 * predicates.put(TotalItems.FIVETOEIGHT, j -> totalNumItems(j) >= 5 &&
+		 * totalNumItems(j) <= 8); predicates.put(TotalItems.NINETOTWELVE, j ->
+		 * totalNumItems(j) >= 9 && totalNumItems(j) <= 12);
+		 * predicates.put(TotalItems.THIRTEENPLUS, j -> totalNumItems(j) >= 13);
+		 */
 
-/*
-    public static class NumOfTasks {
-        
-        public static int ONETOTWO = 0;
-        public static int THREETOFOUR = 1;
-        public static int FIVEPLUS = 2;
+		predicates.put(TotalWeight.ZEROTOTEN, j -> totalWeight(j) >= 0 && totalWeight(j) < 10);
+		predicates.put(TotalWeight.TENTOTWENTY, j -> totalWeight(j) >= 10 && totalWeight(j) < 20);
+		predicates.put(TotalWeight.TWENTYTOTHIRTY, j -> totalWeight(j) >= 20 && totalWeight(j) < 30);
+		predicates.put(TotalWeight.THIRTYTOFORTY, j -> totalWeight(j) >= 30 && totalWeight(j) < 40);
+		predicates.put(TotalWeight.FORTYPLUS, j -> totalWeight(j) >= 40);
 
-    }
+		/*
+		 * predicates.put(HighestRewardItem.ZEROTOFIVE, j -> highestReward(j) >=
+		 * 0 && highestReward(j) <= 5);
+		 * predicates.put(HighestRewardItem.SIXTOTEN, j -> highestReward(j) >= 6
+		 * && highestReward(j) <= 10);
+		 * predicates.put(HighestRewardItem.ELEVENTOFIFTEEN, j ->
+		 * highestReward(j) >= 11 && highestReward(j) <= 15);
+		 * predicates.put(HighestRewardItem.SIXTEENPLUS, j -> highestReward(j)
+		 * >= 16);
+		 * 
+		 * predicates.put(HeaviestItem.ZEROTOONE, j -> heaviestItem(j) >= 0 &&
+		 * heaviestItem(j) <= 1); predicates.put(HeaviestItem.TWOTOTHREE, j ->
+		 * heaviestItem(j) >= 2 && heaviestItem(j) <= 3);
+		 * predicates.put(HeaviestItem.FOURPLUS, j -> heaviestItem(j) >= 4);
+		 */
 
-    public static class TotalItems {
+		// DEFINITE
+		predicates.put(HighestQuantity.ONETOTWO, j -> highestQuantity(j) >= 1 && highestQuantity(j) <= 2);
+		predicates.put(HighestQuantity.THREETOFOUR, j -> highestQuantity(j) >= 3 && highestQuantity(j) <= 4);
+		predicates.put(HighestQuantity.FIVETOSIX, j -> highestQuantity(j) >= 5 && highestQuantity(j) <= 6);
+		predicates.put(HighestQuantity.SEVENPLUS, j -> highestQuantity(j) >= 7);
 
-        public static int ONETOFOUR = 3;
-        public static int FIVETOEIGHT = 4;
-        public static int NINETOTWELVE = 5;
-        public static int THIRTEENPLUS = 6;
+		predicates.put(Cancelled.YES, Job::cancelled);
+		predicates.put(Cancelled.NO, j -> !j.cancelled());
+	}
 
-    }
-    */
-    
-    public static class TotalReward {
+	/*
+	 * public static class NumOfTasks {
+	 * 
+	 * public static int ONETOTWO = 0; public static int THREETOFOUR = 1; public
+	 * static int FIVEPLUS = 2;
+	 * 
+	 * }
+	 * 
+	 * public static class TotalItems {
+	 * 
+	 * public static int ONETOFOUR = 3; public static int FIVETOEIGHT = 4;
+	 * public static int NINETOTWELVE = 5; public static int THIRTEENPLUS = 6;
+	 * 
+	 * }
+	 */
 
-        public static int ZEROTOFORTY = 0;
-        public static int FORTYTOEIGHTY = 1;
-        public static int EIGHTYTOONEHUNDREDANDTWENTY = 2;
-        public static int ONEHUNDREDANDTWENTYTOONEHUNDREDANDSIXTY = 3;
-        public static int ONEHUNDREDANDSIXTYPLUS = 4;
+	public static class TotalReward {
 
-    }
-    
-    public static class TotalWeight {
+		public static int ZEROTOFORTY = 0;
+		public static int FORTYTOEIGHTY = 1;
+		public static int EIGHTYTOONEHUNDREDANDTWENTY = 2;
+		public static int ONEHUNDREDANDTWENTYTOONEHUNDREDANDSIXTY = 3;
+		public static int ONEHUNDREDANDSIXTYPLUS = 4;
 
-        public static int ZEROTOTEN = 5;
-        public static int TENTOTWENTY = 6;
-        public static int TWENTYTOTHIRTY = 7;
-        public static int THIRTYTOFORTY = 8;
-        public static int FORTYPLUS = 9;
+	}
 
-    }
-    
-    public static class HighestQuantity {
+	public static class TotalWeight {
 
-        public static int ONETOTWO = 10;
-        public static int THREETOFOUR = 11;
-        public static int FIVETOSIX = 12;
-        public static int SEVENPLUS = 13;
+		public static int ZEROTOTEN = 5;
+		public static int TENTOTWENTY = 6;
+		public static int TWENTYTOTHIRTY = 7;
+		public static int THIRTYTOFORTY = 8;
+		public static int FORTYPLUS = 9;
 
-    }
-    
-    public static class Cancelled {
-        
-        public static int YES = 14;
-        public static int NO = 15;
+	}
 
-    }
-    
-    public static double totalReward(Job job){
-    	
-    	double reward = 0.0;
-    	
-    	for(SingleTask task : job.getTasks())
-    	{
-    		
-    		 if(!task.getItemID().equals("dropOff"))
-    		 {
-    			reward = reward + JobProcessor.getItem(task.getItemID()).getReward();
-    			 	
-    		 }	
-    	}
-    	
-    	return reward;
-    }
-    
-    public static double totalWeight(Job job){
-    	
-    	double weight = 0.0;
-    	
-    	for(SingleTask task : job.getTasks())
-    	{
-    		
-    		 if(!task.getItemID().equals("dropOff"))
-    		 {
-    			 weight = weight + JobProcessor.getItem(task.getItemID()).getWeight();
-    			 	
-    		 }	
-    	}
-    	
-    	return weight;
-    }
-    
-    /*
-    public static int totalNumItems(Job job){
-    	
-    	int quantity = 0;
-    	
-    	for(SingleTask task : job.getTasks())
-    	{
-    		quantity = quantity + task.getQuantity();
-    		
-    	}
-    	
-    	return quantity;
-    }
-	*/
-    
-    /*
-    public static class HighestRewardItem {
-        
-        public static int ZEROTOFIVE = 7;
-        public static int FIVETOTEN = 8;
-        public static int TENTOFIFTEEN = 9;
-        public static int FIFTEENPLUS = 10;
+	public static class HighestQuantity {
 
-    }
-    
-    public static double highestReward(Job job){
-    	
-    	double reward = 0;
-    	
-    	for(SingleTask task : job.getTasks())
-    	{
-    		
+		public static int ONETOTWO = 10;
+		public static int THREETOFOUR = 11;
+		public static int FIVETOSIX = 12;
+		public static int SEVENPLUS = 13;
 
-    		 if(!task.getItemID().equals("dropOff") && JobProcessor.getItem(task.getItemID()).getReward() > reward){
-    			 if(JobProcessor.getItem(task.getItemID()).getReward() > reward){
-    				 reward = JobProcessor.getItem(task.getItemID()).getReward();
-    			 }	
-    		 }	
-    	}
-    	
-    	return reward;
-    }
-    
-    
+	}
 
-    public static class HeaviestItem {
+	public static class Cancelled {
 
-        public static int ZEROTOPOINTFIVE = 11;
-        public static int POINTFIVETOTHREE = 12;
-        public static int THREEPLUS = 13;
+		public static int YES = 14;
+		public static int NO = 15;
 
-    }
-    
-    public static double heaviestItem(Job job){
-    	
-    	double heaviest = 0;
-    	
-    	for(SingleTask task : job.getTasks())
-    	{
-    		
-    		 if(JobProcessor.getItem(task.getItemID()).getWeight() > heaviest){
-    			 
-    			heaviest = JobProcessor.getItem(task.getItemID()).getWeight();
-    		 }
-    		
-    		
-    	}
-    	
-    	return heaviest;
-    	
-    }
-    
-    */
+	}
+	
+	public static class ItemCount {
+		
+		
+		
+	}
+	
+	public static double totalReward(Job job) {
 
-    public static List<Integer> getFeatures(Job job) {
-        
-        List<Integer> list = new ArrayList<Integer>();
-        Set<Entry<Integer, Predicate<Job>>> entrySet = predicates.entrySet();
+		double reward = 0.0;
 
-        for( Map.Entry<Integer, Predicate<Job>> e : entrySet) {
-            Integer f = e.getKey();
-            Predicate<Job> p = e.getValue(); 
-            if(p.test(job))
-                list.add(f);
-        }
+		for (SingleTask task : job.getTasks()) {
 
-        return list;
-        
-    }
+			if (!task.getItemID().equals("dropOff")) {
+				reward = reward + JobProcessor.getItem(task.getItemID()).getReward();
 
-  
-    
-    public static double highestQuantity(Job job){
-    	
-    	double quantity = 0;
-    	
-    	for(SingleTask task : job.getTasks())
-    	{
-    		
-    		 if(task.getQuantity() > quantity){
-    			 
-    			quantity = task.getQuantity();
-    		 }
-    		
-    		
-    	}
-    	
-    	return quantity;
+			}
+		}
 
-    }
+		return reward;
+	}
 
-    
+	public static double totalWeight(Job job) {
+
+		double weight = 0.0;
+
+		for (SingleTask task : job.getTasks()) {
+
+			if (!task.getItemID().equals("dropOff")) {
+				weight = weight + JobProcessor.getItem(task.getItemID()).getWeight();
+
+			}
+		}
+
+		return weight;
+	}
+
+	/*
+	 * public static int totalNumItems(Job job){
+	 * 
+	 * int quantity = 0;
+	 * 
+	 * for(SingleTask task : job.getTasks()) { quantity = quantity +
+	 * task.getQuantity();
+	 * 
+	 * }
+	 * 
+	 * return quantity; }
+	 */
+
+	/*
+	 * public static class HighestRewardItem {
+	 * 
+	 * public static int ZEROTOFIVE = 7; public static int FIVETOTEN = 8; public
+	 * static int TENTOFIFTEEN = 9; public static int FIFTEENPLUS = 10;
+	 * 
+	 * }
+	 * 
+	 * public static double highestReward(Job job){
+	 * 
+	 * double reward = 0;
+	 * 
+	 * for(SingleTask task : job.getTasks()) {
+	 * 
+	 * 
+	 * if(!task.getItemID().equals("dropOff") &&
+	 * JobProcessor.getItem(task.getItemID()).getReward() > reward){
+	 * if(JobProcessor.getItem(task.getItemID()).getReward() > reward){ reward =
+	 * JobProcessor.getItem(task.getItemID()).getReward(); } } }
+	 * 
+	 * return reward; }
+	 * 
+	 * 
+	 * 
+	 * public static class HeaviestItem {
+	 * 
+	 * public static int ZEROTOPOINTFIVE = 11; public static int
+	 * POINTFIVETOTHREE = 12; public static int THREEPLUS = 13;
+	 * 
+	 * }
+	 * 
+	 * public static double heaviestItem(Job job){
+	 * 
+	 * double heaviest = 0;
+	 * 
+	 * for(SingleTask task : job.getTasks()) {
+	 * 
+	 * if(JobProcessor.getItem(task.getItemID()).getWeight() > heaviest){
+	 * 
+	 * heaviest = JobProcessor.getItem(task.getItemID()).getWeight(); }
+	 * 
+	 * 
+	 * }
+	 * 
+	 * return heaviest;
+	 * 
+	 * }
+	 * 
+	 */
+
+	public static List<Integer> getFeatures(Job job) {
+
+		List<Integer> list = new ArrayList<Integer>();
+		Set<Entry<Integer, Predicate<Job>>> entrySet = predicates.entrySet();
+
+		for (Map.Entry<Integer, Predicate<Job>> e : entrySet) {
+			Integer f = e.getKey();
+			Predicate<Job> p = e.getValue();
+			if (p.test(job))
+				list.add(f);
+		}
+
+		return list;
+
+	}
+
+	public static double highestQuantity(Job job) {
+
+		double quantity = 0;
+
+		for (SingleTask task : job.getTasks()) {
+
+			if (task.getQuantity() > quantity) {
+
+				quantity = task.getQuantity();
+			}
+
+		}
+
+		return quantity;
+
+	}
+
 }

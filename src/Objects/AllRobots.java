@@ -1,5 +1,6 @@
 package Objects;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import Objects.Sendable.RobotInfo;
@@ -79,6 +80,15 @@ public class AllRobots {
 		robots = newList;
 
 		if(!robotFound) throw new IllegalArgumentException("Robot " + name + " not found");
+	}
+	
+	public synchronized static void modifyRobotLocation(String name, Point newLocation, Direction newDirection){
+		for(RobotInfo robot : robots) {
+			if(robot.getName().equals(name)) {
+				robot.setPosition(newLocation);
+				robot.setDirection(newDirection);
+			}
+		}
 	}
 
 	/**

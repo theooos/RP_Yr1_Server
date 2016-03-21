@@ -8,6 +8,8 @@ import java.util.Optional;
 
 //import JobInput.JobProcessor;
 import Objects.Sendable.SingleTask;
+import jobInput.JobProcessor;
+import jobSelection.ProbDistribution;
 import main.RunServer;
 import main.Test;
 import routePlanning.orderPicks.OrderPicks;
@@ -21,7 +23,7 @@ public class Job {
 	private List<SingleTask> tasks;
 	private boolean cancelled;
 	private boolean ordered;
-	private float cancellationProb;
+	private ProbDistribution cancellationProb;
 	private Map<String, Item> items;
 	private int jobid;
 	private int distanceToTravel;
@@ -33,12 +35,11 @@ public class Job {
 	 * @param jobid The ID of the job
 	 * @param items The items to add to the job
 	 */
-	public Job(int jobid, Map<String, Item> items) {
+	public Job(int jobid) {
 		this.tasks = new ArrayList<>();
 		this.cancelled = false;
 		this.ordered = false;
-		this.cancellationProb = 0.0f;
-		this.items = items;
+		this.cancellationProb = new ProbDistribution(new float[]{0.0f, 1.0f});
 		this.jobid = jobid;
 	}
 
@@ -48,11 +49,11 @@ public class Job {
 	 * @param tasks The tasks in the job.
 	 * @param items The items for the job.
 	 */
-	public Job(int jobid, List<SingleTask> tasks, Map<String, Item> items) {
+	public Job(int jobid, List<SingleTask> tasks) {
 		this.tasks = tasks;
 		this.cancelled = false;
 		this.ordered = false;
-		this.cancellationProb = 0.0f;
+		this.cancellationProb = new ProbDistribution(new float[]{0.0f, 1.0f});
 		this.jobid = jobid;
 	}
 
@@ -118,17 +119,17 @@ public class Job {
 
 	/**
 	 * Set the cancellation probability.
-	 * @param p The cancellation probability.
+	 * @param probDistribution The cancellation probability.
 	 */
-	public void setCancellationProb(float p) {
-		this.cancellationProb = p;
+	public void setCancellationProb(ProbDistribution probDistribution) {
+		this.cancellationProb = probDistribution;
 	}
 
 	/**
 	 * Get the cancellation probability.
 	 * @return The cancellation probability.
 	 */
-	public float getCancellationProb() {
+	public ProbDistribution getCancellationProb() {
 		return cancellationProb;
 	}
 
@@ -171,8 +172,8 @@ public class Job {
 		for(SingleTask task : tasks)
 		{
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
-                //Item item = JobProcessor.getItem(task.getItemID());
+                //Item item = items.get(task.getItemID());
+                Item item = JobProcessor.getItem(task.getItemID());
                 numOfItems += task.getQuantity();
                 reward += item.getReward() * task.getQuantity();
             }
@@ -184,10 +185,11 @@ public class Job {
 
 	public double getTotalReward() {
 
-		double reward = 0f;
+		double reward = 0.0;
 		for(SingleTask task : tasks) {
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
+                //Item item = items.get(task.getItemID());
+                Item item = JobProcessor.getItem(task.getItemID());
                 reward += item.getReward() * task.getQuantity();
             }
 		}
@@ -207,7 +209,8 @@ public class Job {
 		for(SingleTask task : tasks)
 		{
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
+               
+                Item item = JobProcessor.getItem(task.getItemID());
                 reward += item.getReward() * task.getQuantity();
                 weight += item.getWeight() * task.getQuantity();
             }
@@ -227,7 +230,8 @@ public class Job {
 		for(SingleTask task : tasks)
 		{
             if(!task.getItemID().equals("dropOff")) {
-                Item item = items.get(task.getItemID());
+                
+                Item item = JobProcessor.getItem(task.getItemID());
                 totalweight = totalweight + (item.getWeight() * task.getQuantity());
             }
 		}
@@ -258,7 +262,7 @@ public class Job {
 	@Override
 	public String toString() {
 		return "Job [tasks=" + tasks + ", cancelled=" + cancelled + ", ordered=" + ordered + ", cancellationProb="
-				+ cancellationProb + ", items=" + items + ", jobid=" + jobid + ", distanceToTravel=" + distanceToTravel
+				+ cancellationProb + ", jobid=" + jobid + ", distanceToTravel=" + distanceToTravel
 				+ "]";
 	}   	
 }

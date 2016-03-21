@@ -11,12 +11,22 @@ import jobInput.JobProcessor;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * A table for displaying the jobs currently being carried out by the robots
+ * @author Artur
+ *
+ */
 public class JobTable
 {
 	private static JTable activeJobs;
 	private static DefaultTableModel tableModel;
 	private static JPanel panel;
 
+	/**
+	 * Draws the job table in a panel
+	 * @param routeExec Route Execution object
+	 * @return A panel with the job table drawn
+	 */
 	public static JPanel draw(RouteExecution routeExec)
 	{
 		panel = new JPanel(new BorderLayout());
@@ -46,21 +56,37 @@ public class JobTable
 		return panel;
 	}
 
+	/**
+	 * Add a job to the job table
+	 * @param job Job ID
+	 * @param reward The total reward for a job
+	 * @param robot The robot carrying out the job
+	 */
 	public static void addJob(int job, String reward, String robot)
 	{
-		tableModel.addRow(new Object[] { job, reward, robot, "Waiting for job confirmation"});
-		RobotTable.updateStatus(robot, "Received job offer (ID " + job + ")");
+		tableModel.addRow(new Object[] { job, reward, robot, "Running task"});
 	}
 
+	/**
+	 * Cancels a job being carried out by the robot
+	 * @param jobID Job ID
+	 * @param robot Robot executing the job
+	 * @param routeExec Route Execution object
+	 */
 	private static void cancelJob(int jobID, String robot, RouteExecution routeExec)
 	{
-		tableModel.removeRow(activeJobs.getSelectedRow());
+		//tableModel.removeRow(activeJobs.getSelectedRow());
+		updateStatus(jobID, "Cancelled");
 		RobotTable.updateStatus(robot, "Ready");
 		JobProcessor.getJob(jobID).cancel();
 		routeExec.initVariables(robot);
 		JOptionPane.showMessageDialog(panel, "Job " + jobID + " cancelled.");
 	}
 
+	/**
+	 * Display information about a particular job in a message box
+	 * @param jobID Job ID
+	 */
 	private static void viewJobInfo(int jobID)
 	{
 		Job job = JobProcessor.getJob(jobID);
@@ -71,6 +97,11 @@ public class JobTable
 		JOptionPane.showMessageDialog(panel, "Job ID: " + jobID + "\nTasks: " + tasks + "\nCancellation probability: " + job.getCancellationProb() + "\nTotal weight: " + job.getTotalWeight());
 	}
 	
+	/**
+	 * Update the status of a particular job
+	 * @param jobID Job ID
+	 * @param status New status of the job
+	 */
 	public static void updateStatus(int jobID, String status)
 	{
 		for(int i = 0; i < tableModel.getRowCount(); i++)
