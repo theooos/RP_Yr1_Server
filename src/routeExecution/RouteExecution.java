@@ -8,6 +8,7 @@ import java.util.Vector;
 import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.Direction;
+import Objects.Item;
 import Objects.Job;
 import Objects.WarehouseMap;
 import Objects.Sendable.DropOffPoint;
@@ -20,6 +21,7 @@ import jobSelection.Selection;
 import routePlanning.pathFinding.PathFinding;
 import warehouseInterface.GridMap;
 import warehouseInterface.JobTable;
+import warehouseInterface.RobotTable;
 import warehouseInterface.Statistics;
 
 
@@ -92,7 +94,7 @@ public class RouteExecution extends Thread {
 							System.out.println("index1: "+this.getCurrentTaskIndex(name));
 							System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
 							if(task!=null){
-							this.assignTask( task,name);
+								this.assignTask( task,name);
 							}
 						}
 					}
@@ -141,6 +143,7 @@ public class RouteExecution extends Thread {
 									AllRobots.getRobot(name).waitingForMoveReport=true;					
 									done=false;
 									System.out.println("sent next move: "+ nextmove.toString());
+									RobotTable.updateStatus(name, "Moving to " + nextmove.getNextLocation().x + ", " + nextmove.getNextLocation().y);
 									
 								}
 							}
@@ -203,7 +206,7 @@ public class RouteExecution extends Thread {
 										AllRobots.getRobot(name).waitingForMoveReport=true;					
 										done=false;
 										System.out.println("sent next move: "+ nextmove.toString());
-										
+										RobotTable.updateStatus(name, "Moving to " + nextmove.getNextLocation().x + ", " + nextmove.getNextLocation().y);
 									}
 								}
 							}
@@ -562,6 +565,8 @@ public class RouteExecution extends Thread {
 		//System.out.println(AllRobots.getRobot(name).directions);
 		//System.out.println(Arrays.toString(task.toArray()));
 		AllRobots.getRobot(name).directions=(Vector<Direction>) task.clone();
+		SingleTask singleTask = AllRobots.getRobot(name).currJob.getTaskAtIndex(AllRobots.getRobot(name).currTaskIndex).get();
+		JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Picking up item (" + singleTask.getItemID() + ", " + singleTask.getQuantity() + ") at " + singleTask.getLocation().x + ", " + singleTask.getLocation().y);
 	}
 
 	private int getCurrentTaskIndex(String name)
