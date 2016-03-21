@@ -41,12 +41,12 @@ public class RunServer extends Thread {
 
 		//// Testing puppets, uncomment for experimentation
 
-		Puppet tay = new Puppet("TayTay", "0016531AF6E5");
-		AllPuppets.addPuppet(tay);
+		//Puppet tay = new Puppet("TayTay", "0016531AF6E5");
+		//AllPuppets.addPuppet(tay);
 
 		//// Creating Puppet
-		// Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-		// AllPuppets.addPuppet(alfonso);
+		 Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+		 AllPuppets.addPuppet(alfonso);
 		//
 		//Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
 		//AllPuppets.addPuppet(johnCena);
@@ -113,7 +113,7 @@ public class RunServer extends Thread {
 						AllRobots.addRobot((RobotInfo) comm);
 					}
 					else{
-						AllRobots.modifyRobot(info.getName(), info);
+						AllRobots.modifyRobotLocation(info.getName(), info.getPosition(), info.getDirection());
 					}
 				}
 			}
