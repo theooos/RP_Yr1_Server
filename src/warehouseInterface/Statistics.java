@@ -6,12 +6,21 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * Display and keep track of revenue and jobs done/cancelled in a session.
+ * @author Artur
+ *
+ */
 public class Statistics
 {
 	private static DefaultTableModel tableModel;
 	private static double revenue;
 	private static int jobsDone, jobsCancelled;
 
+	/**
+	 * Draw the table with various statistics
+	 * @return A panel with the statistics table
+	 */
 	public static JPanel draw()
 	{
 		JPanel panel = new JPanel();
@@ -44,18 +53,28 @@ public class Statistics
 		return panel;
 	}
 
+	/**
+	 * Increase the revenue counter
+	 * @param amount The amount to increase the revenue by
+	 */
 	public static void increaseRevenue(double amount)
 	{
 		revenue += amount;
 		tableModel.setValueAt(String.format("%.2f", revenue), 0, 0);
 	}
 
+	/**
+	 * Indicate that a job has been completed
+	 */
 	public static void jobDone()
 	{
 		jobsDone++;
 		tableModel.setValueAt(jobsDone, 0, 1);
 	}
 
+	/**
+	 * Indicate that a job has been cancelled
+	 */
 	public static void jobCancelled()
 	{
 		jobsCancelled++;
