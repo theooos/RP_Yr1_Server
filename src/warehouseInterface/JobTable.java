@@ -79,6 +79,7 @@ public class JobTable
 		updateStatus(jobID, "Cancelled");
 		RobotTable.updateStatus(robot, "Ready");
 		JobProcessor.getJob(jobID).cancel();
+		System.out.println(routeExec);
 		routeExec.initVariables(robot);
 		JOptionPane.showMessageDialog(panel, "Job " + jobID + " cancelled.");
 	}
