@@ -27,6 +27,9 @@ public class Display
 {
 	public static void main(String[] args)
 	{
+		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
+		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		
 		JFrame frame = new JFrame("Warehouse Interface");
 		frame.setLayout(new GridLayout(2, 2));
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -53,9 +56,6 @@ public class Display
 		//AllRobots.addRobot(new RobotInfo("John Cena", new Point(0, 4), Direction.WEST));
 		//AllRobots.addRobot(new RobotInfo("Donaldihno", new Point(11, 4), Direction.EAST));
 		frame.setVisible(true);
-
-//		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
-//		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 	}
 
 	public static JTable createTable(DefaultTableModel tableModel)
