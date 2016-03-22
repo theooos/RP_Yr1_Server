@@ -175,8 +175,16 @@ public class PathFinding {
 					return null;
 				}
 				
+				//goal node found and is occupied therefore stay in the node before it (gather round)
+				if(neighbourNode.equals(goalNode) && RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1)){
+					goalNode = currentExplored;
+					explored.remove(currentExplored);
+					AddToFrontier(currentExplored, currentGCost, currentGCost);//Add currentExplored (goal) back to frontier
+					break;//This is potetially not an optimal choice of best path (end of path yet no time for major debugging)
+				}
+				
 				//null - Tried to find neighbour out of bounds vvv
-				if(neighbourNode == null 
+				else if(neighbourNode == null 
 					|| explored.contains(neighbourNode) 
 					|| map.isObstacle(neighbourNode) 
 					|| RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1)
