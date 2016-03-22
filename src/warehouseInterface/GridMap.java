@@ -3,6 +3,7 @@ package warehouseInterface;
 import Objects.AllRobots;
 import Objects.Direction;
 import Objects.Sendable.RobotInfo;
+import Objects.Sendable.SingleTask;
 import Objects.WarehouseMap;
 
 import javax.swing.*;
@@ -12,12 +13,22 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Vector;
 
+/**
+ * Displays the map of the warehouse, including all robots, drop-off points and items currently being collected by the robots.
+ * @author Artur
+ *
+ */
 public class GridMap
 {
 	private static JPanel panel;
 	private static final int GRID_WIDTH = 12, GRID_HEIGHT = 8;
-	private static final Color TAYTAY = new Color(237, 41, 57), CENA = new Color(76, 102, 164), ALFONSO = new Color(76, 187, 23);
+	private static final Color TAYTAY = new Color(255, 215, 0), CENA = new Color(76, 102, 164), ALFONSO = new Color(76, 187, 23);
 
+	/**
+	 * Creates the panel that renders the warehouse map
+	 * @param grid The description object of the warehouse grid
+	 * @return A panel with the rendered warehouse map
+	 */
 	public static JPanel createGrid(WarehouseMap grid)
 	{
 		panel = new JPanel() {
@@ -31,8 +42,8 @@ public class GridMap
 				g2d.setStroke(new BasicStroke(10));
 				g2d.drawRect(0, 0, width, height); // pretty black border :)
 				g2d.setStroke(new BasicStroke(1));
-				//g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-				//g2d.drawString("\u21E2N", width - 45, 25);
+				g2d.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+				g2d.drawString("\u2191N", width - 45, 25);
 				g2d.rotate(Math.toRadians(180), width / 2 - 4, height / 2);
 				for(int i = 0; i < GRID_WIDTH; i++)
 					for(int j = 0; j < GRID_HEIGHT; j++)
@@ -65,7 +76,7 @@ public class GridMap
 				{
 					switch(robot.getName())
 					{
-						case "Tay Tay":
+						case "TayTay":
 							g2d.setColor(TAYTAY);
 							break;
 						case "John Cena":
@@ -80,7 +91,7 @@ public class GridMap
 					if(robot.getDirection() == Direction.NORTH || robot.getDirection() == Direction.SOUTH)
 					{
 						g2d.drawRect((GRID_WIDTH - robot.getPosition().x) * xScale - 7, (robot.getPosition().y + 1) * yScale - 14, 14, 28);
-						if(robot.getDirection() == Direction.NORTH)
+						if(robot.getDirection() == Direction.SOUTH)
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale - 22);
 						else
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 14, (GRID_WIDTH - robot.getPosition().x) * xScale, (robot.getPosition().y + 1) * yScale + 22);
@@ -93,12 +104,20 @@ public class GridMap
 						else
 							g2d.drawLine((GRID_WIDTH - robot.getPosition().x) * xScale - 14, (robot.getPosition().y + 1) * yScale, (GRID_WIDTH - robot.getPosition().x) * xScale - 22, (robot.getPosition().y + 1) * yScale);
 					}
+					if(robot.isDoingJob)
+					{
+						for(int i = robot.currTaskIndex; i < robot.currJob.getNumOfTasks(); i++)
+							g2d.fillRoundRect((GRID_WIDTH - robot.currJob.getTaskAtIndex(i).get().getLocation().x) * xScale - 4, (robot.currJob.getTaskAtIndex(i).get().getLocation().y + 1) * yScale - 4, 8, 8, 3, 3);
+					}
 				}
 			}
 		};
 		return panel;
 	}
 
+	/**
+	 * Refreshes the warehouse map
+	 */
 	public static void refresh()
 	{
 		panel.repaint();

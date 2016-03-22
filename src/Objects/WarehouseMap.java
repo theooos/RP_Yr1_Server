@@ -43,12 +43,26 @@ public class WarehouseMap {
 		this.gridHeight = nicksMap.getYSize();
 		grid = new boolean[gridWidth][gridHeight];
 
+		grid[2][2] = true;
+		grid[2][3] = true;
+		grid[2][4] = true;
+		grid[2][5] = true;
+		
+		grid[5][3] = true;
+		grid[5][4] = true;
+		grid[6][3] = true;
+		grid[6][4] = true;
+		
+		grid[9][2] = true;
+		grid[9][3] = true;
+		grid[9][4] = true;
+		grid[9][5] = true;
 		// Set obstacles
-		for(int i = 0; i < gridWidth; i++) {
+		/*for(int i = 0; i < gridWidth; i++) {
 			for(int j = 0; j < gridHeight; j++) {
 				grid[i][j] = nicksMap.isObstructed(i, j);
 			}
-		}
+		}*/
 
 		// Read dropoff locations
 		Optional<List<String>> dos = JobProcessor.readFile(doFile);

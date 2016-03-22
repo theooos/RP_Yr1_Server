@@ -6,17 +6,30 @@ import javax.swing.table.DefaultTableModel;
 import routeExecution.RouteExecution;
 import Objects.AllRobots;
 import Objects.Direction;
+import Objects.Job;
 import Objects.WarehouseMap;
 import Objects.Sendable.RobotInfo;
+import Objects.Sendable.SingleTask;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
+import jobInput.JobProcessor;
+
+/**
+ * A class for testing all classes of the interface
+ * @author Artur
+ *
+ */
 public class Display
 {
 	public static void main(String[] args)
 	{
+		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
+		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		
 		JFrame frame = new JFrame("Warehouse Interface");
 		frame.setLayout(new GridLayout(2, 2));
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -38,14 +51,11 @@ public class Display
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
 		
-		AllRobots.addRobot(new RobotInfo("Tay Tay", new Point(5, 7)));
-		AllRobots.addRobot(new RobotInfo("Alfonso", new Point(5, 0), Direction.SOUTH));
-		AllRobots.addRobot(new RobotInfo("John Cena", new Point(0, 4), Direction.WEST));
-		AllRobots.addRobot(new RobotInfo("Donaldihno", new Point(11, 4), Direction.EAST));
+		AllRobots.addRobot(new RobotInfo("TayTay", new Point(5, 7)));
+		//AllRobots.addRobot(new RobotInfo("Alfonso", new Point(5, 0), Direction.SOUTH));
+		//AllRobots.addRobot(new RobotInfo("John Cena", new Point(0, 4), Direction.WEST));
+		//AllRobots.addRobot(new RobotInfo("Donaldihno", new Point(11, 4), Direction.EAST));
 		frame.setVisible(true);
-
-//		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
-//		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 	}
 
 	public static JTable createTable(DefaultTableModel tableModel)

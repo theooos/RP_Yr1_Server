@@ -9,15 +9,28 @@ import jobInput.JobProcessor;
 import main.RunServer;
 import routePlanning.orderPicks.OrderPicks;
 
+/**
+ * selection class
+ * creates and orders priority queue of jobs
+ *
+ */
 public class Selection { 
 	
+	/**
+	 * constructor
+	 */
 	public static PriorityQueue<Job> priorityQueue = new PriorityQueue<Job>(new Comparator<Job>() {
 		
+		/**
+		 * overwritten compare method
+		 * @param job1 first job
+		 * @param job2 second job 
+		 */
 		@Override
 		public int compare(Job job1, Job job2) {
 
-	        Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 50)*(1-job1.getCancellationProb()) / 2);
-            Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 50)*(1-job2.getCancellationProb()) / 2);
+	        Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 50)*(1-job1.getCancellationProb().getProbs()[0]) / 2);
+            Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 50)*(1-job2.getCancellationProb().getProbs()[0]) / 2);
 	
             return valueJob2.compareTo(valueJob1);
 		}

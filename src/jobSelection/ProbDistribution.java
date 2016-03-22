@@ -5,23 +5,48 @@ import java.util.function.Predicate;
 
 import jobInput.JobProcessor;
 
+/**
+ * 
+ * prob distribution class
+ * calculates the probability distribution using predicates
+ *	
+ */
 public class ProbDistribution {
 
     private float[] probabilities;
 
+    /**
+     * constructor
+     * @param probabilities array of probabilities
+     */
     public ProbDistribution(float[] probabilities) {
         this.probabilities = probabilities;
     }
 
+    /**
+     * is normalised method
+     * @return boolean do probs add up to 1?
+     */
     public boolean isNormalised() {
         return (sumOfProbs() == 1);
     }
 
+    /**
+     * normalise method
+     */
     public void normalise() {
         float multiplier = 1.0f / sumOfProbs();
         for(int i = 0; i < probabilities.length; i++) {
             probabilities[i] *= multiplier;
         }
+    }
+    
+    /**
+     * get probs method
+     * @return probabilities the array of probs
+     */
+    public float[] getProbs() {
+    	return probabilities;
     }
 
     private float sumOfProbs() {
@@ -32,6 +57,12 @@ public class ProbDistribution {
         return sum;
     }
 
+    /**
+     * calculate the probability distribution
+     * @param col collection 
+     * @param p predicate
+     * @return probability distribution
+     */
     public static <T> ProbDistribution calculateProbDistr(Collection<T> col, Predicate<T> p) {
         
         float[] prob = new float[2];
@@ -46,6 +77,10 @@ public class ProbDistribution {
 
     }
 
+    /**
+     * to string method
+     * @return s string of probabilities
+     */
     // For debugging purposes.
     @Override
     public String toString() {

@@ -11,6 +11,7 @@ import Objects.Direction;
 import Objects.Item;
 import Objects.Job;
 import Objects.WarehouseMap;
+import Objects.Sendable.CompleteReport;
 import Objects.Sendable.DropOffPoint;
 import Objects.Sendable.Move;
 import Objects.Sendable.MoveReport;
@@ -73,7 +74,7 @@ public class RouteExecution extends Thread {
 				}
 			}
 			for(int ir=0;ir<nrOfRobots;ir++){
-				//check if all the robots have a task tJobTable.updateStatus(AllRobots.getRobot(pup.name()).currJob.getJobID(), "Completed");hey are doing or not and assign tasks to them
+				//check if all the robots have a task they are doing or not and assign tasks to them
 				String name=this.getRobotName(ir);
 				if(isFunctioning(name))
 				{
@@ -83,7 +84,7 @@ public class RouteExecution extends Thread {
 						{
 							//robot should go to dropoff
 							AllRobots.getRobot(name).goingToDropOff=true;
-							Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),this.getJob().dropOff, GetTime()+1, AllRobots.getRobot(name));
+							Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),AllRobots.getRobot(name).currJob.dropOff, GetTime()+1, AllRobots.getRobot(name));
 							System.out.println("assigning task to drop off:"+path);
 							this.assignTask( path,name);
 							JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Moving to drop-off point");
@@ -91,9 +92,9 @@ public class RouteExecution extends Thread {
 						}else{
 							
 							Vector<Direction> task=this.getNextTask(name);
-							System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
-							System.out.println("index1: "+this.getCurrentTaskIndex(name));
-							System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
+							//System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
+							//System.out.println("index1: "+this.getCurrentTaskIndex(name));
+							//System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
 							if(task!=null){
 								this.assignTask( task,name);
 							}
@@ -114,14 +115,14 @@ public class RouteExecution extends Thread {
 					//check if robot reached the item
 					if(AllRobots.getRobot(name).goingToDropOff)
 					{
-						if(this.getJob().dropOff.equals(this.getRobotLocation(name)))
+						if(AllRobots.getRobot(name).currJob.dropOff.equals(this.getRobotLocation(name)))
 						{
 							//reached drop off
 							if(!AllRobots.getRobot(name).droppingOff)
 							{
 								AllRobots.getRobot(name).droppingOff=true;
 								
-								AllPuppets.send(name,new DropOffPoint((int)this.getJob().dropOff.getX(),(int)this.getJob().dropOff.getY()));
+								AllPuppets.send(name,new DropOffPoint((int)AllRobots.getRobot(name).currJob.dropOff.getX(),(int)AllRobots.getRobot(name).currJob.dropOff.getY()));
 							}
 						}else{
 							if(this.getTaskMoveIndex(name)<this.getCurrentTask(name).size()){
@@ -159,6 +160,7 @@ public class RouteExecution extends Thread {
 								System.out.println("reached Item");
 								AllRobots.getRobot(name).pickingUp=true;
 								AllPuppets.send(name,getTask(name));
+								
 								
 								/*
 								if(this.getCurrentTaskIndex(name)==AllRobots.getRobot(name).currJob.getNumOfTasks()-1)
@@ -219,7 +221,7 @@ public class RouteExecution extends Thread {
 			//commands have been sent now to wait for movereports
 			
 			boolean timepassed=false;
-			while(!done)
+			while(!done&&running)
 			{
 				done=true;
 				for(int ir=0;ir<nrOfRobots;ir++)
@@ -297,13 +299,10 @@ public class RouteExecution extends Thread {
 						if(this.finishedDropingItems(name))
 						{
 							//job complete!!
-							this.increaseReward();
+							this.increaseReward(name);
 							System.out.println("job complete");
 							JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Completed");
 							this.initVariables(name);
-							//notify whoever needs to be notified about the fact that the job is complete
-
-
 						}
 					}
 				}
@@ -451,9 +450,10 @@ public class RouteExecution extends Thread {
 
 	}
 
-	private void increaseReward()
+	private void increaseReward(String name)
 	{
-		Statistics.increaseRevenue(this.getJob().totalReward);
+		Statistics.increaseRevenue(AllRobots.getRobot(name).currJob.getTotalReward());
+		Statistics.jobDone();
 	}
 	
 	private SingleTask getTask(String name)
@@ -588,11 +588,19 @@ public class RouteExecution extends Thread {
 			return new Vector<Direction>();
 		}else{
 			SingleTask nextTask=AllRobots.getRobot(name).currJob.getTaskAtIndex(getCurrentTaskIndex(name)).get();
+			if(nextTask!=null){
 			Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),nextTask.getLocation(), GetTime()+1, AllRobots.getRobot(name));
-			//System.out.println("got a task");
-
+			System.out.println("got a task");
+			
 			return path;
-		}
+		
+			}else{ 
+				System.out.println("task null");
+				return null;
+				
+				
+			}
+		}	
 	}
 
 	private Vector<Direction> getCurrentTask(String name)
@@ -616,26 +624,13 @@ public class RouteExecution extends Thread {
 		System.out.println("assigning job");
 		AllRobots.getRobot(name).currJob=job;
 		AllRobots.getRobot(name).isDoingJob=true;
-		double reward = 0.0;
-		int count = 0;
-		for(SingleTask task : job.getTasks())
-			if(!task.getItemID().equals("dropOff")){
-				reward += JobProcessor.getItem(task.getItemID()).getReward() * task.getQuantity();
-				count++;
-				System.out.println(job);
-				System.out.println("the number of tasks is " + (job.getNumOfTasks() ));
-				//System.out.println("this is count: " + count);
-				System.out.println("this is reward: " + reward);
-			}
-		JobTable.addJob(job.getJobID(), String.valueOf(reward), name);
+		JobTable.addJob(job.getJobID(), String.format("%.2f", job.getTotalReward()), name); 
 	}
 
 
 	private Job getJob()
 	{
-		//System.out.println(priorityQueue);
 		return priorityQueue.remove();
-
 	}
 
 	public void stopThread()
@@ -711,13 +706,32 @@ public class RouteExecution extends Thread {
 
 	}
 
-	public void addCompleteReport(String name, SendableObject comm) {
-		if(this.isPickingUpItem(name)){
-			AllRobots.getRobot(name).hasCompletedTask=true;
+	public void addCompleteReport(String name, CompleteReport comm) {
+		if(comm.wasCancelled())
+		{
+			JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Cancelled");
+			JobProcessor.getJob(AllRobots.getRobot(name).currJob.getJobID()).cancel();
+			initVariables(name);
+			return;
 		}
-		if(this.dropingItems(name)){
-			AllRobots.getRobot(name).finishedDroppingItems=true;
-			
+		if(comm.getIsPickup()){
+			if(comm.wasCompleted())
+			{
+				AllRobots.getRobot(name).hasCompletedTask=true;
+			}else
+			{
+				AllRobots.getRobot(name).hasATask=false;
+				AllRobots.getRobot(name).pickingUp=false;
+			}
+		}else{
+			if(comm.wasCompleted())
+			{
+				AllRobots.getRobot(name).finishedDroppingItems=true;
+			}else
+			{
+				AllRobots.getRobot(name).hasATask=false;
+				AllRobots.getRobot(name).droppingOff=false;
+			}
 		}
 	}
 

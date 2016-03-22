@@ -14,6 +14,7 @@ import warehouseInterface.RobotTable;
 import warehouseInterface.Statistics;
 import Objects.AllPuppets;
 import Objects.AllRobots;
+import Objects.Job;
 import Objects.WarehouseMap;
 import Objects.Sendable.CompleteReport;
 import Objects.Sendable.Move;
@@ -21,6 +22,7 @@ import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
 import jobInput.JobProcessor;
+import jobSelection.Probability;
 import networking.Puppet;
 
 /**
@@ -38,19 +40,33 @@ public class RunServer extends Thread {
 		//// JobSelection (Fran & Brendan) -- Process the items
 		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
 		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		Probability p = new Probability(JobProcessor.getAllJobs().values(), JobProcessor.getAllItems().values());	
+		for(Job j : JobProcessor.getAllJobs().values()) {
+			 j.setCancellationProb(p.probabilityCancelled(j));
+	    }
 
 		//// Testing puppets, uncomment for experimentation
 
+<<<<<<< HEAD
 		Puppet tay = new Puppet("TayTay", "0016531AF6E5");
 		AllPuppets.addPuppet(tay);
+=======
+		//Puppet tay = new Puppet("TayTay", "0016531AF6E5");
+		//AllPuppets.addPuppet(tay);
+>>>>>>> 7f5a9dfc88b4deba5611618d5e64efadf0e2d45f
 
 		//// Creating Puppet
-		Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-		AllPuppets.addPuppet(alfonso);
+		 Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+		 AllPuppets.addPuppet(alfonso);
 		//
+<<<<<<< HEAD
 		
 		Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
 		AllPuppets.addPuppet(johnCena);
+=======
+		//Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
+		//AllPuppets.addPuppet(johnCena);
+>>>>>>> 7f5a9dfc88b4deba5611618d5e64efadf0e2d45f
 
 		//// Setting up the WarehouseInterface (Artur)
 		setUpWarehouse();
@@ -100,14 +116,22 @@ public class RunServer extends Thread {
 				if (comm instanceof MoveReport) {
 					routeExec.addMoveReport(pup.name(), (MoveReport) comm);
 					System.out.println("GOT REPORT: " + ((MoveReport) comm).toString());
-				} else if (comm instanceof CompleteReport) {
-					routeExec.addCompleteReport(pup.name(), comm);
-				} else if (comm instanceof RobotInfo) {
+				}
+				else if (comm instanceof CompleteReport) {
+					routeExec.addCompleteReport(pup.name(), (CompleteReport) comm);
+				}
+				else if (comm instanceof RobotInfo) {
 					/*
 					 * Will only be called when a robot has started up, and had
 					 * it's input given to it by the operator.
 					 */
-					AllRobots.addRobot((RobotInfo) comm);
+					RobotInfo info = (RobotInfo) comm;
+					if (!AllRobots.checkExists(info.getName())){
+						AllRobots.addRobot((RobotInfo) comm);
+					}
+					else{
+						AllRobots.modifyRobotLocation(info.getName(), info.getPosition(), info.getDirection());
+					}
 				}
 			}
 		}
@@ -118,6 +142,10 @@ public class RunServer extends Thread {
 	 */
 	private void setUpWarehouse() {
 
+	//// Start RoutePlanning & RouteExecution (Szymon & Maria)
+		routeExec = new RouteExecution(1, map);
+		routeExec.start();
+		
 		JFrame frame = new JFrame("Warehouse Interface - 1.1");
 		frame.setLayout(new GridLayout(2, 2));
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -129,12 +157,15 @@ public class RunServer extends Thread {
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
 		frame.setVisible(true);
+<<<<<<< HEAD
 
 		// This shouldn't be hardcoded, change later
 
 		//// Start RoutePlanning & RouteExecution (Szymon & Maria)
 		routeExec = new RouteExecution(3, map);
 		routeExec.start();
+=======
+>>>>>>> 7f5a9dfc88b4deba5611618d5e64efadf0e2d45f
 	}
 
 	/**

@@ -11,10 +11,18 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * A deprecated class that allows the operator to select a job to assign to the robot
+ * @author Artur
+ *
+ */
 public class AddJob extends JFrame
 {
 	private JTable table;
 
+	/**
+	 * Displays the window with a list of jobs to assign to the robots
+	 */
 	public AddJob()
 	{
 		super("Add a new job");
@@ -65,6 +73,9 @@ public class AddJob extends JFrame
 		setVisible(true);
 	}
 
+	/**
+	 * Adds a selected job to the job table
+	 */
 	private void addJob()
 	{
 		if(table.getSelectedRow() != -1) //we know a row has been selected
