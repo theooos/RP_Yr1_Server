@@ -23,6 +23,7 @@ import routePlanning.orderPicks.OrderPicks;
  */
 public class JobProcessor {
 	
+	private static Map<Integer, Job> trainingData = new HashMap<Integer, Job>();
 	private static Map<Integer, Job> jobs = new HashMap<Integer, Job>();
 	private static Map<String, Item> items = new HashMap<String, Item>();
 
@@ -42,6 +43,14 @@ public class JobProcessor {
 	 */
 	public static Job getJob(int id) {
 		return jobs.get(id);
+	}
+
+	/**
+	 * Get all the jobs.
+	 * @return All the jobs.
+	 */
+	public static Map<Integer, Job> getAllTrainingJobs() {
+		return trainingData;
 	}
 
 	/**
@@ -90,17 +99,25 @@ public class JobProcessor {
 
 	/**
 	 * Process the job files.
+     * @param trainingFile The training file.
 	 * @param jobFile The job file.
 	 * @param cancelFile The cancellation file.
 	 */
-	public static void processJobFiles(String jobFile, String cancelFile) {
+	public static void processJobFiles(String trainingFile, String jobFile, String cancelFile) {
 
+		//contents of training file
+		Optional<List<String>> trainingContents = readFile(trainingFile);
 		//contents of jobs file
 		Optional<List<String>> jobsContents = readFile(jobFile);
 		//contents of cancellation file
 		Optional<List<String>> cancellationsContents = readFile(cancelFile);
 
 		//nothing in files? error
+		if(!trainingContents.isPresent()) {
+			System.err.println("Error processing job file.");
+			return;
+		}
+
 		if(!jobsContents.isPresent()) {
 			System.err.println("Error processing job file.");
 			return;
@@ -109,6 +126,28 @@ public class JobProcessor {
 		if(!cancellationsContents.isPresent()) {
 			System.err.println("Error processing cancellations file.");
 			return;
+		}
+
+		for(String jobStr : trainingContents.get()) {
+			// Each data element is separated by a comma.
+			String[] jobArr = jobStr.split(",");
+
+			// Create a new job.
+			Job newJob = new Job(Integer.parseInt(jobArr[0]));;
+			
+			
+			// Add each the item and the quantity of the item to the job.
+			for(int i = 1; i < jobArr.length; i+=2) {
+				newJob.addTask(jobArr[i], Integer.parseInt(jobArr[i+1]), items.get(jobArr[i]).getLocation());
+			}
+			//System.out.println(newJob.getTasks());
+			//System.out.println()
+			//OrderPicks op = new OrderPicks(newJob.getTasks(), RunServer.map.getDropoffPoints(), RunServer.map);
+			
+			
+			trainingData.put(Integer.parseInt(jobArr[0]), newJob);
+			// Add a job to the list.
+			//jobs.put(Integer.parseInt(jobArr[0]), new Job(Integer.parseInt(jobArr[0]), op.orderedItems, items));
 		}
 
 		for(String jobStr : jobsContents.get()) {

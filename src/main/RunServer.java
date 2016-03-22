@@ -21,6 +21,7 @@ import Objects.Sendable.MoveReport;
 import Objects.Sendable.RobotInfo;
 import Objects.Sendable.SendableObject;
 import jobInput.JobProcessor;
+import jobSelection.Probability;
 import networking.Puppet;
 
 /**
@@ -37,7 +38,11 @@ public class RunServer extends Thread {
 	public RunServer() {
 		//// JobSelection (Fran & Brendan) -- Process the items
 		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
-		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		JobProcessor.processJobFiles("res/training_jobs.csv", "res/jobs.csv", "res/cancellations.csv");
+        Probability pCalculator = new Probability(JobProcessor.getAllTrainingJobs().values(), JobProcessor.getAllItems().values());
+        for(Job j : JobProcessor.getAllJobs().values()) {
+            j.setCancellationProb(pCalculator.probabilityCancelled(j));
+        }
 
 		//// Testing puppets, uncomment for experimentation
 
