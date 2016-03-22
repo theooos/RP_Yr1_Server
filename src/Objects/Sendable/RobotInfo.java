@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Vector;
 
 import Objects.Direction;
+import Objects.GlobalClock;
 import Objects.Job;
 import Objects.WarehouseMap;
 import routePlanning.dataStructures.TimePosReservations;
@@ -35,26 +36,21 @@ public class RobotInfo implements SendableObject {
 	public Point nextRobotLocation;
 	public Direction nextDir;
 
-	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
-	private Point currentNode;
-	private TimePosReservations timePosReservations;
+///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
+private TimePosReservations timePosReservations;
 
-	/**
-	 * After robot stops at goal and remains stationary(no jobs) it becomes an obstacle and has the node it resides at reserved until the next move
-	 */
-	private boolean stopped;
+///////////////////////////////////////////////////////////////////////////////////Route Planning-DEBUg///////////////////////////////////////////////////////////////////////////////////
+private int robotID;
+private WarehouseMap map;
+private Vector<Direction> pathSequence;
+private int pathSequenceProgress = 0;//Index of the next move
 
-	///////////////////////////////////////////////////////////////////////////////////Route Planning-DEBUg///////////////////////////////////////////////////////////////////////////////////
-	private int robotID;
-	private WarehouseMap map;
-	private Vector<Direction> pathSequence;
-	private int pathSequenceProgress = 0;//Index of the next move
-
-	public RobotInfo(int robotID, WarehouseMap map){
-		this.robotID = robotID;
-		this.map = map;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public RobotInfo(int robotID, WarehouseMap map, Point position){
+this.robotID = robotID;
+this.map = map;
+this.position = position;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//By default, all robots start facing 'north' (which is west IRL)
 	public RobotInfo(String name) {
@@ -140,111 +136,152 @@ public class RobotInfo implements SendableObject {
 		return ("RobotInfo," + name + "," + (int)position.getX() + "," + (int)position.getY() + "," + direction);
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
-	/**
-	 * SetUp a stationary robot(no jobs allocated)
-	 * @param currentNode
-	 */
-	public void SetUpStationary(Point currentNode){
-		this.currentNode = currentNode;
-		stopped = true;
-	}
+///////////////////////////////////////////////////////////////////////////////////Setters Route Planning///////////////////////////////////////////////////////////////////////////////////
+/**
+* SetUp a stationary robot(no jobs allocated)
+* @param position
+*/
+public void SetUpStationary(Point position){
+setStopped();
+}
 
-	public void SetUpPath(Point currentNode, TimePosReservations timePosReservations){
-		this.currentNode = currentNode;
-		this.timePosReservations = timePosReservations;
-		stopped = false;
-	}
+public void SetUpPath(Vector<Direction> pathSequence, TimePosReservations timePosReservations){
+this.pathSequence = pathSequence;
+pathSequenceProgress = 0;
+this.timePosReservations = timePosReservations;//timePosReservations contains firstReservedTime other than Integer.MAX_VALUE so this robot is not stopped
+}
 
-	///////////////////////////////////////////////////////////////////Time & Pos Reservations///////////////////////////////////////////////////////////////////////////
-	public boolean IsReserved(Point node, int time){
-		if (stopped)
-			return node.equals(currentNode);// stopped e.g. No reservations yet, therefore return true if the current node is being checked for reservations as this robot is occupying it
-		else if (timePosReservations == null)
-			return false;//object created yet SetUp Method hasnt been called on this instance
-		return timePosReservations.isReserved(node, time);
-	}
+///////////////////////////////////////////////////////////////////Getters Time & Pos Reservations///////////////////////////////////////////////////////////////////////////
+public boolean IsReserved(Point node, int time){
+int stoppedStatus = getStopped(time);
+if (stoppedStatus > -1){
+switch (stoppedStatus) {
+case 0:
+return node.equals(position);// stopped e.g. No reservations yet, therefore return true if the current node is being checked for reservations as this robot is occupying it
+case 1:
+return node.equals(position);
+case 2:
+return node.equals(timePosReservations.getReservedNode(timePosReservations.getLastReservedTime()));
+}
+}
+return timePosReservations.isReserved(node, time);
+}
 
-	///////////////////////////////////////////////////////////////////////////////////Route Planning-DEBUg///////////////////////////////////////////////////////////////////////////////////
-	public void SetUpPath(Point currentNode, Vector<Direction> pathSequence, TimePosReservations timePosReservations){
-		this.currentNode = currentNode;
-		this.pathSequence = pathSequence;
-		this.timePosReservations = timePosReservations;
-		stopped = false;
-	}
+/**
+* Caller wants to stop at the given node at the given time, return boolean indicating if he will cut off my path
+* @param node
+* @param time
+* @return
+*/
+public boolean isReservedForStopping(Point node, int time){
+if(timePosReservations == null)
+return false;
+if(node.equals(timePosReservations.getReservedNode(timePosReservations.getLastReservedTime()))){//caller wants to go to the node I am currently travelling towards and will stop at
+//This node is not reserved before I get there e.g. time == 16, but caller is closer so he is checking it at time 15 as he will get there in less time
+//, so return false because the caller will crash with me my destination node otherwise
+return true;
+}
+else {//Caller wants to potentially stop along my path to my goal node so he can only stop there after I have passed that point, not before!
+for (int t = time; t < timePosReservations.getLastReservedTime(); t++){//dont need <= in condition since I have already checked above if this is a common destination node
+if(node.equals(timePosReservations.getReservedNode(t)))//If I will be at that node when the caller wants to stop there or after he stops (before reaching my dest.) do not let him block my way
+return true;
+}
+}
+return false;
+}
 
-	public Point goToNextNode(){
-		if (pathSequenceProgress == pathSequence.size()){
-			stopped = true;
-			return null;//End of path
-		}
+/**
+* No reservations initialised yet OR the reservations have been placed in the future 
+* e.g. pathFinding determined it is more optimal (less travel) to wait for other robots to move out of the way, than go around
+* or explicitly stopped using SetUpStationary()
+* @param time time at which Im checking if the robot is stopped
+* @return -1 - not stopped, 0 - no reservations exist, 1 - waiting to move, 2 - reached destination, waiting for next
+*/
+private int getStopped(int time){
+if(timePosReservations == null)
+return 0;
+else if(time + 1 < timePosReservations.getFirstReservedTime())
+return 1;
+else if(time >= timePosReservations.getLastReservedTime())
+return 2;
+return -1;
+}
 
-		switch (pathSequence.get(pathSequenceProgress++)) {
-		case NORTH:
-			return moveUp();
+private void setStopped() {
+if(getStopped(GlobalClock.getCurrentTime()) == -1)//if timePosReservations == null then wont try to call setFirstReservedTime and the null condition itself signifies being stopped
+timePosReservations.setFirstReservedTime(Integer.MAX_VALUE);
+}
 
-		case SOUTH:
-			return moveDown();	
+public int getLastReservedTime() {
+return timePosReservations == null ? 0 : timePosReservations.getLastReservedTime();//If no reservations yet e.g. robots added and calculating path before (setting path i.e. adding reservations)
+}
 
-		case EAST:
-			return moveRight();
+///////////////////////////////////////////////////////////////////////////////////Route Planning-DEBUg///////////////////////////////////////////////////////////////////////////////////
+public int getFirstReservedTime() {//DELETE AFTER DEBUG!
+return timePosReservations == null ? 0 : timePosReservations.getFirstReservedTime();//If no reservations yet e.g. robots added and calculating path before (setting path i.e. adding reservations)
+}
 
-		case WEST:
-			return moveLeft();
+public Vector<Direction> getPathSequence() {//DELETE AFTER DEBUG!
+return pathSequence;
+}
 
-		default:
-			return null;//Should not happen
-		}
-	}
+/**
+* 
+* @return returns null if the robot will not move
+*/
+public Point goToNextNode(){
+if(pathSequence == null || getStopped(GlobalClock.getCurrentTime()) > -1){
+return null;//Please do not move me Im stopped
+}
 
-	
-	/**
-	 * Move the roobt
-	 * @param destinationNode Destination
-	 * @return New location of the robot
-	 */
-	private Point move(Point destinationNode){
-		return currentNode = destinationNode;
-	}
+if (pathSequenceProgress == pathSequence.size()){
+setStopped();
+return null;//End of path
+}
 
-	/**
-	 * Move the robot up
-	 * @return New location of the robot
-	 */
-	public Point moveUp() {
-		return move(map.getAboveNode(currentNode));
-	}
+switch (pathSequence.get(pathSequenceProgress++)) {
+case NORTH:
+return moveUp();
 
-	/**
-	 * Move the robot down
-	 * @return New location of the robot
-	 */
-	public Point moveDown() {
-		return move(map.getBelowNode(currentNode));
-	}
+case SOUTH:
+return moveDown();	
 
-	/**
-	 * Move the robot left
-	 * @return New location of the robot
-	 */
-	public Point moveLeft() {
-		return move(map.getLeftNode(currentNode));
-	}
+case EAST:
+return moveRight();
 
-	/**
-	 * Move the robot right
-	 * @return New location of the robot
-	 */
-	public Point moveRight() {
-		return move(map.getRightNode(currentNode));
-	}
+case WEST:
+return moveLeft();
 
-	/**
-	 * Get the ID of the robot
-	 * @return ID of robot
-	 */
-	public int getID(){
-		return robotID;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+default:
+return null;//Should not happen
+}
+}
+
+private Point move(Point destinationNode){
+//position.status = Node.GOALPATH;
+return position = destinationNode;
+//position.status = " " + robotID + " ";
+}
+
+public Point moveUp() {
+return move(map.getAboveNode(position));
+}
+
+public Point moveDown() {
+return move(map.getBelowNode(position));
+}
+
+public Point moveLeft() {
+return move(map.getLeftNode(position));
+}
+
+public Point moveRight() {
+return move(map.getRightNode(position));
+}
+
+public int getID(){
+return robotID;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

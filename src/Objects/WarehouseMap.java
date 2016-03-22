@@ -24,6 +24,39 @@ public class WarehouseMap {
 
 	///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
 	private Point[][] map;
+	
+	 public WarehouseMap(int gridWidth, int gridHeight) {//, String doFile) {
+	        
+	       this.gridWidth = gridWidth;
+	        this.gridHeight = gridHeight;
+	        grid = new boolean[gridWidth][gridHeight];
+	 /*
+	        // Read dropoff locations
+	        Optional<List<String>> dos = JobProcessor.readFile(doFile);
+	        
+	        if(!dos.isPresent()) {
+	            throw new IllegalArgumentException("Could not create dropoff points from the file.");
+	        }
+	        dropoffs = new ArrayList<Point>();
+	        for(String doPoints : dos.get()) {
+	        	if(doPoints.equals("") || doPoints.equals(" "))
+	        		continue;
+	            String[] doArr = doPoints.replaceAll("\\s","").split(",");
+	            Point p = new Point(Integer.parseInt(doArr[0]), Integer.parseInt(doArr[1]));
+	            dropoffs.add(p);
+	        }*/
+	        
+	        ///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
+	        //Set up & populate map
+	  		map = new Point[gridWidth][gridHeight];	
+	  		
+	  		for (int i = 0; i < gridWidth; i++){
+	  			for (int j = 0; j < gridHeight; j++){
+	  				map[i][j] = new Point(i, j);
+	  			}
+	  		}
+	  		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    }
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
