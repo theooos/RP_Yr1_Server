@@ -169,7 +169,11 @@ public class PathFinding {
 					|| explored.contains(neighbourNode) 
 					|| map.isObstacle(neighbourNode) 
 					|| RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1)
-					|| RobotsReservations.IsReserved(neighbourNode, time + currentGCost) && RobotsReservations.IsReserved(current, time + currentGCost + 1)
+					|| RobotsReservations.IsReserved(neighbourNode, time + currentGCost) && RobotsReservations.IsReserved(current, time + currentGCost + 1)//Prevent robots switching places as the nodes in 
+					//front of them are not reserved when thet meet head on
+					//reserved yet this leads to collisions as robots move through each other
+					|| RobotsReservations.IsReserved(robot, current, time + currentGCost)//has another robot reserved my current node while Im still here
+					//prevent robots from waiting for other robots to move into them and then checking with success the free node the other robot left behind
 				){
 					continue;
 				}

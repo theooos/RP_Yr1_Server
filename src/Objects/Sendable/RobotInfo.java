@@ -161,15 +161,22 @@ public class RobotInfo implements SendableObject {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////Route Planning-DEBUg///////////////////////////////////////////////////////////////////////////////////
+	public int getFirstReservedTime() {//DELETE AFTER DEBUG!
+		return timePosReservations == null ? 0 : timePosReservations.getFirstReservedTime();//If no reservations yet e.g. robots added and calculating path before (setting path i.e. adding reservations)
+	}
 	
+	public Vector<Direction> getPathSequence() {//DELETE AFTER DEBUG!
+		return pathSequence;
+	}
 	
 	/**
 	 * 
 	 * @return returns null if the robot will not move
 	 */
 	public Point goToNextNode(){
-		if(getStopped(GlobalClock.getCurrentTime()) > -1)
+		if(pathSequence == null || getStopped(GlobalClock.getCurrentTime()) > -1){
 			return null;//Please do not move me Im stopped
+		}
 			
 		if (pathSequenceProgress == pathSequence.size()){
 			setStopped();

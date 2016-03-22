@@ -19,9 +19,31 @@ public class RobotsReservations {
 		robots.add(robot);
 	}
 	
+	/**
+	 * Returns whether any robot has reserved the given node
+	 * @param node
+	 * @param time
+	 * @return
+	 */
 	public static boolean IsReserved(Point node, int time){
 		for (int i = 0; i < robots.size(); i++){
 			if (robots.get(i).IsReserved(node, time))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Returns whether any robot EXCEPT the given one has reserved the given node
+	 * @param robot
+	 * @param node
+	 * @param time
+	 * @return
+	 */
+	public static boolean IsReserved(RobotInfo robot, Point node, int time){
+		for (int i = 0; i < robots.size(); i++){
+			if (!robot.equals(robots.get(i)) && robots.get(i).IsReserved(node, time))
 				return true;
 		}
 		

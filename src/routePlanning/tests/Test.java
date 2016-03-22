@@ -21,6 +21,7 @@ import java.util.Random;
  * 
  * @author Szymon */
 public class Test {
+	private boolean travelledToTheEnd = true;//To prevent path assignment to the same destination multiple times throughout the journey causing robots to stop
 	private int mapWidth = 10;
 	private int mapHeight =10;
 	private int noOfRobots = 10;
@@ -60,15 +61,29 @@ public class Test {
 		int tempY;
 		for (int z = 0; z < testRobots.size(); z++) {
 			currentRobot = testRobots.get(z);
-			currentRobot.goToNextNode();
+			
+			if(currentRobot.getID() == 8){
+				System.out.println("R8 next node " + currentRobot.goToNextNode());
+				System.out.println("R8 first reserved time " + currentRobot.getFirstReservedTime());
+				System.out.println("R8 last reserved time " + currentRobot.getLastReservedTime());
+				System.out.println("Current time " + GlobalClock.getCurrentTime());
+				System.out.println("R8 pathSeq " + currentRobot.getPathSequence());
+			}
+			else{
+				currentRobot.goToNextNode();
+			}
+			
 			tempX = (int) currentRobot.getPosition().getX();
 			tempY = (int) currentRobot.getPosition().getY();
 			//System.out.println("R" + currentRobot.getID() + "  " + tempX + ", " + tempY);
 			displayMap[tempX][tempY] = "  R" + currentRobot.getID();
 			displayMap[tempX][tempY] += currentRobot.getID() > 9 ? " " : "  ";
-			
-			if(currentRobot.getID() == 10)
-				System.out.println("R10 pos " + currentRobot.getPosition());
+		}
+		
+		//After EVERY robot has moved are there any robots on one node NOTE it is permitted while they are moving!
+		//NOTE this will not catch the bug where one robot waits for the second to go on him so the first one can go to the position left behind by the second
+		for (int z = 0; z < testRobots.size(); z++) {
+			currentRobot = testRobots.get(z);
 			for (int z2 = 0; z2 < testRobots.size(); z2++) {
 				if(!currentRobot.equals(testRobots.get(z2))){
 					if(currentRobot.getPosition().equals(testRobots.get(z2).getPosition()) == true){
@@ -80,7 +95,7 @@ public class Test {
 							System.out.println();
 						}
 						System.out.println("R" + currentRobot.getID() + " went into R" + testRobots.get(z2).getID());
-						//assert(currentRobot.getPosition().equals(testRobots.get(z2).getPosition()) == false);
+						assert(currentRobot.getPosition().equals(testRobots.get(z2).getPosition()) == false);
 					}
 				}
 			}
@@ -117,6 +132,24 @@ public class Test {
 			
 			currentRobot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
 		}
+	}
+	
+	public void assignRandomPaths(RobotInfo robot) {
+		Point endNode = null;
+		Point startNode = new Point((int) robot.getPosition().getX(),(int) robot.getPosition().getY());
+
+		do{
+			endNode = new Point(randomGenerator.nextInt(mapWidth), randomGenerator.nextInt(mapHeight));
+		}while(map.isObstacle(endNode));//Do not give paths with destination inside walls
+		
+		pathSequence = pathFinding.GetPath(startNode, endNode, robot);
+		
+		if(pathSequence == null){//E.g. tried to get path from currentNode to currentNode
+								//OR  tried to get path to reserved node in which a robot stands stationary for long and doesnt move out of the way
+			return;
+		}
+		
+		robot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
 	}
 	
 	public void assignPathsToStart(){
@@ -163,6 +196,8 @@ public class Test {
 			
 			goalNode = new Point(goalX, goalY);
 			pathSequence = pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
+			if(tempRobot.getID() == 7)
+				System.out.println("R7 Assigning path " + pathSequence);
 			tempRobot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
 		}
 	}
@@ -263,7 +298,7 @@ public class Test {
 		
 		while (true) {
 			try {
-				Thread.sleep(600);
+				Thread.sleep(200);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -275,15 +310,27 @@ public class Test {
 				//test.assignRandomPaths();
 			}
 			
-			if(test.testRobots.get(9).getPosition().getX() == test.mapWidth - 1){
+			if(test.testRobots.get(9).getPosition().getX() == test.mapWidth - 1 && !test.travelledToTheEnd){
 				test.assignPathsToStart();
+				test.travelledToTheEnd = true;
 			}
 			
-			if(test.testRobots.get(5).getPosition().getX() == 0){
+			if(test.testRobots.get(5).getPosition().getX() == 0 && test.travelledToTheEnd){
 				test.assignPathsToEnd();
+				test.travelledToTheEnd = false;
 			}
 			
 			if(GlobalClock.getCurrentTime() == 5 || GlobalClock.getCurrentTime() == 30){
+				//AT TIME == 30 A SITUATION ARISES WHERE R10 IS REDIRECTED WHILE ON ITS PATH TO A LOCATION IN FRONT OF MOVING ROBOTS, THE ROBOT DECIDES TO WAIT UNTIL ALL ROBOTS PASS
+				//AND AT THE SAME TIME R3 ROBOT GOES INTO R10 SO THAT R10 HAS A FREE SPACE IT CAN NOW MOVE INTO I.E. THE SPACE OCCUPIED BY R3 BEFORE IT WENT INTO R10
+				//I HAVE TO LOOK INTO CHANGED PATHS AND THE CONSEQUENCES ON CHECKED DATA
+				
+				//All robots have new paths computed:
+				//R7 has completed its path and has its new path computed first so since R8 has old path at the time of this computation,R7 thinks it can move past him
+				//R8 then computes new path but cannot move so it has to wait, it waits too long and R7 goes into R8!
+				//* One way to solve this would be to screen shot the occupied positions at the time of new path computation and assume all robots will stay there so treat these positions as walls for
+				//	that one computation XXX This approach leads to a dead lock
+				//*	Another way would be moving the player out of the way to a safe place
 				goalX = 3;
 				goalY = 3;
 				
@@ -303,6 +350,18 @@ public class Test {
 				goalNode = new Point(goalX, goalY);
 				test.pathSequence = test.pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
 				tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());
+			}
+			
+			if(GlobalClock.getCurrentTime() > 60 && test.newPathTimer()){//Now let R10 move randomly
+				/*goalX = 0;
+				goalY = 0;
+				
+				tempRobot = test.testRobots.get(10);
+				
+				goalNode = new Point(goalX, goalY);
+				test.pathSequence = test.pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
+				tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());*/
+				//test.assignRandomPaths(test.testRobots.get(10));
 			}
 			
 			test.DrawMap();
