@@ -197,7 +197,7 @@ return false;
 * @param time time at which Im checking if the robot is stopped
 * @return -1 - not stopped, 0 - no reservations exist, 1 - waiting to move, 2 - reached destination, waiting for next
 */
-private int getStopped(int time){
+public int getStopped(int time){
 if(timePosReservations == null)
 return 0;
 else if(time + 1 < timePosReservations.getFirstReservedTime())
@@ -207,7 +207,7 @@ return 2;
 return -1;
 }
 
-private void setStopped() {
+public void setStopped() {
 if(getStopped(GlobalClock.getCurrentTime()) == -1)//if timePosReservations == null then wont try to call setFirstReservedTime and the null condition itself signifies being stopped
 timePosReservations.setFirstReservedTime(Integer.MAX_VALUE);
 }

@@ -8,6 +8,7 @@ import java.util.Vector;
 import Objects.AllPuppets;
 import Objects.AllRobots;
 import Objects.Direction;
+import Objects.GlobalClock;
 import Objects.Item;
 import Objects.Job;
 import Objects.WarehouseMap;
@@ -37,12 +38,16 @@ public class RouteExecution extends Thread {
 	private int nrOfRobots=0;
 	private PathFinding pathfinder;
 	private PriorityQueue<Job> priorityQueue;
-	private int time=0;
+	//private int time=0;
 
-	public RouteExecution( int nrOfRobots,WarehouseMap map)
+	public RouteExecution( WarehouseMap map)
 	{
-		this.nrOfRobots=nrOfRobots;
+		this.nrOfRobots=AllRobots.getAllRobots().size();
 		this.pathfinder=new PathFinding(map);
+		for(int i=0;i<nrOfRobots;i++)
+		{
+			pathfinder.addRobot(AllRobots.getAllRobots().get(i));
+		}
 		this.priorityQueue = Selection.createQueue();
 	}
 
@@ -84,7 +89,7 @@ public class RouteExecution extends Thread {
 						{
 							//robot should go to dropoff
 							AllRobots.getRobot(name).goingToDropOff=true;
-							Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),AllRobots.getRobot(name).currJob.dropOff, GetTime()+1, AllRobots.getRobot(name));
+							Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),AllRobots.getRobot(name).currJob.dropOff, AllRobots.getRobot(name));
 							System.out.println("assigning task to drop off:"+path);
 							this.assignTask( path,name);
 							JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Moving to drop-off point");
@@ -120,11 +125,14 @@ public class RouteExecution extends Thread {
 							//reached drop off
 							if(!AllRobots.getRobot(name).droppingOff)
 							{
+								AllRobots.getRobot(name).setStopped();
 								AllRobots.getRobot(name).droppingOff=true;
 								
 								AllPuppets.send(name,new DropOffPoint((int)AllRobots.getRobot(name).currJob.dropOff.getX(),(int)AllRobots.getRobot(name).currJob.dropOff.getY()));
 							}
 						}else{
+							if(AllRobots.getRobot(name).getStopped(GlobalClock.getCurrentTime())<0)
+							{
 							if(this.getTaskMoveIndex(name)<this.getCurrentTask(name).size()){
 								Direction facingDir=this.getRobotFacingDirection(name);
 								Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
@@ -149,14 +157,14 @@ public class RouteExecution extends Thread {
 									
 								}
 							}
-							
+							}
 						}
 					}else{
 						if(this.getItemLocation(this.getCurrentTaskIndex(name),name).equals(this.getRobotLocation(name)))
 						{
 							if(!AllRobots.getRobot(name).pickingUp&&!AllRobots.getRobot(name).droppingOff)
 							{
-								
+								AllRobots.getRobot(name).setStopped();
 								System.out.println("reached Item");
 								AllRobots.getRobot(name).pickingUp=true;
 								AllPuppets.send(name,getTask(name));
@@ -179,7 +187,8 @@ public class RouteExecution extends Thread {
 	
 						}else
 						{ //execute next move
-							if(!AllRobots.getRobot(name).waitingForMoveReport)
+							if(!AllRobots.getRobot(name).waitingForMoveReport && AllRobots.getRobot(name).getStopped(GlobalClock.getCurrentTime())<0)
+							
 							{
 								Direction facingDir=this.getRobotFacingDirection(name);
 								//System.out.println(name);
@@ -247,7 +256,7 @@ public class RouteExecution extends Thread {
 				}
 				
 			}
-			if(timepassed)time++;
+			if(timepassed)GlobalClock.increaseTime();;
 
 			// check if any of the robots have picked up their items			
 			for(int ir=0;ir<nrOfRobots;ir++)
@@ -260,6 +269,8 @@ public class RouteExecution extends Thread {
 							AllRobots.getRobot(name).pickingUp=false;
 							
 							AllRobots.getRobot(name).currTaskIndex++;
+							
+							
 							/*
 							if(AllRobots.getRobot(name).currTaskIndex+1<AllRobots.getRobot(name).currJob.getNumOfTasks())
 							{
@@ -560,6 +571,8 @@ public class RouteExecution extends Thread {
 	private void assignTask(Vector<Direction> task,String name)
 	{
 		this.setHasATask(name, true);
+		AllRobots.getRobot(name).SetUpPath(task, pathfinder.getTimePosReservations());
+	
 		AllRobots.getRobot(name).currDirectionsIndex=0;
 		AllRobots.getRobot(name).hasATask=true;
 		//System.out.println(AllRobots.getRobot(name).currJob);
@@ -576,9 +589,10 @@ public class RouteExecution extends Thread {
 		return AllRobots.getRobot(name).currTaskIndex;
 	}
 
+	/*
 	public int GetTime(){
 		return this.time;
-	}
+	}*/
 
 	private Vector<Direction> getNextTask(String name)
 	{
@@ -589,7 +603,7 @@ public class RouteExecution extends Thread {
 		}else{
 			SingleTask nextTask=AllRobots.getRobot(name).currJob.getTaskAtIndex(getCurrentTaskIndex(name)).get();
 			if(nextTask!=null){
-			Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),nextTask.getLocation(), GetTime()+1, AllRobots.getRobot(name));
+			Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),nextTask.getLocation(), AllRobots.getRobot(name));
 			System.out.println("got a task");
 			
 			return path;
