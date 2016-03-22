@@ -9,6 +9,8 @@ import Objects.Sendable.SingleTask;
 import jobInput.JobProcessor;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 
 /**
@@ -21,6 +23,7 @@ public class JobTable
 	private static JTable activeJobs;
 	private static DefaultTableModel tableModel;
 	private static JPanel panel;
+	private static RouteExecution routeExec;
 
 	/**
 	 * Draws the job table in a panel
@@ -32,6 +35,18 @@ public class JobTable
 		panel = new JPanel(new BorderLayout());
 		tableModel = new DefaultTableModel(new String[] {"Job ID", "Reward", "Robot", "Status"}, 0);
 		activeJobs = Display.createTable(tableModel);
+		activeJobs.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if(SwingUtilities.isRightMouseButton(e))
+				{
+					int row = activeJobs.rowAtPoint(e.getPoint());
+					activeJobs.setRowSelectionInterval(row, row);
+				}
+			}
+		});
+		JobTable.routeExec = routeExec;
 
 		JButton cancelJobManually = new JButton("Cancel a job");
 		cancelJobManually.addActionListener(e -> cancelJobManually());
@@ -40,7 +55,7 @@ public class JobTable
 		JMenuItem viewInfo = new JMenuItem("Information");
 		viewInfo.addActionListener(e -> viewJobInfo((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0)));
 		JMenuItem cancelJob = new JMenuItem("Cancel this job");
-		cancelJob.addActionListener(e -> cancelJob((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0), (String) activeJobs.getValueAt(activeJobs.getSelectedRow(), 2), routeExec));
+		cancelJob.addActionListener(e -> cancelJob((int) activeJobs.getValueAt(activeJobs.getSelectedRow(), 0), (String) activeJobs.getValueAt(activeJobs.getSelectedRow(), 2)));
 		popupMenu.add(viewInfo);
 		popupMenu.add(cancelJob);
 		activeJobs.setComponentPopupMenu(popupMenu);
@@ -101,7 +116,7 @@ public class JobTable
 	 * @param robot Robot executing the job
 	 * @param routeExec Route Execution object
 	 */
-	private static void cancelJob(int jobID, String robot, RouteExecution routeExec)
+	private static void cancelJob(int jobID, String robot)
 	{
 		updateStatus(jobID, "Cancelled");
 		RobotTable.updateStatus(robot, "Ready");
