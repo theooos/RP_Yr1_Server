@@ -27,8 +27,8 @@ public class Display
 {
 	public static void main(String[] args)
 	{
-		JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
-		JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
+		//JobProcessor.processItemFiles("res/items.csv", "res/locations.csv");
+		//JobProcessor.processJobFiles("res/jobs.csv", "res/cancellations.csv");
 		
 		JFrame frame = new JFrame("Warehouse Interface");
 		frame.setLayout(new GridLayout(2, 2));
@@ -77,17 +77,6 @@ public class Display
 		table.getTableHeader().setResizingAllowed(false);
 		table.getTableHeader().setReorderingAllowed(false);
 		table.setFocusable(false);
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				if(SwingUtilities.isRightMouseButton(e))
-				{
-					int row = table.rowAtPoint(e.getPoint());
-					table.setRowSelectionInterval(row, row);
-				}
-			}
-		});
 		return table;
 	}
 }

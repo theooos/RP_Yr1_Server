@@ -7,6 +7,8 @@ import Objects.Sendable.RobotInfo;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * A table for displaying robots currently connected with the warehouse
@@ -27,6 +29,17 @@ public class RobotTable
 		panel = new JPanel(new BorderLayout());
 		tableModel = new DefaultTableModel(new String[] {"Robot", "Status"}, 0);
 		JTable table = Display.createTable(tableModel);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				if(SwingUtilities.isRightMouseButton(e))
+				{
+					int row = table.rowAtPoint(e.getPoint());
+					table.setRowSelectionInterval(row, row);
+				}
+			}
+		});
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem viewInfo = new JMenuItem("Information");

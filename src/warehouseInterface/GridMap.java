@@ -22,7 +22,7 @@ public class GridMap
 {
 	private static JPanel panel;
 	private static final int GRID_WIDTH = 12, GRID_HEIGHT = 8;
-	private static final Color TAYTAY = new Color(255, 215, 0), CENA = new Color(76, 102, 164), ALFONSO = new Color(76, 187, 23);
+	private static final Color ALFONSO = new Color(255, 215, 0), TAYTAY = new Color(76, 102, 164), CENA = new Color(76, 187, 23);
 
 	/**
 	 * Creates the panel that renders the warehouse map
