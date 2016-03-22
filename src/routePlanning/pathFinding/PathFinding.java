@@ -176,7 +176,7 @@ public class PathFinding {
 				}
 				
 				//goal node found and is occupied therefore stay in the node before it (gather round)
-				if(neighbourNode.equals(goalNode) && RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1)){
+				if(neighbourNode != null && neighbourNode.equals(goalNode) && RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1)){
 					goalNode = currentExplored;
 					explored.remove(currentExplored);
 					AddToFrontier(currentExplored, currentGCost, currentGCost);//Add currentExplored (goal) back to frontier
