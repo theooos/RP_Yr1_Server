@@ -41,14 +41,14 @@ public class RunServer extends Thread {
 
 		//// Testing puppets, uncomment for experimentation
 
-		Puppet tay = new Puppet("TayTay", "0016531AF6E5");
-		AllPuppets.addPuppet(tay);
+		//Puppet tay = new Puppet("TayTay", "0016531AF6E5");
+		//AllPuppets.addPuppet(tay);
 
-		//// Creating Puppet
-		Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-		AllPuppets.addPuppet(alfonso);
-		//
-		
+//		//// Creating Puppet
+		//Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+		//AllPuppets.addPuppet(alfonso);
+		//// //
+		////
 		Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
 		AllPuppets.addPuppet(johnCena);
 
@@ -101,17 +101,16 @@ public class RunServer extends Thread {
 					routeExec.addMoveReport(pup.name(), (MoveReport) comm);
 					System.out.println("GOT REPORT: " + ((MoveReport) comm).toString());
 				} else if (comm instanceof CompleteReport) {
-					routeExec.addCompleteReport(pup.name(), (CompleteReport)comm);
+					routeExec.addCompleteReport(pup.name(), (CompleteReport) comm);
 				} else if (comm instanceof RobotInfo) {
 					/*
 					 * Will only be called when a robot has started up, and had
 					 * it's input given to it by the operator.
 					 */
 					RobotInfo ri = (RobotInfo) comm;
-					if(AllRobots.checkExists(ri.getName())) {
+					if (AllRobots.checkExists(ri.getName())) {
 						AllRobots.modifyRobotLocation(ri.getName(), ri.getPosition(), ri.getDirection());
-					}
-					else {
+					} else {
 						AllRobots.addRobot(ri);
 					}
 				}

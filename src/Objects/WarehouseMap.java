@@ -295,10 +295,10 @@ public class WarehouseMap {
 			return Direction.WEST;
 		}
 		else if(node2.y > node1.y){
-			return Direction.SOUTH;
+			return Direction.NORTH;
 		}
 		else if(node2.y < node1.y){
-			return Direction.NORTH;
+			return Direction.SOUTH;
 		}
 		else {//Should never happen
 			return null;

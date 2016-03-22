@@ -145,9 +145,9 @@ public class RouteExecution extends Thread {
 								AllPuppets.send(name,new DropOffPoint((int)AllRobots.getRobot(name).currJob.dropOff.getX(),(int)AllRobots.getRobot(name).currJob.dropOff.getY()));
 							}
 						}else{
-							if(AllRobots.getRobot(name).getStopped(GlobalClock.getCurrentTime())<0)
+							if(this.getTaskMoveIndex(name)<this.getCurrentTask(name).size())
 							{
-							if(this.getTaskMoveIndex(name)<this.getCurrentTask(name).size()){
+							if(AllRobots.getRobot(name).getStopped(GlobalClock.getCurrentTime())<0){
 								Direction facingDir=this.getRobotFacingDirection(name);
 								Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
 								
@@ -171,6 +171,21 @@ public class RouteExecution extends Thread {
 									
 								}
 							}
+							}else
+							{
+								//robot is waiting around the dropoff
+								//System.out.println("out of bounds"+this.getItemLocation(this.getCurrentTaskIndex(name),name)+" robot loc: "+ this.getRobotLocation(name));
+								Vector<Direction> task=this.getNextTask(name);
+								//System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
+								//System.out.println("index1: "+this.getCurrentTaskIndex(name));
+								//System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
+								if(task!=null){
+									this.assignTask( task,name);
+									System.out.println("assigning task:"+task);
+								}else
+								{
+									System.out.println(AllRobots.getRobot(name).currJob);
+								}
 							}
 						}
 					}else{
@@ -201,7 +216,7 @@ public class RouteExecution extends Thread {
 	
 						}else
 						{ //execute next move
-							if(!AllRobots.getRobot(name).waitingForMoveReport && AllRobots.getRobot(name).getStopped(GlobalClock.getCurrentTime())<0)
+							if(!AllRobots.getRobot(name).waitingForMoveReport)
 							
 							{
 								Direction facingDir=this.getRobotFacingDirection(name);
@@ -226,26 +241,28 @@ public class RouteExecution extends Thread {
 									}
 									
 								}else{
-									Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
-								
-									Move nextmove=this.getMove(facingDir, moveDir,name);
-									if(nextmove==null)System.out.println("error generating the move object");
-									else
-									{
-										//send the move to the server
-										AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
-			
-			
-			
-										AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
-										
-										AllPuppets.send(name,nextmove);
-			
-										AllRobots.getRobot(name).waitingForMoveReport=true;					
-										done=false;
-										System.out.println("sent next move: "+ nextmove.toString());
-										RobotTable.updateStatus(name, "Moving to " + nextmove.getNextLocation().x + ", " + nextmove.getNextLocation().y);
-									}
+									if(AllRobots.getRobot(name).getStopped(GlobalClock.getCurrentTime())<0){
+										Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+									
+										Move nextmove=this.getMove(facingDir, moveDir,name);
+										if(nextmove==null)System.out.println("error generating the move object");
+										else
+										{
+											//send the move to the server
+											AllRobots.getRobot(name).nextRobotLocation=nextmove.getNextLocation();
+				
+				
+				
+											AllRobots.getRobot(name).nextDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
+											
+											AllPuppets.send(name,nextmove);
+				
+											AllRobots.getRobot(name).waitingForMoveReport=true;					
+											done=false;
+											System.out.println("sent next move: "+ nextmove.toString());
+											RobotTable.updateStatus(name, "Moving to " + nextmove.getNextLocation().x + ", " + nextmove.getNextLocation().y);
+										}
+									}	
 								}
 							}
 						}
