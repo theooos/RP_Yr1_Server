@@ -1,4 +1,4 @@
-package Testing.RoutePlanning;
+/*package Testing.RoutePlanning;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Vector;
@@ -72,4 +72,4 @@ public class JUnitTests {
 		//Also in this case the robot initially has a choice of going up (first step: 0,0) or down (first step: 0,2) to prevent a collision.
 		//The down path is 6 units in length therefore should not be chosen
 	}
-}
+}*/

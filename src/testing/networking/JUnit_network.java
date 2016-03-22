@@ -14,20 +14,19 @@ import Objects.Sendable.SingleTask;
 import lejos.util.Delay;
 import networking.PuppetListener;
 
+/**
+ * Test scripts: Test that a bluetooth connection can be made with a robot then an object is sent down and returned
+ * Code validates that the object sent down (SingleTask) is sent back and contains all the same parameters since it's stripped and rebuilt.
+ */
 public class JUnit_network {
 
 	Boolean alive;
 	public static SingleTask dummyReturn;
 
-	@Before
-	public void setUp() throws Exception {
-
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-	
+	/**
+	 * A static method to return the item sent back by the robot
+	 * @param obj The object sent back
+	 */
 	public static void getItemBack(Object obj) {
 		SingleTask dummyReturn = (SingleTask) obj;
 	}
@@ -45,43 +44,32 @@ public class JUnit_network {
 		// Robot name
 		String R_tay = "TayTay";
 		String R_a = "Alfonso";
+		String R_jc = "John Cena";
 		
 		// Send the object
-		
-		/*
-		while(!AllRobots.checkExists(R_a)) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		*/
-		AllPuppets.send(R_tay, dummyTask);
-		System.out.println("TASK SENT");
-		
+		AllPuppets.send(R_tay, dummyTask); // Change name to the appropriate robot used for testing
+		System.out.println("DUMMY OBJECT SENT");
 		
 		// Waits for the object to be returned
 		while(dummyReturn == null) {
 			try {
-				Thread.sleep(100);
+				Thread.sleep(500);
 				System.out.println("WAITING FOR OBJECT");
-				//AllPuppets.send(R_tay, dummyTask);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} // Sleeps only the thread, where as delay delays the whole code
 		}
 		
-		System.out.println("FINISHED");
-		//System.out.println(dummyReturn.toString());
+		System.out.println("\n FINISHED");
 		
+		System.out.println("Item sent: " + dummyReturn.toString());
+		System.out.println("Item returned: " + dummyReturn.toString());
+		
+		// Asserting that the above are both equal to eachother
 		assertTrue(dummyTask.toString().equals(dummyReturn.toString()));
-		assertTrue(dummyTask.equals(dummyReturn));
-		System.out.println(dummyTask.toString());
-		System.out.println(dummyReturn.toString());
-		System.out.println("WHOSE TAYLOR SWIFT ANYWAY?");
+		
+		// Should hopefully end the server, so the robot end should stop and reboot too since connection is lost.
+		netTest.end();
 
 	}
 

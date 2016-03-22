@@ -47,6 +47,7 @@ public class Test_WarehouseGUI {
 		frame.setVisible(true);
 		
 		// Adding dummy jobs
+		JobTable.addJob(10001, "cake", "TayTay");
 		JobTable.addJob(10002, "sweets", "John Cena");
 		JobTable.addJob(10003, "donuts", "Alfonso");
 		JobTable.addJob(10004, "donuts", "TayTay");
@@ -60,16 +61,21 @@ public class Test_WarehouseGUI {
 		
 		// Adding dummy robots
 		RobotTable.addRobot(tt);
+		RobotTable.draw();
 		RobotTable.addRobot(jc);
 		RobotTable.addRobot(af);
 		
 		// Adding dummy statistics
 		Statistics.increaseRevenue(1989);
 		Statistics.jobDone();
+		Statistics.jobDone();
+		Statistics.jobDone();
 		Statistics.jobCancelled();
 		
-		// Should show as received job offer for "TayTay"
-		JobTable.addJob(10001, "cake", "TayTay");
+		// Updating status of a job
+		JobTable.updateStatus(10002, "Shake it off");
+		
+		RobotTable.updateStatus("TayTay", "TEST");
 		
 	}
 

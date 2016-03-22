@@ -17,38 +17,38 @@ public class startServer extends Thread {
 	private boolean alive;
 
 	public startServer() {
-		//// Puppets
+
+		//// Puppets -- CHANGE TO THE RELEVANT ONE USED FOR TESTING
 		Puppet tay = new Puppet("TayTay", "0016531AF6E5");
 		AllPuppets.addPuppet(tay);
-			//Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
-			//AllPuppets.addPuppet(johnCena);  
 
-		//// Creating Puppet
-//		Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
-//		AllPuppets.addPuppet(alfonso);
+		// Puppet johnCena = new Puppet("John Cena", "00165308E5A7");
+		// AllPuppets.addPuppet(johnCena);  
+
+		// Puppet alfonso = new Puppet("Alfonso", "00165308DA58");
+		// AllPuppets.addPuppet(alfonso);
 
 		alive = true;
 	}
 
+	/**
+	 * Method that checks if any commands have been sent
+	 */
 	private void checkCommands() {
 		ArrayList<Puppet> puppets = AllPuppets.getPuppets();
 
+		// Loops through all puppets and looks for received commands
 		for(Puppet pup : puppets) {
 			SendableObject comm = null; 			
 			while((comm = pup.popCommand()) != null)
 			{
-				System.out.println("LOOPING");
-				if(comm instanceof SingleTask){
-					//routeExec.addMoveReport(pup.name(), (MoveReport)comm);
-					//System.out.println("GOT REPORT: " + ((MoveReport) comm).toString());
+				// If the sent item is a SingleTask, pass it back to the JUnit main class using the defined method
+				if(comm instanceof SingleTask) {
 					JUnit_network.dummyReturn = (SingleTask) comm;
-					System.out.println("GOT SINGLETASK! SENDING TO JUNIT CLASS");
+					System.out.println("GOT SINGLETASK BACK! SENDING TO JUNIT CLASS");
 					JUnit_network.getItemBack(comm);
-				
-					
-					//J
 				}
-				else if(comm instanceof RobotInfo){
+				else if(comm instanceof RobotInfo) {
 					/* Will only be called when a robot has started up, and had it's
 					 * input given to it by the operator.
 					 */
@@ -64,6 +64,7 @@ public class startServer extends Thread {
 	 */
 	@Override
 	public void run() {
+		
 		while(alive) {
 			checkCommands();	
 			try {
@@ -71,10 +72,15 @@ public class startServer extends Thread {
 				Thread.sleep(400);
 			} catch (InterruptedException e) {
 				out("RunMe run() sleep failed");
-			}
-			// Checks puppets for data.
-			//checkCommands();			
+			}		
 		}
+	}
+	
+	/**
+	 * Method to end the server
+	 */
+	public void end() {
+		alive = false;
 	}
 
 	/**
