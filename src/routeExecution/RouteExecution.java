@@ -212,7 +212,19 @@ public class RouteExecution extends Thread {
 								//System.out.println(blah2);
 								if(blah>=blah2)
 								{
-									System.out.println("out of bounds"+this.getItemLocation(this.getCurrentTaskIndex(name),name)+" robot loc: "+ this.getRobotLocation(name));
+									//System.out.println("out of bounds"+this.getItemLocation(this.getCurrentTaskIndex(name),name)+" robot loc: "+ this.getRobotLocation(name));
+									Vector<Direction> task=this.getNextTask(name);
+									//System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
+									//System.out.println("index1: "+this.getCurrentTaskIndex(name));
+									//System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
+									if(task!=null){
+										this.assignTask( task,name);
+										System.out.println("assigning task:"+task);
+									}else
+									{
+										System.out.println(AllRobots.getRobot(name).currJob);
+									}
+									
 								}else{
 									Direction moveDir=this.getCurrentTask(name).get(this.getTaskMoveIndex(name));
 								
