@@ -240,7 +240,7 @@ public class Job {
 	}
 
 	public double rewardPerDistance() {
-
+		//System.out.println(distanceToTravel);
 		if(ordered)
 			return getTotalReward() / distanceToTravel;
 		else {
@@ -253,6 +253,7 @@ public class Job {
 			//System.out.println(tasks);
 			distanceToTravel = op.getFinalDistance();
 			this.ordered = true;
+			
 			return getTotalReward() / distanceToTravel;
 		}
 		

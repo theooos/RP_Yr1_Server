@@ -43,11 +43,9 @@ public class RouteExecution extends Thread {
 	public RouteExecution( WarehouseMap map)
 	{
 		this.nrOfRobots=AllRobots.getAllRobots().size();
+		//System.out.println("number of robots:"+nrOfRobots);
 		this.pathfinder=new PathFinding(map);
-		for(int i=0;i<nrOfRobots;i++)
-		{
-			pathfinder.addRobot(AllRobots.getAllRobots().get(i));
-		}
+		
 		this.priorityQueue = Selection.createQueue();
 	}
 
@@ -58,10 +56,21 @@ public class RouteExecution extends Thread {
 
 	public void run()
 	{
+		
 		boolean done=true;
 		initVariables();
 		while(running)
-		{		
+		{	
+			if(this.nrOfRobots<AllRobots.getAllRobots().size())
+			{
+				for(int j=this.nrOfRobots;j<AllRobots.getAllRobots().size();j++)
+				{
+					pathfinder.addRobot(AllRobots.getAllRobots().get(j));
+					
+				}
+				this.nrOfRobots=AllRobots.getAllRobots().size();
+			}
+				
 			try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {}
@@ -91,9 +100,10 @@ public class RouteExecution extends Thread {
 							AllRobots.getRobot(name).goingToDropOff=true;
 							Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),AllRobots.getRobot(name).currJob.dropOff, AllRobots.getRobot(name));
 							System.out.println("assigning task to drop off:"+path);
+							if(path!=null){
 							this.assignTask( path,name);
 							JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Moving to drop-off point");
-							
+							}
 						}else{
 							
 							Vector<Direction> task=this.getNextTask(name);
@@ -102,6 +112,10 @@ public class RouteExecution extends Thread {
 							//System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
 							if(task!=null){
 								this.assignTask( task,name);
+								System.out.println("assigning task:"+task);
+							}else
+							{
+								System.out.println(AllRobots.getRobot(name).currJob);
 							}
 						}
 					}
@@ -604,7 +618,7 @@ public class RouteExecution extends Thread {
 			SingleTask nextTask=AllRobots.getRobot(name).currJob.getTaskAtIndex(getCurrentTaskIndex(name)).get();
 			if(nextTask!=null){
 			Vector<Direction> path=  pathfinder.GetPath(this.getRobotLocation(name),nextTask.getLocation(), AllRobots.getRobot(name));
-			System.out.println("got a task");
+			System.out.println(name+"  got a task from "+this.getRobotLocation(name)+" to "+ nextTask.getLocation());
 			
 			return path;
 		

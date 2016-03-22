@@ -46,7 +46,7 @@ public class Display
 
 		WarehouseMap grid = new WarehouseMap("res/drops.csv");
 		
-		frame.add(JobTable.draw(new RouteExecution(1, grid)));
+		frame.add(JobTable.draw(new RouteExecution(grid)));
 		frame.add(GridMap.createGrid(grid));
 		frame.add(RobotTable.draw());
 		frame.add(Statistics.draw());
