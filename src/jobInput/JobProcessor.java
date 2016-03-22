@@ -22,7 +22,7 @@ import routePlanning.orderPicks.OrderPicks;
  * Class that carries out all the necessary processing and stores the data.
  */
 public class JobProcessor {
-
+	
 	private static Map<Integer, Job> jobs = new HashMap<Integer, Job>();
 	private static Map<String, Item> items = new HashMap<String, Item>();
 
@@ -81,7 +81,7 @@ public class JobProcessor {
 			reader.close();
 
 			return Optional.of(fileContents);
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) { //catch empty file
 			return Optional.empty();
 		} catch (IOException e) {
 			return Optional.empty();
@@ -95,9 +95,12 @@ public class JobProcessor {
 	 */
 	public static void processJobFiles(String jobFile, String cancelFile) {
 
+		//contents of jobs file
 		Optional<List<String>> jobsContents = readFile(jobFile);
+		//contents of cancellation file
 		Optional<List<String>> cancellationsContents = readFile(cancelFile);
 
+		//nothing in files? error
 		if(!jobsContents.isPresent()) {
 			System.err.println("Error processing job file.");
 			return;

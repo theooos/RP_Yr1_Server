@@ -10,6 +10,11 @@ import Objects.Item;
 import Objects.Job;
 import Objects.Sendable.SingleTask;
 
+/**
+ * probability class 
+ * used to work out chance of a job being cancelled
+ * 
+ */
 public class Probability {
 
 	private int countCancelled = 0;
@@ -20,6 +25,11 @@ public class Probability {
     private List<Job> trainingSet;
     private List<Item> items;
     
+    /**
+     * constructor
+     * @param trainingSet collection of jobs
+     * @param items collection of items
+     */
     public Probability(Collection<Job> trainingSet, Collection<Item> items) {
 
     	this.trainingSet = new ArrayList<Job>(trainingSet);
@@ -56,6 +66,13 @@ public class Probability {
 
     }
 
+    /**
+     * 
+     * @param item
+     * @param i
+     * @param cancelled is the job a cancelled job?
+     * @return count occurrences of that quantity and job combo
+     */
     private Integer countOccurencesOfGroupAndItem(Item item, int i, boolean cancelled) {
 		
     	int count = 0;
@@ -86,6 +103,9 @@ public class Probability {
     	
 	}
 
+    /**
+     * populate probability arrays
+     */
 	public void populateProbs() {
         
         for(int i = 0; i < probs.length; i++) {
@@ -108,6 +128,11 @@ public class Probability {
 
     }
 
+	/**
+	 * get features method
+	 * @param j the job
+	 * @return featuresOfJob the list of features(integers)
+	 */
     public List<Integer> getFeatures(Job j) {
 
         List<Integer> featuresOfJob = new ArrayList<Integer>();
@@ -121,6 +146,11 @@ public class Probability {
 
     }
     
+    /**
+     * probability of cancelled method
+     * @param j the job
+     * @return p the probability distribution for that job 
+     */
     public ProbDistribution probabilityCancelled(Job j) {
     	
     	double prob = 0d;
@@ -129,6 +159,7 @@ public class Probability {
     	List<Integer> features = getFeatures(j);
     	Map<String, Integer> itemFeatures = getItemFeatures(j);
     	
+    	//probability of cancellation given those features
     	double pGivenFeatures = 1d;
     	for(Integer f : features) {
     		double p = conProbs[f][Features.Cancelled.YES];
@@ -148,7 +179,7 @@ public class Probability {
     	
     	prob = pGivenFeatures * probs[Features.Cancelled.YES];
     	
-    	
+    	//probaility of not being cancelled given those features
     	pGivenFeatures = 1d;
     	for(Integer f : features) {
     		double p = conProbs[f][Features.Cancelled.NO];
@@ -168,13 +199,18 @@ public class Probability {
     	
     	probNot = (pGivenFeatures) * probs[Features.Cancelled.NO];
     	
-    	
+    	//return the probability distribution
     	ProbDistribution p = new ProbDistribution(new float[]{ (float) prob, (float) probNot });
     	p.normalise();
     	return p;
     	
     }
     
+    /**
+     * get item features method
+     * @param j the job
+     * @return map item features
+     */
     public Map<String, Integer> getItemFeatures(Job j) {
     	Map<String, Integer> map = new HashMap<String, Integer>();
     	for(SingleTask t : j.getTasks()) {

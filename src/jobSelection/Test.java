@@ -5,6 +5,11 @@ import java.util.PriorityQueue;
 import Objects.Job;
 import jobInput.JobProcessor;
 
+/**
+ * test class
+ * view rewards per item
+ *
+ */
 public class Test {
 
     public static void main(String[] args) {
@@ -16,25 +21,25 @@ public class Test {
         
         PriorityQueue<Job> q = Selection.createQueue();
         
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
         
         for(Job j : JobProcessor.getAllJobs().values()) {
         	j.setCancellationProb(p.probabilityCancelled(j));
         }
-System.out.println();
+        //System.out.println();
         q = Selection.createQueue();
         
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
-        System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
+        //System.out.println(q.remove().rewardPerItem());
         
     }
 

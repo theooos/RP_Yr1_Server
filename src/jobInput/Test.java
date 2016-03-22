@@ -1,12 +1,16 @@
 package jobInput;
 
-
+//testing cancellations
 import java.util.ArrayList;
 import java.util.List;
 
 import Objects.Job;
 import Objects.WarehouseMap;
 
+/**
+ * test class
+ * view whether jobs are cancelled
+ */
 public class Test {
 
 	public static void main(String[] args) {

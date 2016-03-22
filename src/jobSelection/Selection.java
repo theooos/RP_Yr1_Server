@@ -9,10 +9,23 @@ import jobInput.JobProcessor;
 import main.RunServer;
 import routePlanning.orderPicks.OrderPicks;
 
+/**
+ * selection class
+ * creates and orders priority queue of jobs
+ *
+ */
 public class Selection { 
 	
+	/**
+	 * constructor
+	 */
 	public static PriorityQueue<Job> priorityQueue = new PriorityQueue<Job>(new Comparator<Job>() {
 		
+		/**
+		 * overwritten compare method
+		 * @param job1 first job
+		 * @param job2 second job 
+		 */
 		@Override
 		public int compare(Job job1, Job job2) {
 
