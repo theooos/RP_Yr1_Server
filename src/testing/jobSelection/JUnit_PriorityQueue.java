@@ -48,18 +48,18 @@ public class JUnit_PriorityQueue {
 			int id = jobHead.getJobID();
 			double rpi = jobHead.rewardPerItem(); // Get the reward per item for the job
 			double rpd = jobHead.rewardPerDistance(); // Get the reward per distance for the job
-			double canP = jobHead.getCancellationProb(); // Get the cancellation probability of the job
+			double canP = jobHead.getCancellationProb().getProbs()[0]; // Get the cancellation probability of the job
 		
-			Integer totalValueHead = (int) ((rpi * 100 + rpd * 100) * (1-canP) / 2);
+			Integer totalValueHead = (int) ((rpi * 100 + rpd * 50) * (1-canP) / 2);
 			//System.out.println(totalValueHead + " - ID: " + id); // DEBUG PRINT OUT TO GET JOB ID
 			
 			// Peeked job (not removed) used for a comparison
 			Job jobPeek = priorityQueue.peek();
 			double rpi2 = jobPeek.rewardPerItem(); 
 			double rpd2 = jobPeek.rewardPerDistance();
-			double canP2 = jobPeek.getCancellationProb();
+			double canP2 = jobPeek.getCancellationProb().getProbs()[0];
 			
-			Integer totalValuePeek = (int) ((rpi2 * 100 + rpd2 * 100) * (1-canP2) / 2);
+			Integer totalValuePeek = (int) ((rpi2 * 100 + rpd2 * 50) * (1-canP2) / 2);
 			
 			////////////
 			// Asserting that the item on the head should have a value that is greater than or equal to the next item

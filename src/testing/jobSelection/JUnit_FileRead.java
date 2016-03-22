@@ -33,22 +33,28 @@ public class JUnit_FileRead {
 	public void test() {
 		System.out.println(JobProcessor.getJob(10000));
 		// Testing the jobs
-		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(0).get().getItemID().equals("ba"));
-		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(0).get().getQuantity() == 2);
-		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(1).get().getItemID().equals("bi"));
-		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(1).get().getQuantity() == 3);
-		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(2).get().getItemID().equals("cb"));
-		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(2).get().getQuantity() == 3);
+		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(0).get().getItemID().equals("cc"));
+		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(0).get().getQuantity() == 1);
+		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(1).get().getItemID().equals("bf"));
+		assertTrue(JobProcessor.getAllJobs().get(10000).getTaskAtIndex(1).get().getQuantity() == 1);
 		
-		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(0).get().getItemID().equals("af"));
-		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(0).get().getQuantity() == 2);
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(0).get().getItemID().equals("ab"));
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(0).get().getQuantity() == 1);
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(1).get().getItemID().equals("aj"));
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(1).get().getQuantity() == 3);
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(2).get().getItemID().equals("bf"));
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(2).get().getQuantity() == 3);
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(3).get().getItemID().equals("cc"));
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(3).get().getQuantity() == 1);
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(4).get().getItemID().equals("ce"));
+		assertTrue(JobProcessor.getAllJobs().get(10015).getTaskAtIndex(4).get().getQuantity() == 1);
 		
 		// Testing the items
 		assertTrue(JobProcessor.getAllItems().size() == 30); // All 30 in the given file
-		assertTrue(JobProcessor.getAllItems().get("aa").getLocation().getX() == 5);
-		assertTrue(JobProcessor.getAllItems().get("aa").getLocation().getY() == 3);
-		assertTrue(JobProcessor.getAllItems().get("aa").getReward() == 12.78);
-		assertTrue(JobProcessor.getAllItems().get("aa").getWeight() == 0.36);
+		assertTrue(JobProcessor.getAllItems().get("aa").getLocation().getX() == 9);
+		assertTrue(JobProcessor.getAllItems().get("aa").getLocation().getY() == 1);
+		assertTrue(JobProcessor.getAllItems().get("aa").getReward() == 16.02);
+		assertTrue(JobProcessor.getAllItems().get("aa").getWeight() == 0.38);
 	}
 
 }
