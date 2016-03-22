@@ -173,6 +173,14 @@ public class WarehouseMap {
     }
     
     ///////////////////////////////////////////////////////////////////////////////////Route Planning///////////////////////////////////////////////////////////////////////////////////
+    public int getGridWidth() {
+		return gridWidth;
+	}
+    
+    public int getGridHeight() {
+		return gridHeight;
+	}
+    
     public Point getAboveNode(Point node){
 		int x = node.x;
 		int y = node.y;

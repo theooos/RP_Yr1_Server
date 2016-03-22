@@ -35,6 +35,7 @@ public class Test {
 	private Random randomGenerator = new Random();
 	
 	private int timeToMakeNewPaths = 10;
+	private int timeToMakeNewPaths2 = 10;
 
 	public boolean newPathTimer() {
 		if(timeToMakeNewPaths > 0){
@@ -43,6 +44,17 @@ public class Test {
 		}
 		else {
 			timeToMakeNewPaths = 3;
+			return true;
+		}
+	}
+	
+	public boolean newPathTimer2() {
+		if(timeToMakeNewPaths2 > 0){
+			timeToMakeNewPaths2--;
+			return false;
+		}
+		else {
+			timeToMakeNewPaths2 = 10;
 			return true;
 		}
 	}
@@ -62,12 +74,12 @@ public class Test {
 		for (int z = 0; z < testRobots.size(); z++) {
 			currentRobot = testRobots.get(z);
 			
-			if(currentRobot.getID() == 8){
-				System.out.println("R8 next node " + currentRobot.goToNextNode());
-				System.out.println("R8 first reserved time " + currentRobot.getFirstReservedTime());
-				System.out.println("R8 last reserved time " + currentRobot.getLastReservedTime());
+			if(currentRobot.getID() == 5){
+				System.out.println("R5 next node " + currentRobot.goToNextNode());
+				System.out.println("R5 first reserved time " + currentRobot.getFirstReservedTime());
+				System.out.println("R5 last reserved time " + currentRobot.getLastReservedTime());
 				System.out.println("Current time " + GlobalClock.getCurrentTime());
-				System.out.println("R8 pathSeq " + currentRobot.getPathSequence());
+				System.out.println("R5 pathSeq " + currentRobot.getPathSequence());
 			}
 			else{
 				currentRobot.goToNextNode();
@@ -172,6 +184,8 @@ public class Test {
 			
 			goalNode = new Point(goalX, goalY);
 			pathSequence = pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
+			if(tempRobot.getID() == 5)
+				System.out.println("R5 Assigning path to start" + pathSequence);
 			tempRobot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
 		}
 	}
@@ -196,8 +210,8 @@ public class Test {
 			
 			goalNode = new Point(goalX, goalY);
 			pathSequence = pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
-			if(tempRobot.getID() == 7)
-				System.out.println("R7 Assigning path " + pathSequence);
+			if(tempRobot.getID() == 5)
+				System.out.println("R5 Assigning path to end" + pathSequence);
 			tempRobot.SetUpPath(pathSequence, pathFinding.getTimePosReservations());
 		}
 	}
@@ -315,7 +329,7 @@ public class Test {
 				test.travelledToTheEnd = true;
 			}
 			
-			if(test.testRobots.get(5).getPosition().getX() == 0 && test.travelledToTheEnd){
+			if(test.testRobots.get(9).getPosition().getX() == 0 && test.travelledToTheEnd && test.newPathTimer2()){
 				test.assignPathsToEnd();
 				test.travelledToTheEnd = false;
 			}
@@ -352,16 +366,15 @@ public class Test {
 				tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());
 			}
 			
-			if(GlobalClock.getCurrentTime() > 60 && test.newPathTimer()){//Now let R10 move randomly
-				/*goalX = 0;
-				goalY = 0;
+			if(GlobalClock.getCurrentTime() == 60){
+				goalX = 1;
+				goalY = 1;
 				
 				tempRobot = test.testRobots.get(10);
 				
 				goalNode = new Point(goalX, goalY);
 				test.pathSequence = test.pathFinding.GetPath(tempRobot.getPosition(), goalNode, tempRobot);
-				tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());*/
-				//test.assignRandomPaths(test.testRobots.get(10));
+				tempRobot.SetUpPath(test.pathSequence, test.pathFinding.getTimePosReservations());
 			}
 			
 			test.DrawMap();

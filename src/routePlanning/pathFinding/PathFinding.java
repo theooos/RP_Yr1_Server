@@ -25,7 +25,7 @@ public class PathFinding {
 	 */
 	private WarehouseMap map;
 	
-	private Point current;//Current node
+	private Point currentExplored;//Current node
 	
 	/**
 	 * Explored node set
@@ -107,7 +107,7 @@ public class PathFinding {
 		Vector<Direction> bestPathDirections = new Vector<Direction>(0);
 		TimePosReservations bestTimePosReservations = null;
 		
-		return findOptimalPath(startNode, goalNode, GlobalClock.getCurrentTime(), robot, bestPathDirections, bestTimePosReservations, greatestReservedTime);
+		return findOptimalPath(startNode, goalNode, GlobalClock.getCurrentTime(), robot, bestPathDirections, bestTimePosReservations, greatestReservedTime, true);
 	}
 	
 	/**
@@ -122,17 +122,17 @@ public class PathFinding {
 	 * @param greatestReservedTime
 	 * @return
 	 */
-	private Vector<Direction> findOptimalPath(Point startNode, Point goalNode, int time, RobotInfo robot, Vector<Direction> bestPathDirections, TimePosReservations bestTimePosReservations, int greatestReservedTime) {
+	private Vector<Direction> findOptimalPath(Point startNode, Point goalNode, int time, RobotInfo robot, Vector<Direction> bestPathDirections, TimePosReservations bestTimePosReservations, int greatestReservedTime, boolean callSafe) {
 		SetUp(startNode, goalNode);//Set up & clean up after potential previous search
 
 		while(!frontier.isEmpty()) {
-			current = GetBestNode();
+			currentExplored = GetBestNode();
 			
 			//Note that in some scenarios e.g. in dead end if a robot is covering goal and moves out of the way later then the algorithm will not find the path to the goal
 			//But it is possible in other cases for the robot to cover the goal in one time window then move out of the way and the algorithm will find the path
 			//SOLVED: Because a new path is looked for in the next time window only if the current algorithm iteration finds a goal the dead end scenario may be an Achilles heel of this setup
 			//NOW the algorithm will look at all time windows regardless of finding a path in any one
-			if(current.equals(goalNode)){
+			if(currentExplored.equals(goalNode)){
 				Vector<Direction> tempPathDirections = ReconstructPath(goalNode, robot, time);
 				if(!RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()) && (tempPathDirections.size() < bestPathDirections.size() || bestPathDirections.size() == 0)){
 					//System.out.println("isReservedForStopping : " + goalNode + " time " + timePosReservations.getLastReservedTime() + " " + RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()));
@@ -142,26 +142,37 @@ public class PathFinding {
 				break;
 			}
 			
-			int currentGCost = GetGCost(current);
-			RemoveFromFrontier(current);
-			explored.addElement(current);
+			int currentGCost = GetGCost(currentExplored);
+			RemoveFromFrontier(currentExplored);
+			explored.addElement(currentExplored);
 			
 			Point neighbourNode = null;
 			for(int i = 0; i < 4; i++){//For each neighbour node (at most 4) 
 				
 				switch (i) {
 				case 0:
-					neighbourNode = map.getAboveNode(current);
+					neighbourNode = map.getAboveNode(currentExplored);
 					break;
 				case 1:
-					neighbourNode = map.getBelowNode(current);	
+					neighbourNode = map.getBelowNode(currentExplored);	
 					break;
 				case 2:
-					neighbourNode = map.getLeftNode(current);
+					neighbourNode = map.getLeftNode(currentExplored);
 					break;
 				case 3:
-					neighbourNode = map.getRightNode(current);
+					neighbourNode = map.getRightNode(currentExplored);
 					break;
+				}
+				
+				//Moving out of the way of another path set previously
+				if(RobotsReservations.IsReserved(robot, robot.getPosition(), time + currentGCost)){
+					if( bestPathDirections.size() > 0){
+						greatestReservedTime = 0;//do not look into further time windows and return the best path so far
+						break;
+					}
+					if(callSafe)
+						return moveToSafePlace(time + currentGCost, robot);
+					return null;
 				}
 				
 				//null - Tried to find neighbour out of bounds vvv
@@ -169,16 +180,16 @@ public class PathFinding {
 					|| explored.contains(neighbourNode) 
 					|| map.isObstacle(neighbourNode) 
 					|| RobotsReservations.IsReserved(neighbourNode, time + currentGCost + 1)
-					|| RobotsReservations.IsReserved(neighbourNode, time + currentGCost) && RobotsReservations.IsReserved(current, time + currentGCost + 1)//Prevent robots switching places as the nodes in 
+					|| RobotsReservations.IsReserved(neighbourNode, time + currentGCost) && RobotsReservations.IsReserved(currentExplored, time + currentGCost + 1)//Prevent robots switching places as the nodes in 
 					//front of them are not reserved when thet meet head on
 					//reserved yet this leads to collisions as robots move through each other
-					|| RobotsReservations.IsReserved(robot, current, time + currentGCost)//has another robot reserved my current node while Im still here
+					|| RobotsReservations.IsReserved(robot, currentExplored, time + currentGCost)//has another robot reserved my current node while Im still here
 					//prevent robots from waiting for other robots to move into them and then checking with success the free node the other robot left behind
 				){
 					continue;
 				}
 				
-				fCost = GetFCost(currentGCost, current, goalNode);
+				fCost = GetFCost(currentGCost, currentExplored, goalNode);
 				
 				if(!frontier.contains(neighbourNode)){
 					//AddToFrontier(neighbourNode, currentGCost + 1, GetFCost(neighbourNode, goalNode));
@@ -191,14 +202,14 @@ public class PathFinding {
 					continue;
 				}
 				
-				AddToPathTrace(current, neighbourNode);
+				AddToPathTrace(currentExplored, neighbourNode);
 			}
 			
 		}
 		
 		if(time + 1 <= greatestReservedTime + 1){//Still time windows left to check
 			//Could potentially make this a non recursive function to avoid potential stack overflow
-			return findOptimalPath(startNode, goalNode, time + 1, robot, bestPathDirections, bestTimePosReservations, greatestReservedTime);
+			return findOptimalPath(startNode, goalNode, time + 1, robot, bestPathDirections, bestTimePosReservations, greatestReservedTime, false);
 		}
 		else if(bestPathDirections.size() > 0){//time > greatestReservedTime + 1 and at least 1 solution
 			timePosReservations = bestTimePosReservations;//For getting separately after getting route
@@ -207,6 +218,49 @@ public class PathFinding {
 		
 		//No paths to goal found e.g. goal was inside a wall
 		return null;//Return Failure
+	}
+	
+	/**
+	 * Finds a path to the closest safe place if one exists, returns null otherwise
+	 * @param startNode
+	 * @param fromTime
+	 * @param deadlineTime
+	 * @param time
+	 * @param robot
+	 * @return
+	 */
+	private Vector<Direction> moveToSafePlace(int deadlineTime, RobotInfo robot) {
+		deadlineTime -= 2;//Because passing into findOptimalPath as the last reserved time and the way findOptimalPath deals with this restriction
+		
+		int fromTime = GlobalClock.getCurrentTime();
+		
+		//Temp most optimal path data
+		Vector<Direction> bestPathDirections = new Vector<Direction>(0);
+		TimePosReservations bestTimePosReservations = null;
+		Vector<Direction> tempPath = null;
+		int gridWidth = map.getGridHeight();
+		int gridHeight = map.getGridHeight();
+		for (int t = fromTime; t < deadlineTime; t++){//For each time window before the deadline
+			for (int x = 0; x < gridWidth; x++){//For each node
+				for (int y = 0; y < gridHeight; y++){
+					System.out.println(t + " " + x + " " + y);
+
+					tempPath = findOptimalPath(robot.getPosition(), new Point(x, y), t, robot, bestPathDirections, bestTimePosReservations, deadlineTime, false);//Find the shortest path to any safe place
+					
+					//Commented out assumuning the bestPathDirections & bestTimePosReservations are passed in by ref to findOptimalPath and changed there
+					if(tempPath != null) {//The following is checked in findOptimalPath: && (bestPathDirections.size() == 0 || tempPath.size() < bestPathDirections.size())){
+						bestPathDirections = tempPath;
+						bestTimePosReservations = timePosReservations;
+					}
+				}
+			}
+		}
+		
+		if(bestPathDirections.size() > 0)
+			return bestPathDirections;
+		if(robot.getID() == 5)
+			System.out.println("Cannot find safe path for R5");
+		return null;//No safePlace path found
 	}
 	
 	/**
