@@ -175,7 +175,7 @@ public class JobProcessor {
 		for(String cancelStr : cancellationsContents.get()) {
 			String[] cancelArr = cancelStr.split(",");
 			if(cancelArr[1].equals("1"))
-				jobs.get(Integer.parseInt(cancelArr[0])).cancel();
+				trainingData.get(Integer.parseInt(cancelArr[0])).cancel();
 		}
 
 	

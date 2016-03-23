@@ -171,21 +171,32 @@ public class RouteExecution extends Thread {
 									
 								}
 							}
-							}else
-							{
-								//robot is waiting around the dropoff
-								//System.out.println("out of bounds"+this.getItemLocation(this.getCurrentTaskIndex(name),name)+" robot loc: "+ this.getRobotLocation(name));
-								Vector<Direction> task=this.getNextTask(name);
-								//System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
-								//System.out.println("index1: "+this.getCurrentTaskIndex(name));
-								//System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
-								if(task!=null){
-									this.assignTask( task,name);
-									System.out.println("assigning task:"+task);
-								}else
+							}else{
+								
+								Direction facingDir=this.getRobotFacingDirection(name);
+								//System.out.println(name);
+								int blah = this.getTaskMoveIndex(name);
+								//System.out.println(blah);
+								int blah2 = this.getCurrentTask(name).size();
+								//System.out.println(blah2);
+								if(blah>=blah2)
 								{
-									System.out.println(AllRobots.getRobot(name).currJob);
+									
+									//System.out.println("out of bounds"+this.getItemLocation(this.getCurrentTaskIndex(name),name)+" robot loc: "+ this.getRobotLocation(name));
+									Vector<Direction> task=  pathfinder.GetPath(this.getRobotLocation(name),AllRobots.getRobot(name).currJob.dropOff, AllRobots.getRobot(name));
+									System.out.println("assigning task to drop off:"+task);
+									//System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);
+									//System.out.println("index1: "+this.getCurrentTaskIndex(name));
+									//System.out.println("maxindex: "+AllRobots.getRobot(name).currJob.getNumOfTasks());
+									if(task!=null){
+										this.assignTask( task,name);
+										System.out.println("assigning task:"+task);
+									}else
+									{
+										System.out.println(AllRobots.getRobot(name).currJob);
+									}
 								}
+								
 							}
 						}
 					}else{
@@ -227,6 +238,7 @@ public class RouteExecution extends Thread {
 								//System.out.println(blah2);
 								if(blah>=blah2)
 								{
+									
 									//System.out.println("out of bounds"+this.getItemLocation(this.getCurrentTaskIndex(name),name)+" robot loc: "+ this.getRobotLocation(name));
 									Vector<Direction> task=this.getNextTask(name);
 									//System.out.println("assigning task to this task:"+this.getNextTask(name)+" stuff: "+task);

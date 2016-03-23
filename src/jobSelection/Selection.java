@@ -48,8 +48,8 @@ public class Selection {
 		//OrderPicks op = new OrderPicks(tasks, RunServer.map.getDropoffPoints(), RunServer.map); 
 		//add to queue
 		for(Job j : jobMap.values())
-			if(j.getTotalWeight()<50 && !j.cancelled() && j.getCancellationProb() < 0.5){
- && j.				//System.out.println("job being added to queue: "+ j);
+			if(j.getTotalWeight()<50 && !j.cancelled() && j.getCancellationProb().getProbs()[0] < 0.5){
+ 				//System.out.println("job being added to queue: "+ j);
 				priorityQueue.add(j);
 				
 			}

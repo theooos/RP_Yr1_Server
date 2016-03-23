@@ -1,7 +1,6 @@
 package routePlanning.pathFinding;
 
 import java.awt.Point;
-import java.util.Currency;
 import java.util.Vector;
 
 import Objects.Direction;
@@ -20,6 +19,7 @@ import routePlanning.dataStructures.TimePosReservations;
  */
 
 public class PathFinding {
+	Point queuePos = null;
 	/**
 	 * Node map
 	 */
@@ -106,8 +106,12 @@ public class PathFinding {
 		//Temp most optimal path data
 		Vector<Direction> bestPathDirections = new Vector<Direction>(0);
 		TimePosReservations bestTimePosReservations = null;
-		
+		queuePos = null;
 		return findOptimalPath(startNode, goalNode, GlobalClock.getCurrentTime(), robot, bestPathDirections, bestTimePosReservations, greatestReservedTime, true);
+	}
+	
+	public Point getQueuePos() {
+		return queuePos;
 	}
 	
 	/**
@@ -134,7 +138,7 @@ public class PathFinding {
 			//NOW the algorithm will look at all time windows regardless of finding a path in any one
 			if(currentExplored.equals(goalNode)){
 				Vector<Direction> tempPathDirections = ReconstructPath(goalNode, robot, time);
-				if(!RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()) && (tempPathDirections.size() < bestPathDirections.size() || bestPathDirections.size() == 0)){
+				if(!(tempPathDirections == null) && !RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()) && (tempPathDirections.size() < bestPathDirections.size() || bestPathDirections.size() == 0)){
 					//System.out.println("isReservedForStopping : " + goalNode + " time " + timePosReservations.getLastReservedTime() + " " + RobotsReservations.isReservedForStopping(goalNode, timePosReservations.getLastReservedTime()));
 					bestPathDirections = tempPathDirections;
 					bestTimePosReservations = timePosReservations;//Best = current
@@ -180,6 +184,7 @@ public class PathFinding {
 					goalNode = currentExplored;
 					explored.remove(currentExplored);
 					AddToFrontier(currentExplored, currentGCost, currentGCost);//Add currentExplored (goal) back to frontier
+					queuePos = currentExplored;
 					break;//This is potetially not an optimal choice of best path (end of path yet no time for major debugging)
 				}
 				

@@ -13,6 +13,11 @@ public class TimePosReservations {
 		
 	}
 	
+	public String toString()
+	{
+		return reservations.toString();
+	}
+	
 	public void addReservation(int time, Point node) {
 		reservations.add(new Reservation(time, node));
 	}
