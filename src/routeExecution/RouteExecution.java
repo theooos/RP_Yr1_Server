@@ -780,6 +780,7 @@ public class RouteExecution extends Thread {
 		{
 			JobTable.updateStatus(AllRobots.getRobot(name).currJob.getJobID(), "Cancelled");
 			JobProcessor.getJob(AllRobots.getRobot(name).currJob.getJobID()).cancel();
+			Statistics.jobCancelled();
 			initVariables(name);
 			return;
 		}

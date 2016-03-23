@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import routeExecution.RouteExecution;
+import Objects.AllRobots;
 import Objects.Job;
 import Objects.Sendable.SingleTask;
 import jobInput.JobProcessor;
@@ -121,7 +122,21 @@ public class JobTable
 		updateStatus(jobID, "Cancelled");
 		RobotTable.updateStatus(robot, "Ready");
 		JobProcessor.getJob(jobID).cancel();
-		routeExec.initVariables(robot);
+		//routeExec.initVariables(robot);
+		String name=robot;
+		AllRobots.getRobot(name).isDoingJob=false;
+		AllRobots.getRobot(name).pickingUp=false;
+		AllRobots.getRobot(name).droppingOff=false;
+		AllRobots.getRobot(name).hasATask=false;
+		AllRobots.getRobot(name).finishedDroppingItems=false;
+		AllRobots.getRobot(name).waitingForMoveReport=false;
+		AllRobots.getRobot(name).hasMoved=false;
+		AllRobots.getRobot(name).hasCompletedTask=false;
+		AllRobots.getRobot(name).currDirectionsIndex=0;
+		AllRobots.getRobot(name).currTaskIndex=0;
+		AllRobots.getRobot(name).goingToDropOff=false;
+		Statistics.jobCancelled();
+		System.out.println("job cancelled");
 		JOptionPane.showMessageDialog(panel, "Job " + jobID + " cancelled.");
 	}
 
