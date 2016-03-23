@@ -58,7 +58,7 @@ public class RouteExecution extends Thread {
 		boolean done = true;
 		initVariables();
 		while (running) {
-			System.out.println("Current time " + GlobalClock.getCurrentTime());
+//			System.out.println("Current time " + GlobalClock.getCurrentTime());
 			if (this.nrOfRobots < AllRobots.getAllRobots().size()) {
 				for (int j = this.nrOfRobots; j < AllRobots.getAllRobots().size(); j++) {
 					pathfinder.addRobot(AllRobots.getAllRobots().get(j));
