@@ -30,7 +30,13 @@ public class Selection {
 		public int compare(Job job1, Job job2) {
 
 	        Integer valueJob1 = (int) ((job1.rewardPerItem() * 100 + job1.rewardPerDistance() * 50) / 2);
-            Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 50) / 2);
+            Integer valueJob2 = (int) ((job2.rewardPerItem() * 100 + job2.rewardPerDistance() * 50) / 2);		
+			
+			if(job1.getCancellationProb().getProbs()[0] >= 0.5)
+				valueJob1 /= 100;
+	        if(job2.getCancellationProb().getProbs()[0] >= 0.5)
+	        	valueJob2 /= 100;
+	        
 	
             return valueJob2.compareTo(valueJob1);
 		}
@@ -48,7 +54,7 @@ public class Selection {
 		//OrderPicks op = new OrderPicks(tasks, RunServer.map.getDropoffPoints(), RunServer.map); 
 		//add to queue
 		for(Job j : jobMap.values())
-			if(j.getTotalWeight()<50 && !j.cancelled() && j.getCancellationProb().getProbs()[0] < 0.5){
+			if(j.getTotalWeight()<50 && !j.cancelled()){// && j.getCancellationProb().getProbs()[0] < 0.5){
  				//System.out.println("job being added to queue: "+ j);
 				priorityQueue.add(j);
 				
